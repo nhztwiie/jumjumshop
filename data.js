@@ -6,9 +6,21 @@ const SHOP_DATA = {
         address: "Nguyễn Văn Cánh, P. Phú Tân, Vĩnh Long",
         hotline: "0576.935.873",
         avatar: "images/jumjumshop.png",
-        bgMusic: "audio/jumjum music.mp3", // Link nhạc nền chill (có thể thay bằng link mp3 của bạn)
+        
+        // --- Thêm thông tin Favicon & Mạng xã hội ---
+        favicon: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f964.png", // Icon ứng dụng / Favicon biểu tượng ly nước
+        zaloUrl: "https://zalo.me/0398476794",                                          // Link nhắn tin Zalo
+        facebookUrl: "https://www.facebook.com/nhzt.wiie",                                          // Link kết nối Facebook quán
+        
+        // --- Âm thanh & Nhạc nền ---
+        bgMusic: "audio/jumjum music.mp3", 
         musicTitle: "JUMJUM MUSIC"
     },
+    spaceImages: [
+        "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600",
+        "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=600",
+        "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600"
+    ],
     adminAccount: {
         email: "lnh.quii@gmail.com",
         password: "nhzt.wii100614",
@@ -58,7 +70,7 @@ const SHOP_DATA = {
         },
         {
             id: "sp06",
-            name: "Bánh Croissant Trứng Muối",
+            name: "Bánh Croissant Trừng Muối",
             category: "Bánh Ngọt",
             price: 38000,
             image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=500&q=80",
