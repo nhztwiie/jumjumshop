@@ -5,13 +5,13 @@ const SHOP_DATA = {
         slogan: "Taste the Fresh, Feel the Joy",
         address: "Nguyễn Văn Cánh, P. Phú Tân, Vĩnh Long",
         hotline: "0576.935.873",
-        avatar: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=300&q=80",
-        bgMusic: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Link nhạc nền chill (có thể thay bằng link mp3 của bạn)
-        musicTitle: "Chill Vibes - JUMJUM Lounge"
+        avatar: "images/jumjumshop.png",
+        bgMusic: "audio/jumjum music.mp3", // Link nhạc nền chill (có thể thay bằng link mp3 của bạn)
+        musicTitle: "JUMJUM MUSIC"
     },
     adminAccount: {
-        email: "jumjumshop@gmail.com",
-        password: "jumjumshop161126",
+        email: "lnh.quii@gmail.com",
+        password: "nhzt.wii100614",
         role: "shop",
         name: "Quản trị viên JUMJUM"
     },
@@ -68,14 +68,14 @@ const SHOP_DATA = {
     initialReviews: [
         {
             id: 1,
-            user: "Minh Thư",
+            user: "Anh Ba Ngọc Sơn",
             rating: 5,
             comment: "Quán decor siêu xinh, trà sữa đường đen trân châu mềm dẻo vừa miệng lắm luôn!",
             date: "15/11/2026"
         },
         {
             id: 2,
-            user: "Hoàng Nam",
+            user: "Christina Nguyễn Phương Hằng",
             rating: 5,
             comment: "Giao hàng nhanh ở khu vực Phú Tân, Matcha kem muối đỉnh của chóp.",
             date: "14/11/2026"
