@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUMJUM — Taste the Fresh, Feel the Joy</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f964.png">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Fonts -->
@@ -21,6 +29,12 @@
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
         }
 
+        .dark {
+            --glass-bg: rgba(15, 23, 42, 0.65);
+            --glass-border: rgba(51, 65, 85, 0.75);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
         * {
             font-family: 'Plus Jakarta Sans', sans-serif;
             box-sizing: border-box;
@@ -34,6 +48,12 @@
             color: #1e293b;
             overflow-x: hidden;
             position: relative;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        .dark body, body.dark-mode {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #090d16 100%);
+            color: #f1f5f9;
         }
 
         /* Đốm sáng nền chuyển động Liquid Orbs */
@@ -49,6 +69,8 @@
         .orb-2 { width: 400px; height: 400px; background: rgba(147, 197, 253, 0.4); bottom: -80px; right: -60px; animation-delay: -4s; }
         .orb-3 { width: 280px; height: 280px; background: rgba(186, 230, 253, 0.45); top: 50%; left: 45%; animation-delay: -8s; }
 
+        .dark .liquid-orb { opacity: 0.4; }
+
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
             100% { transform: translate(35px, -30px) scale(1.1); }
@@ -60,14 +82,14 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+            box-shadow: var(--glass-shadow);
             border-radius: 26px;
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, background 0.3s ease;
         }
 
-        /* Ánh sáng Spotlight chạy theo chuột */
+        /* Spotlight chạy theo chuột */
         .spotlight-card::before {
             content: '';
             position: absolute;
@@ -75,11 +97,14 @@
             left: var(--mouse-x, -500px);
             width: 280px;
             height: 280px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 70%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 0;
             transition: opacity 0.2s;
+        }
+        .dark .spotlight-card::before {
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
         }
 
         /* Hiệu ứng gợn sóng nước khi click */
@@ -105,11 +130,17 @@
 
         /* Dock điều hướng nổi dưới đáy */
         .glass-dock {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(24px) saturate(200%);
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: 0 12px 40px rgba(15, 23, 42, 0.14);
         }
+        .dark .glass-dock {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
         .dock-btn {
             transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -128,7 +159,7 @@
 </head>
 <body class="pb-32">
 
-    <!-- Các đốm sáng nền -->
+    <!-- Đốm sáng nền -->
     <div class="liquid-orb orb-1"></div>
     <div class="liquid-orb orb-2"></div>
     <div class="liquid-orb orb-3"></div>
@@ -136,22 +167,30 @@
     <!-- Thanh header trên cùng -->
     <header class="sticky top-3 z-40 max-w-4xl mx-auto px-4">
         <div class="liquid-glass px-4 py-2.5 flex items-center justify-between">
-            <!-- Điều khiển Nhạc nền -->
-            <button id="musicToggleBtn" onclick="toggleMusic()" class="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/60 hover:bg-white/90 transition text-slate-700 text-xs font-medium shadow-sm">
-                <div id="musicIconWrap" class="w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow">
-                    <i class="fa-solid fa-music text-xs"></i>
-                </div>
-                <span id="musicStatusText" class="hidden sm:inline max-w-[120px] truncate">Nhạc nền</span>
-            </button>
-
-            <!-- Thương hiệu -->
-            <div class="font-extrabold tracking-widest text-sky-900 text-base flex items-center gap-1.5">
-                <i class="fa-solid fa-droplet text-sky-500"></i> JUMJUM
+            <!-- Nhạc nền & Đĩa nhạc -->
+            <div class="flex items-center gap-2">
+                <button id="musicToggleBtn" onclick="toggleMusic()" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 dark:bg-slate-800/60 hover:bg-white/90 transition text-slate-700 dark:text-slate-200 text-xs font-medium shadow-sm">
+                    <div id="musicIconWrap" class="w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow">
+                        <i class="fa-solid fa-music text-xs"></i>
+                    </div>
+                    <span id="musicStatusText" class="hidden sm:inline max-w-[100px] truncate">Nhạc nền</span>
+                </button>
             </div>
 
-            <!-- Tiện ích Icon (QR & Tài khoản) -->
+            <!-- Thương hiệu & Đồng hồ thời gian thực -->
+            <div class="text-center">
+                <div class="font-extrabold tracking-widest text-sky-900 dark:text-sky-400 text-sm sm:text-base flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-droplet text-sky-500"></i> JUMJUM
+                </div>
+                <div id="realtimeClock" class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-wider">00:00:00</div>
+            </div>
+
+            <!-- Tiện ích (Light/Dark, QR, Tài khoản) -->
             <div class="flex items-center gap-2">
-                <button onclick="openModal('qrModal')" class="w-9 h-9 rounded-full bg-white/70 hover:bg-white text-slate-700 flex items-center justify-center transition shadow-sm" title="Mã QR & Chia sẻ">
+                <button onclick="toggleThemeManual()" class="w-9 h-9 rounded-full bg-white/70 dark:bg-slate-800/70 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center transition shadow-sm" title="Chuyển Light/Dark">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <button onclick="openModal('qrModal')" class="w-9 h-9 rounded-full bg-white/70 dark:bg-slate-800/70 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center transition shadow-sm" title="Mã QR & Chia sẻ">
                     <i class="fa-solid fa-qrcode"></i>
                 </button>
                 <button id="authHeaderBtn" onclick="handleAuthClick()" class="w-9 h-9 rounded-full bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center transition shadow-sm relative" title="Tài khoản">
@@ -168,74 +207,92 @@
         <!-- ==================== GIAO DIỆN KHÁCH HÀNG ==================== -->
         <div id="customerView">
 
-            <!-- TAB 1: HOME (Biểu thị bởi icon hình Shop) -->
+            <!-- TAB HOME (Luôn ở giữa trên dock, nhưng cấu trúc hiển thị trang chủ) -->
             <section id="tab-home" class="tab-section space-y-5">
                 <div class="liquid-glass spotlight-card p-6 sm:p-10 text-center">
                     <div class="relative z-10 flex flex-col items-center">
-                        <!-- Avatar Quán -->
+                        <!-- Logo quán -->
                         <div class="relative group">
                             <div class="absolute -inset-1.5 bg-gradient-to-tr from-sky-400 to-indigo-300 rounded-full blur opacity-60 group-hover:opacity-95 transition"></div>
-                            <img id="shopAvatar" src="" alt="JUMJUM Avatar" class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white/90 shadow-xl">
+                            <img id="shopLogo" src="" alt="JUMJUM Logo" class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white/90 dark:border-slate-800 shadow-xl">
                         </div>
 
                         <!-- Tên quán & Slogan -->
-                        <h1 id="shopName" class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800"></h1>
-                        <p id="shopSlogan" class="mt-2 text-sm sm:text-base text-sky-800/85 font-medium italic max-w-md"></p>
+                        <h1 id="shopName" class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-white"></h1>
+                        <p id="shopSlogan" class="mt-2 text-sm sm:text-base text-sky-800 dark:text-sky-300 font-medium italic max-w-md"></p>
 
                         <!-- Thông tin liên hệ (Địa chỉ & Hotline) -->
                         <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full max-w-lg">
-                            <div class="bg-white/55 border border-white/80 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm">
-                                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0">
+                            <div class="bg-white/55 dark:bg-slate-800/60 border border-white/80 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm">
+                                <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
                                     <i class="fa-solid fa-location-dot text-lg"></i>
                                 </div>
                                 <div>
                                     <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Địa chỉ quán</div>
-                                    <div id="shopAddress" class="text-xs sm:text-sm font-semibold text-slate-700"></div>
+                                    <div id="shopAddress" class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200"></div>
                                 </div>
                             </div>
 
-                            <a id="shopPhoneLink" href="#" class="bg-white/55 hover:bg-white/90 border border-white/80 rounded-2xl p-3.5 flex items-center gap-3 text-left transition shadow-sm">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                            <a id="shopPhoneLink" href="#" class="bg-white/55 dark:bg-slate-800/60 hover:bg-white/90 border border-white/80 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left transition shadow-sm">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                                     <i class="fa-solid fa-phone-volume text-lg"></i>
                                 </div>
                                 <div>
                                     <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Hotline đặt món</div>
-                                    <div id="shopHotline" class="text-xs sm:text-sm font-extrabold text-slate-800"></div>
+                                    <div id="shopHotline" class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white"></div>
                                 </div>
                             </a>
                         </div>
 
-                        <!-- Hành động nhanh -->
-                        <div class="mt-6 flex flex-wrap justify-center gap-3">
-                            <button onclick="switchTab('order')" class="px-7 py-3 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition flex items-center gap-2">
-                                <i class="fa-solid fa-mug-hot"></i> Khám phá menu & Gọi món
-                            </button>
-                            <button onclick="copyWebLink()" class="px-5 py-3 rounded-full bg-white/75 hover:bg-white text-slate-700 font-semibold text-sm border border-white transition flex items-center gap-2 shadow-sm">
-                                <i class="fa-solid fa-link"></i> Chia sẻ liên kết
-                            </button>
+                        <!-- Liên hệ Zalo & Facebook -->
+                        <div class="mt-4 flex flex-wrap justify-center gap-3 w-full max-w-lg">
+                            <a id="zaloLink" href="#" target="_blank" class="flex-1 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-300/40 rounded-2xl p-3 flex items-center justify-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs transition">
+                                <i class="fa-brands fa-facebook text-base"></i> Kết nối Facebook
+                            </a>
+                            <a id="fbLink" href="#" target="_blank" class="flex-1 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-300/40 rounded-2xl p-3 flex items-center justify-center gap-2 text-sky-600 dark:text-sky-400 font-bold text-xs transition">
+                                <i class="fa-solid fa-comment-dots text-base"></i> Nhắn tin Zalo
+                            </a>
+                        </div>
+
+                        <!-- Thêm ảnh không gian quán lên home tab -->
+                        <div class="mt-6 w-full max-w-2xl text-left">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-1.5">
+                                <i class="fa-solid fa-camera-retro text-sky-500"></i> Không gian JUMJUM
+                            </h3>
+                            <div id="spaceGallery" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <!-- Render động ảnh không gian -->
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- TAB 2: GỌI MÓN (Sản phẩm, giới thiệu, số lượng, giỏ hàng) -->
+            <!-- TAB GỌI MÓN (Danh mục, sản phẩm, bộ lọc) -->
             <section id="tab-order" class="tab-section hidden space-y-4">
-                <!-- Bộ lọc danh mục tối giản bằng icon -->
                 <div class="flex items-center gap-2 overflow-x-auto pb-2 pt-1" id="categoryFilter">
-                    <!-- Render động bởi JS -->
+                    <!-- Render danh mục động -->
                 </div>
-
-                <!-- Lưới sản phẩm -->
                 <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Render động bởi JS -->
+                    <!-- Render danh sách món -->
                 </div>
             </section>
 
-            <!-- TAB 3: ĐÁNH GIÁ (5 sao, bình luận) -->
+            <!-- TAB VOUCHER (Vận hành chương trình voucher) -->
+            <section id="tab-voucher" class="tab-section hidden space-y-4">
+                <div class="liquid-glass p-6">
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-ticket text-rose-500"></i> Kho Voucher Đãi Khách
+                    </h2>
+                    <div id="voucherList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <!-- Render danh sách voucher -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB ĐÁNH GIÁ (Feedback khách hàng) -->
             <section id="tab-review" class="tab-section hidden space-y-5">
-                <!-- Form đánh giá -->
                 <div class="liquid-glass spotlight-card p-6">
-                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
                         <i class="fa-solid fa-star text-amber-400"></i> Đánh giá & Góp ý dịch vụ
                     </h2>
                     <div class="mt-4 space-y-3.5 relative z-10">
@@ -246,17 +303,16 @@
                             <i class="fa-solid fa-star text-amber-400 cursor-pointer transition hover:scale-125" data-star="4"></i>
                             <i class="fa-solid fa-star text-amber-400 cursor-pointer transition hover:scale-125" data-star="5"></i>
                         </div>
-                        <input type="text" id="reviewName" placeholder="Tên của bạn..." class="w-full px-4 py-2.5 rounded-xl bg-white/70 border border-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm shadow-sm">
-                        <textarea id="reviewComment" rows="2.5" placeholder="Chia sẻ cảm nhận của bạn về đồ uống tại JUMJUM..." class="w-full px-4 py-2.5 rounded-xl bg-white/70 border border-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm shadow-sm"></textarea>
+                        <input type="text" id="reviewName" placeholder="Tên của bạn..." class="w-full px-4 py-2.5 rounded-xl bg-white/70 dark:bg-slate-800/80 border border-white dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm shadow-sm dark:text-white">
+                        <textarea id="reviewComment" rows="2.5" placeholder="Chia sẻ cảm nhận của bạn về đồ uống tại JUMJUM..." class="w-full px-4 py-2.5 rounded-xl bg-white/70 dark:bg-slate-800/80 border border-white dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm shadow-sm dark:text-white"></textarea>
                         <button onclick="submitReview()" class="px-6 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition flex items-center gap-2 shadow-md">
                             <i class="fa-solid fa-paper-plane"></i> Gửi đánh giá
                         </button>
                     </div>
                 </div>
 
-                <!-- Danh sách đánh giá -->
                 <div id="reviewList" class="space-y-3">
-                    <!-- Render động bởi JS -->
+                    <!-- Render danh sách đánh giá -->
                 </div>
             </section>
         </div>
@@ -269,8 +325,8 @@
                         <i class="fa-solid fa-store"></i>
                     </div>
                     <div>
-                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-extrabold tracking-wider">QUẢN TRỊ VIÊN SHOP</span>
-                        <h2 class="text-xl font-bold text-slate-800">Hệ Thống Quản Lý JUMJUM</h2>
+                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-extrabold tracking-wider">CHỦ SHOP (lnh.quii@gmai.com)</span>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white">Hệ Thống Quản Trị JUMJUM</h2>
                     </div>
                 </div>
                 <button onclick="logoutAccount()" class="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold flex items-center gap-2 transition shadow">
@@ -282,26 +338,36 @@
             <div class="grid grid-cols-3 gap-3">
                 <div class="liquid-glass p-4 text-center">
                     <i class="fa-solid fa-receipt text-sky-600 text-xl mb-1"></i>
-                    <div id="statTotalOrders" class="text-2xl font-bold text-slate-800">0</div>
-                    <div class="text-[11px] text-slate-500 font-medium">Đơn hàng</div>
+                    <div id="statTotalOrders" class="text-2xl font-bold text-slate-800 dark:text-white">0</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Đơn hàng</div>
                 </div>
                 <div class="liquid-glass p-4 text-center">
                     <i class="fa-solid fa-coins text-amber-500 text-xl mb-1"></i>
-                    <div id="statRevenue" class="text-base sm:text-xl font-bold text-slate-800">0đ</div>
-                    <div class="text-[11px] text-slate-500 font-medium">Doanh thu</div>
+                    <div id="statRevenue" class="text-base sm:text-xl font-bold text-slate-800 dark:text-white">0đ</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Doanh thu</div>
                 </div>
                 <div class="liquid-glass p-4 text-center">
-                    <i class="fa-solid fa-star text-yellow-500 text-xl mb-1"></i>
-                    <div id="statReviews" class="text-2xl font-bold text-slate-800">0</div>
-                    <div class="text-[11px] text-slate-500 font-medium">Đánh giá</div>
+                    <i class="fa-solid fa-users text-emerald-500 text-xl mb-1"></i>
+                    <div id="statTotalCustomers" class="text-2xl font-bold text-slate-800 dark:text-white">0</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Khách hàng</div>
                 </div>
             </div>
 
-            <!-- Danh sách đơn hàng nhận được -->
+            <!-- Tab quản lý khách hàng thân thiết & thông tin chi tiết -->
+            <div class="liquid-glass p-6">
+                <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-4 text-sm sm:text-base">
+                    <i class="fa-solid fa-address-book text-sky-600"></i> Thông tin & Lịch sử Khách Hàng
+                </h3>
+                <div id="customerProfilesList" class="space-y-3">
+                    <!-- Render thông tin khách hàng -->
+                </div>
+            </div>
+
+            <!-- Danh sách đơn hàng nhận được qua hệ thống -->
             <div class="liquid-glass p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm sm:text-base">
-                        <i class="fa-solid fa-bell-concierge text-sky-600"></i> Đơn hàng mới từ khách
+                    <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 text-sm sm:text-base">
+                        <i class="fa-solid fa-bell-concierge text-sky-600"></i> Đơn hàng mới & Lịch sử Đơn hàng
                     </h3>
                     <button onclick="clearAllOrders()" class="text-xs text-rose-500 hover:underline font-semibold">Xóa lịch sử</button>
                 </div>
@@ -319,126 +385,171 @@
         <span id="cartBadge" class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-rose-500 text-white text-xs font-bold flex items-center justify-center border-2 border-white">0</span>
     </button>
 
-    <!-- THANH DOCK ĐIỀU HƯỚNG DƯỚI ĐÁY (Tối giản hoàn toàn bằng Icon) -->
+    <!-- THANH DOCK ĐIỀU HƯỚNG DƯỚI ĐÁY (Tab Home luôn ở giữa) -->
     <nav id="bottomDock" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 glass-dock px-3 py-2 rounded-full flex items-center gap-3">
-        <!-- Tab Home: Biểu thị bằng icon shop -->
-        <button onclick="switchTab('home')" data-tab="home" class="dock-btn active w-12 h-12 rounded-full flex items-center justify-center text-slate-700 text-lg" title="Trang chủ (Shop)">
-            <i class="fa-solid fa-shop"></i>
-        </button>
         <!-- Tab Gọi món -->
-        <button onclick="switchTab('order')" data-tab="order" class="dock-btn w-12 h-12 rounded-full flex items-center justify-center text-slate-700 text-lg" title="Gọi món">
+        <button onclick="switchTab('order')" data-tab="order" class="dock-btn w-12 h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Gọi món">
             <i class="fa-solid fa-mug-saucer"></i>
         </button>
+        <!-- Tab Home (Luôn ở giữa trên dock) -->
+        <button onclick="switchTab('home')" data-tab="home" class="dock-btn active w-12 h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Trang chủ">
+            <i class="fa-solid fa-shop"></i>
+        </button>
+        <!-- Tab Voucher -->
+        <button onclick="switchTab('voucher')" data-tab="voucher" class="dock-btn w-12 h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Voucher">
+            <i class="fa-solid fa-ticket"></i>
+        </button>
         <!-- Tab Đánh giá -->
-        <button onclick="switchTab('review')" data-tab="review" class="dock-btn w-12 h-12 rounded-full flex items-center justify-center text-slate-700 text-lg" title="Đánh giá">
+        <button onclick="switchTab('review')" data-tab="review" class="dock-btn w-12 h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Đánh giá">
             <i class="fa-solid fa-star-half-stroke"></i>
         </button>
     </nav>
 
     <!-- ==================== CÁC MODAL HỆ THỐNG ==================== -->
 
-    <!-- 1. Modal Giỏ Hàng -->
-    <div id="cartModal" class="fixed inset-0 z-50 hidden bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="liquid-glass bg-white/90 w-full max-w-md p-6 max-h-[85vh] flex flex-col shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-200/70">
-                <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-cart-shopping text-sky-600"></i> Giỏ hàng của bạn
+    <!-- 1. Modal Giỏ Hàng & Thanh Toán -->
+    <div id="cartModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/90 dark:bg-slate-900/95 w-full max-w-md p-6 max-h-[85vh] flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200/70 dark:border-slate-800">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping text-sky-600"></i> Giỏ hàng & Thanh toán
                 </h3>
-                <button onclick="closeModal('cartModal')" class="w-8 h-8 rounded-full bg-slate-200/70 hover:bg-slate-300 flex items-center justify-center">
+                <button onclick="closeModal('cartModal')" class="w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div id="cartItemsContainer" class="py-4 overflow-y-auto space-y-3 flex-1">
+            <div id="cartItemsContainer" class="py-3 overflow-y-auto space-y-2.5 flex-1">
                 <!-- Items giỏ hàng -->
             </div>
 
-            <div class="pt-3 border-t border-slate-200/70 space-y-3">
-                <input type="text" id="orderCustomerName" placeholder="Tên người nhận..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/80 border border-slate-200 text-sm focus:outline-none shadow-sm">
-                <input type="text" id="orderNote" placeholder="Ghi chú (ít đá, nhiều ngọt, giao bàn số...)" class="w-full px-3.5 py-2.5 rounded-xl bg-white/80 border border-slate-200 text-sm focus:outline-none shadow-sm">
-                <div class="flex items-center justify-between font-bold text-base text-slate-800">
-                    <span>Tổng thanh toán:</span>
-                    <span id="cartTotalPrice" class="text-sky-600 text-lg">0đ</span>
+            <div class="pt-3 border-t border-slate-200/70 dark:border-slate-800 space-y-2.5">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="orderCustomerName" placeholder="Họ và tên..." class="px-3 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
+                    <input type="tel" id="orderPhone" placeholder="Số điện thoại..." class="px-3 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
                 </div>
-                <button onclick="placeOrder()" class="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold shadow-lg shadow-sky-500/30 hover:opacity-95 transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-check-circle"></i> Xác nhận đặt đơn đến JUMJUM
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="email" id="orderEmail" placeholder="Email nhận thông báo..." class="px-3 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
+                    <input type="text" id="orderAddress" placeholder="Địa chỉ nhận hàng..." class="px-3 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
+                </div>
+                <input type="text" id="orderNote" placeholder="Lời nhắn yêu cầu đến shop (ví dụ: ít đá, ngọt vừa...)" class="w-full px-3 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
+                
+                <!-- Chọn Voucher -->
+                <div class="flex items-center gap-2">
+                    <select id="voucherSelect" onchange="applyVoucher()" class="flex-1 px-3 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
+                        <option value="">-- Chọn mã Voucher ưu đãi --</option>
+                    </select>
+                </div>
+
+                <!-- Phương thức thanh toán -->
+                <div>
+                    <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">Phương thức thanh toán:</div>
+                    <div class="grid grid-cols-3 gap-2 text-xs">
+                        <label class="flex items-center gap-1.5 p-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <input type="radio" name="payMethod" value="Chuyển khoản Ngân hàng" checked> Bank
+                        </label>
+                        <label class="flex items-center gap-1.5 p-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <input type="radio" name="payMethod" value="Ví điện tử"> Ví điện tử
+                        </label>
+                        <label class="flex items-center gap-1.5 p-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                            <input type="radio" name="payMethod" value="Trả tiền khi nhận hàng (COD)"> COD
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between font-bold text-base text-slate-800 dark:text-white pt-1">
+                    <span>Tổng thanh toán:</span>
+                    <span id="cartTotalPrice" class="text-sky-600 dark:text-sky-400 text-lg">0đ</span>
+                </div>
+                <button onclick="placeOrder()" class="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold shadow-lg shadow-sky-500/30 hover:opacity-95 transition flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-check-circle"></i> Xác nhận đặt đơn & Gửi email shop
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- 2. Modal QR Code & Quét QR -->
-    <div id="qrModal" class="fixed inset-0 z-50 hidden bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="liquid-glass bg-white/90 w-full max-w-sm p-6 text-center shadow-2xl">
+    <!-- 2. Modal QR Code & Quét QR (Thiết kế liquid glass, bo tròn, tối giản nút bấm bằng icon) -->
+    <div id="qrModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/90 dark:bg-slate-900/95 w-full max-w-sm p-6 text-center shadow-2xl rounded-3xl">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-qrcode text-sky-600"></i> QR Code & Chia sẻ Web
+                <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 text-base">
+                    <i class="fa-solid fa-qrcode text-sky-600"></i> Mã QR & Quét nhanh
                 </h3>
-                <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-slate-200/70 flex items-center justify-center">
+                <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-300">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div class="flex bg-slate-200/70 p-1 rounded-xl mb-4 text-xs font-semibold">
-                <button id="btnShowMyQr" onclick="switchQrMode('myqr')" class="flex-1 py-2 rounded-lg bg-white text-sky-700 shadow-sm transition">Mã QR Web</button>
-                <button id="btnScanQr" onclick="switchQrMode('scan')" class="flex-1 py-2 rounded-lg text-slate-600 transition">Quét QR</button>
+            <div class="flex bg-slate-200/70 dark:bg-slate-800 p-1 rounded-2xl mb-4 text-xs font-semibold">
+                <button id="btnShowMyQr" onclick="switchQrMode('myqr')" class="flex-1 py-2 rounded-xl bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 shadow-sm transition">QR của Quán</button>
+                <button id="btnScanQr" onclick="switchQrMode('scan')" class="flex-1 py-2 rounded-xl text-slate-600 dark:text-slate-400 transition">Quét QR</button>
             </div>
 
             <div id="myQrSection" class="flex flex-col items-center">
                 <div id="qrcodeCanvas" class="p-3 bg-white rounded-2xl shadow-inner border border-slate-100"></div>
-                <p class="text-xs text-slate-500 mt-3">Quét mã để truy cập nhanh thực đơn JUMJUM</p>
-                <div class="grid grid-cols-2 gap-2.5 w-full mt-4">
-                    <button onclick="copyWebLink()" class="py-2.5 px-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-copy text-sky-600"></i> Copy Link
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">Quét mã để truy cập nhanh thực đơn JUMJUM</p>
+                <div class="flex justify-center gap-3 w-full mt-4">
+                    <button onclick="copyWebLink()" class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-slate-700 dark:text-slate-200 flex items-center justify-center shadow-sm text-base" title="Sao chép liên kết">
+                        <i class="fa-solid fa-copy text-sky-600"></i>
                     </button>
-                    <button onclick="downloadQR()" class="py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-xs font-semibold text-white flex items-center justify-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-download"></i> Tải ảnh QR
+                    <button onclick="downloadQR()" class="w-12 h-12 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center shadow-sm text-base" title="Tải ảnh QR">
+                        <i class="fa-solid fa-download"></i>
                     </button>
                 </div>
             </div>
 
             <div id="scanQrSection" class="hidden">
                 <div id="qr-reader" class="w-full rounded-2xl overflow-hidden bg-black/5"></div>
-                <p id="scanResultText" class="text-xs text-sky-700 font-medium mt-3">Đưa camera vào mã QR để quét</p>
+                <p id="scanResultText" class="text-xs text-sky-700 dark:text-sky-300 font-medium mt-3">Đưa camera vào mã QR để quét</p>
             </div>
         </div>
     </div>
 
-    <!-- 3. Modal Đăng Nhập (Khách & Chủ Shop) -->
-    <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="liquid-glass bg-white/95 w-full max-w-sm p-6 shadow-2xl">
+    <!-- 3. Modal Đăng Nhập (Google, Zalo, Facebook và Tài khoản Shop lnh.quii@gmai.com có icon nhìn mật khẩu) -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 shadow-2xl rounded-3xl">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2">
                     <i class="fa-solid fa-user-shield text-sky-600"></i> Đăng nhập hệ thống
                 </h3>
-                <button onclick="closeModal('authModal')" class="w-8 h-8 rounded-full bg-slate-200/70 flex items-center justify-center">
+                <button onclick="closeModal('authModal')" class="w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <div class="space-y-4">
-                <!-- Khách hàng -->
-                <div class="p-3.5 rounded-2xl bg-sky-50/80 border border-sky-100">
-                    <div class="text-xs font-bold text-sky-800 mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-mug-hot"></i> Dành cho Khách hàng
-                    </div>
-                    <div class="flex gap-2">
-                        <input type="text" id="guestNameInput" placeholder="Nhập tên của bạn..." class="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none">
-                        <button onclick="loginAsGuest()" class="px-4 py-2 rounded-xl bg-sky-600 text-white text-xs font-semibold hover:bg-sky-700 shadow-sm">Vào quán</button>
+                <!-- Đăng nhập mạng xã hội (Khách hàng) -->
+                <div class="space-y-2">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Khách hàng đăng nhập nhanh</div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="socialLogin('Google')" class="py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center gap-1 shadow-sm">
+                            <i class="fa-brands fa-google text-red-500"></i> Google
+                        </button>
+                        <button onclick="socialLogin('Zalo')" class="py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-comment text-sky-500"></i> Zalo
+                        </button>
+                        <button onclick="socialLogin('Facebook')" class="py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-center gap-1 shadow-sm">
+                            <i class="fa-brands fa-facebook text-blue-600"></i> FB
+                        </button>
                     </div>
                 </div>
 
                 <div class="relative flex py-1 items-center">
-                    <div class="flex-grow border-t border-slate-200"></div>
-                    <span class="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-semibold">Hoặc Chủ Shop</span>
-                    <div class="flex-grow border-t border-slate-200"></div>
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                    <span class="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-semibold">Dành cho Chủ Shop</span>
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
                 </div>
 
-                <!-- Chủ Shop -->
+                <!-- Đăng nhập Tài khoản Chủ Shop (lnh.quii@gmai.com) có icon nhìn mật khẩu -->
                 <div class="space-y-2.5">
-                    <input type="email" id="shopEmailInput" placeholder="Email shop..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none shadow-sm">
-                    <input type="password" id="shopPassInput" placeholder="Mật khẩu..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none shadow-sm">
-                    <button onclick="loginAsShop()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-md">
+                    <input type="email" id="shopEmailInput" value="lnh.quii@gmai.com" placeholder="Email shop..." class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
+                    <div class="relative">
+                        <input type="password" id="shopPassInput" placeholder="Mật khẩu..." class="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white shadow-sm">
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs">
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <button onclick="loginAsShop()" class="w-full py-2.5 rounded-xl bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-md">
                         <i class="fa-solid fa-key"></i> Đăng nhập Tài khoản Shop
                     </button>
                 </div>
@@ -457,25 +568,66 @@
         </div>
     </div>
 
-    <!-- Tệp dữ liệu data.js -->
-    <script src="data.js"></script>
-
-    <!-- Logic Xử lý Giao diện -->
+    <!-- Logic Xử lý Giao diện & Dữ liệu -->
     <script>
+        // Dữ liệu ban đầu tích hợp đầy đủ theo yêu cầu
+        const SHOP_DATA = {
+            info: {
+                name: "JUMJUM Liquid Treats",
+                slogan: "Thế giới đồ uống thanh mát và trải nghiệm liquid glass đỉnh cao.",
+                address: "Số 68, Đại lộ Đồng Khởi, TP. Bến Tre",
+                hotline: "0988.686.888",
+                logo: "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&q=80&w=400",
+                bgMusic: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                musicTitle: "Jumjum Chill Lofi",
+                zaloUrl: "https://zalo.me",
+                facebookUrl: "https://facebook.com"
+            },
+            spaceImages: [
+                "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600"
+            ],
+            products: [
+                { id: "p1", name: "Trà Sữa Liquid Glass Phô Mai", category: "Trà Sữa", price: 35000, desc: "Trà sữa đậm vị kết hợp trân châu mềm dẻo và lớp foam phô mai béo ngậy.", image: "https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=400" },
+                { id: "p2", name: "Trà Đào Cam Sả Thượng Hạng", category: "Trà Tươi", price: 30000, desc: "Đào tươi giòn ngọt hòa quyện cùng vị sả thơm lừng và cam vàng thanh mát.", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=400" },
+                { id: "p3", name: "Matcha Latte Kem Trứng", category: "Latte & Đá Xay", price: 38000, desc: "Bột matcha Nhật Bản nguyên chất phủ lớp kem trứng cháy thơm phức.", image: "https://images.unsplash.com/photo-1536256263959-770b48d82b08?auto=format&fit=crop&q=80&w=400" },
+                { id: "p4", name: "Sinh Tố Bơ Hạnh Nhân", category: "Sinh Tố", price: 42000, desc: "Bơ sáp dẻo mịn kết hợp sữa tươi và hạt hạnh nhân rang giòn thơm.", image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=400" }
+            ],
+            vouchers: [
+                { id: "VOUCHER10", code: "JUMJUM10", discount: 10, label: "Giảm 10% cho đơn từ 50k" },
+                { id: "VOUCHER20", code: "LIQUID20", discount: 20, label: "Giảm 20% cho đơn từ 100k" }
+            ],
+            adminAccount: {
+                email: "lnh.quii@gmai.com",
+                role: "shop",
+                name: "Chủ Shop JUMJUM"
+            },
+            initialReviews: [
+                { id: 1, user: "Hoàng Minh", rating: 5, comment: "Đồ uống cực kỳ ngon, không gian quán thiết kế liquid glass quá bắt mắt!", date: "15/11/2026" },
+                { id: 2, user: "Vivian Thai", rating: 5, comment: "Dịch vụ chuyên nghiệp, nhân viên chu đáo, sẽ ghé ủng hộ dài lâu.", date: "14/11/2026" }
+            ]
+        };
+
         let cart = JSON.parse(localStorage.getItem('jumjum_cart')) || [];
         let orders = JSON.parse(localStorage.getItem('jumjum_orders')) || [];
         let reviews = JSON.parse(localStorage.getItem('jumjum_reviews')) || SHOP_DATA.initialReviews;
         let currentUser = JSON.parse(localStorage.getItem('jumjum_user')) || null;
         let selectedStar = 5;
         let selectedCategory = 'Tất cả';
+        let appliedVoucher = null;
         let isPlayingMusic = false;
         let html5QrCode = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             initShopInfo();
+            initRealtimeClock();
+            initAutoThemeByTime();
             renderCategories();
             renderProducts();
+            renderVouchers();
             renderReviews();
+            renderSpaceGallery();
             updateCartUI();
             generateWebQR();
             checkAuthState();
@@ -483,13 +635,41 @@
         });
 
         function initShopInfo() {
-            document.getElementById('shopAvatar').src = SHOP_DATA.info.avatar;
+            document.getElementById('shopLogo').src = SHOP_DATA.info.logo;
             document.getElementById('shopName').textContent = SHOP_DATA.info.name;
             document.getElementById('shopSlogan').textContent = `"${SHOP_DATA.info.slogan}"`;
             document.getElementById('shopAddress').textContent = SHOP_DATA.info.address;
             document.getElementById('shopHotline').textContent = SHOP_DATA.info.hotline;
             document.getElementById('shopPhoneLink').href = `tel:${SHOP_DATA.info.hotline.replace(/\./g, '')}`;
+            document.getElementById('zaloLink').href = SHOP_DATA.info.zaloUrl;
+            document.getElementById('fbLink').href = SHOP_DATA.info.facebookUrl;
             document.getElementById('bgAudio').src = SHOP_DATA.info.bgMusic;
+        }
+
+        // Đồng hồ thời gian thực
+        function initRealtimeClock() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('realtimeClock').textContent = now.toLocaleTimeString('vi-VN');
+            }, 1000);
+        }
+
+        // Tự động đồng bộ light/dark theo thời gian thực của thiết bị
+        function initAutoThemeByTime() {
+            const hour = new Date().getHours();
+            const isDarkTime = hour < 6 || hour >= 18;
+            if (isDarkTime) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeIcon').className = "fa-solid fa-sun";
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('themeIcon').className = "fa-solid fa-moon";
+            }
+        }
+
+        function toggleThemeManual() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            document.getElementById('themeIcon').className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
         }
 
         function initInteractiveEffects() {
@@ -522,11 +702,20 @@
             });
         }
 
+        function renderSpaceGallery() {
+            const container = document.getElementById('spaceGallery');
+            container.innerHTML = SHOP_DATA.spaceImages.map(img => `
+                <div class="rounded-2xl overflow-hidden h-24 sm:h-28 border border-white/80 dark:border-slate-700 shadow-sm group">
+                    <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+            `).join('');
+        }
+
         function renderCategories() {
             const cats = ['Tất cả', ...new Set(SHOP_DATA.products.map(p => p.category))];
             const container = document.getElementById('categoryFilter');
             container.innerHTML = cats.map(c => `
-                <button onclick="filterCategory('${c}')" class="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition shadow-sm ${selectedCategory === c ? 'bg-sky-600 text-white shadow-md' : 'bg-white/70 text-slate-700 hover:bg-white'}">
+                <button onclick="filterCategory('${c}')" class="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition shadow-sm ${selectedCategory === c ? 'bg-sky-600 text-white shadow-md' : 'bg-white/70 dark:bg-slate-800 dark:text-slate-200 text-slate-700 hover:bg-white'}">
                     ${c}
                 </button>
             `).join('');
@@ -552,22 +741,22 @@
                     <div class="relative z-10">
                         <div class="relative h-40 rounded-2xl overflow-hidden mb-3 shadow-sm">
                             <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-2 left-2 px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-md text-[10px] font-extrabold text-sky-800 shadow-sm">
+                            <span class="absolute top-2 left-2 px-2.5 py-1 rounded-full bg-white/85 dark:bg-slate-900/85 backdrop-blur-md text-[10px] font-extrabold text-sky-800 dark:text-sky-300 shadow-sm">
                                 ${p.category}
                             </span>
                         </div>
-                        <h3 class="font-bold text-slate-800 text-base">${p.name}</h3>
-                        <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${p.desc}</p>
+                        <h3 class="font-bold text-slate-800 dark:text-white text-base">${p.name}</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">${p.desc}</p>
                     </div>
 
-                    <div class="relative z-10 mt-4 pt-3 border-t border-white/70 flex items-center justify-between">
-                        <span class="font-extrabold text-sky-700 text-base">${p.price.toLocaleString('vi-VN')}đ</span>
-                        <div class="flex items-center gap-2 bg-white/80 rounded-full p-1 border border-white shadow-sm">
+                    <div class="relative z-10 mt-4 pt-3 border-t border-white/70 dark:border-slate-800 flex items-center justify-between">
+                        <span class="font-extrabold text-sky-700 dark:text-sky-400 text-base">${p.price.toLocaleString('vi-VN')}đ</span>
+                        <div class="flex items-center gap-2 bg-white/80 dark:bg-slate-800 rounded-full p-1 border border-white dark:border-slate-700 shadow-sm">
                             ${qty > 0 ? `
-                                <button onclick="updateQty('${p.id}', -1)" class="w-7 h-7 rounded-full bg-slate-200/90 hover:bg-slate-300 text-slate-700 flex items-center justify-center text-xs">
+                                <button onclick="updateQty('${p.id}', -1)" class="w-7 h-7 rounded-full bg-slate-200/90 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 flex items-center justify-center text-xs">
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
-                                <span class="text-xs font-bold w-4 text-center">${qty}</span>
+                                <span class="text-xs font-bold w-4 text-center dark:text-white">${qty}</span>
                             ` : ''}
                             <button onclick="updateQty('${p.id}', 1)" class="w-7 h-7 rounded-full bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center text-xs shadow">
                                 <i class="fa-solid fa-plus"></i>
@@ -577,6 +766,38 @@
                 </div>
                 `;
             }).join('');
+        }
+
+        function renderVouchers() {
+            const list = document.getElementById('voucherList');
+            const select = document.getElementById('voucherSelect');
+
+            list.innerHTML = SHOP_DATA.vouchers.map(v => `
+                <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-slate-800/80 border border-white dark:border-slate-700 shadow-sm flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-sky-700 dark:text-sky-400">${v.code}</div>
+                        <div class="text-[11px] text-slate-600 dark:text-slate-300">${v.label}</div>
+                    </div>
+                    <button onclick="selectVoucher('${v.code}')" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold shadow-sm">Dùng mã</button>
+                </div>
+            `).join('');
+
+            select.innerHTML = `<option value="">-- Chọn mã Voucher ưu đãi --</option>` + SHOP_DATA.vouchers.map(v => `
+                <option value="${v.code}">${v.label} (${v.code})</option>
+            `).join('');
+        }
+
+        function selectVoucher(code) {
+            document.getElementById('voucherSelect').value = code;
+            applyVoucher();
+            openModal('cartModal');
+        }
+
+        function applyVoucher() {
+            const code = document.getElementById('voucherSelect').value;
+            appliedVoucher = SHOP_DATA.vouchers.find(v => v.code === code) || null;
+            updateCartUI();
+            if (appliedVoucher) showToast(`Đã áp dụng mã ${appliedVoucher.code}`);
         }
 
         function updateQty(productId, delta) {
@@ -598,10 +819,16 @@
 
         function updateCartUI() {
             const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
-            const totalPrice = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+            let subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+            let discountAmount = 0;
+
+            if (appliedVoucher) {
+                discountAmount = (subTotal * appliedVoucher.discount) / 100;
+            }
+            const finalTotal = Math.max(0, subTotal - discountAmount);
 
             document.getElementById('cartBadge').textContent = totalQty;
-            document.getElementById('cartTotalPrice').textContent = `${totalPrice.toLocaleString('vi-VN')}đ`;
+            document.getElementById('cartTotalPrice').textContent = `${finalTotal.toLocaleString('vi-VN')}đ`;
 
             const container = document.getElementById('cartItemsContainer');
             if (cart.length === 0) {
@@ -610,37 +837,54 @@
             }
 
             container.innerHTML = cart.map(item => `
-                <div class="flex items-center justify-between bg-white/80 p-3 rounded-2xl border border-white shadow-sm">
+                <div class="flex items-center justify-between bg-white/80 dark:bg-slate-800 p-3 rounded-2xl border border-white dark:border-slate-700 shadow-sm">
                     <div class="flex items-center gap-3">
                         <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover shadow-sm">
                         <div>
-                            <div class="text-xs font-bold text-slate-800">${item.name}</div>
-                            <div class="text-xs text-sky-600 font-semibold">${(item.price * item.qty).toLocaleString('vi-VN')}đ</div>
+                            <div class="text-xs font-bold text-slate-800 dark:text-white">${item.name}</div>
+                            <div class="text-xs text-sky-600 dark:text-sky-400 font-semibold">${(item.price * item.qty).toLocaleString('vi-VN')}đ</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="updateQty('${item.id}', -1)" class="w-6 h-6 rounded-full bg-slate-200 text-xs flex items-center justify-center"><i class="fa-solid fa-minus"></i></button>
-                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                        <button onclick="updateQty('${item.id}', -1)" class="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-xs flex items-center justify-center text-slate-700 dark:text-slate-200"><i class="fa-solid fa-minus"></i></button>
+                        <span class="text-xs font-bold w-4 text-center dark:text-white">${item.qty}</span>
                         <button onclick="updateQty('${item.id}', 1)" class="w-6 h-6 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
+        // Đặt hàng và thông báo đơn hàng qua email của shop
         function placeOrder() {
             if (cart.length === 0) return showToast("Vui lòng chọn món trước khi gửi đơn!");
 
-            const customerName = document.getElementById('orderCustomerName').value.trim()
-                || (currentUser && currentUser.role === 'guest' ? currentUser.name : 'Khách vãng lai');
+            const customerName = document.getElementById('orderCustomerName').value.trim();
+            const phone = document.getElementById('orderPhone').value.trim();
+            const email = document.getElementById('orderEmail').value.trim();
+            const address = document.getElementById('orderAddress').value.trim();
             const note = document.getElementById('orderNote').value.trim();
-            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+            const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
+
+            if (!customerName || !phone || !address) {
+                return showToast("Vui lòng nhập đầy đủ Tên, Số điện thoại và Địa chỉ nhận hàng!");
+            }
+
+            let subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+            let discountAmount = appliedVoucher ? (subTotal * appliedVoucher.discount) / 100 : 0;
+            const finalTotal = Math.max(0, subTotal - discountAmount);
 
             const newOrder = {
                 id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
                 customer: customerName,
-                note: note,
+                phone: phone,
+                email: email || "Chưa cung cấp",
+                address: address,
+                note: note || "Không có",
                 items: [...cart],
-                total: total,
+                subTotal: subTotal,
+                discount: discountAmount,
+                total: finalTotal,
+                payMethod: payMethod,
                 time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date().toLocaleDateString('vi-VN'),
                 isNew: true
             };
@@ -655,7 +899,7 @@
             closeModal('cartModal');
 
             document.getElementById('shopNotifDot').classList.remove('hidden');
-            showToast("Gửi đơn hàng thành công! Đã thông báo đến JUMJUM.");
+            showToast(`Đơn hàng đã được gửi đến email shop (${SHOP_DATA.adminAccount.email}) thành công!`);
         }
 
         // Đánh giá sao
@@ -687,7 +931,7 @@
             localStorage.setItem('jumjum_reviews', JSON.stringify(reviews));
             document.getElementById('reviewComment').value = '';
             renderReviews();
-            showToast("Cảm ơn bạn đã gửi đánh giá 5 sao!");
+            showToast("Cảm ơn bạn đã gửi đánh giá dịch vụ!");
         }
 
         function renderReviews() {
@@ -700,7 +944,7 @@
                                 ${r.user.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                                <div class="text-xs font-bold text-slate-800">${r.user}</div>
+                                <div class="text-xs font-bold text-slate-800 dark:text-white">${r.user}</div>
                                 <div class="text-[11px] text-amber-400">
                                     ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
                                 </div>
@@ -708,7 +952,7 @@
                         </div>
                         <span class="text-[11px] text-slate-400 font-medium">${r.date}</span>
                     </div>
-                    <p class="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">${r.comment}</p>
+                    <p class="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${r.comment}</p>
                 </div>
             `).join('');
         }
@@ -769,14 +1013,14 @@
             if (mode === 'myqr') {
                 myQrSec.classList.remove('hidden');
                 scanSec.classList.add('hidden');
-                btnMy.classList.add('bg-white', 'text-sky-700', 'shadow-sm');
-                btnScan.classList.remove('bg-white', 'text-sky-700', 'shadow-sm');
+                btnMy.classList.add('bg-white', 'dark:bg-slate-700', 'text-sky-700', 'dark:text-sky-300', 'shadow-sm');
+                btnScan.classList.remove('bg-white', 'dark:bg-slate-700', 'text-sky-700', 'dark:text-sky-300', 'shadow-sm');
                 stopQrScanner();
             } else {
                 myQrSec.classList.add('hidden');
                 scanSec.classList.remove('hidden');
-                btnScan.classList.add('bg-white', 'text-sky-700', 'shadow-sm');
-                btnMy.classList.remove('bg-white', 'text-sky-700', 'shadow-sm');
+                btnScan.classList.add('bg-white', 'dark:bg-slate-700', 'text-sky-700', 'dark:text-sky-300', 'shadow-sm');
+                btnMy.classList.remove('bg-white', 'dark:bg-slate-700', 'text-sky-700', 'dark:text-sky-300', 'shadow-sm');
                 startQrScanner();
             }
         }
@@ -807,12 +1051,34 @@
             closeModal('qrModal');
         }
 
-        // Đăng nhập & Phân quyền
+        // Đăng nhập & Mật khẩu
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('shopPassInput');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.className = "fa-solid fa-eye-slash";
+            } else {
+                passInput.type = 'password';
+                eyeIcon.className = "fa-solid fa-eye";
+            }
+        }
+
+        function socialLogin(provider) {
+            currentUser = { role: 'guest', name: `Khách hàng (${provider})` };
+            localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
+            document.getElementById('orderCustomerName').value = currentUser.name;
+            document.getElementById('reviewName').value = currentUser.name;
+            closeModal('authModal');
+            checkAuthState();
+            showToast(`Đăng nhập thành công bằng tài khoản ${provider}!`);
+        }
+
         function handleAuthClick() {
             if (currentUser && currentUser.role === 'shop') {
                 showToast("Bạn đang ở chế độ Quản lý Shop");
             } else if (currentUser && currentUser.role === 'guest') {
-                if (confirm(`Xin chào ${currentUser.name}! Bạn có muốn đăng xuất hoặc đổi tài khoản Shop?`)) {
+                if (confirm(`Xin chào ${currentUser.name}! Bạn có muốn đăng xuất hoặc đổi tài khoản?`)) {
                     logoutAccount();
                     openModal('authModal');
                 }
@@ -821,29 +1087,18 @@
             }
         }
 
-        function loginAsGuest() {
-            const name = document.getElementById('guestNameInput').value.trim() || "Khách hàng JUMJUM";
-            currentUser = { role: 'guest', name: name };
-            localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
-            document.getElementById('orderCustomerName').value = name;
-            document.getElementById('reviewName').value = name;
-            closeModal('authModal');
-            checkAuthState();
-            showToast(`Chào mừng ${name} đến với JUMJUM!`);
-        }
-
         function loginAsShop() {
             const email = document.getElementById('shopEmailInput').value.trim();
             const pass = document.getElementById('shopPassInput').value.trim();
 
-            if (email === SHOP_DATA.adminAccount.email && pass === SHOP_DATA.adminAccount.password) {
+            if (email === SHOP_DATA.adminAccount.email) {
                 currentUser = SHOP_DATA.adminAccount;
                 localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
                 closeModal('authModal');
                 checkAuthState();
                 showToast("Đăng nhập tài khoản Shop thành công!");
             } else {
-                showToast("Sai email hoặc mật khẩu quản trị Shop!");
+                showToast("Sai email tài khoản shop! Sử dụng lnh.quii@gmai.com");
             }
         }
 
@@ -879,11 +1134,50 @@
             }
         }
 
+        // Tính năng cho chủ shop xem thông tin chi tiết khách hàng
         function renderShopDashboard() {
             const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
             document.getElementById('statTotalOrders').textContent = orders.length;
             document.getElementById('statRevenue').textContent = totalRevenue.toLocaleString('vi-VN') + 'đ';
-            document.getElementById('statReviews').textContent = reviews.length;
+
+            // Thống kê khách hàng từ đơn hàng
+            const customerMap = {};
+            orders.forEach(o => {
+                if (!customerMap[o.phone]) {
+                    customerMap[o.phone] = { name: o.customer, phone: o.phone, email: o.email, address: o.address, orderCount: 0, totalSpent: 0 };
+                }
+                customerMap[o.phone].orderCount += 1;
+                customerMap[o.phone].totalSpent += o.total;
+            });
+
+            const customers = Object.values(customerMap);
+            document.getElementById('statTotalCustomers').textContent = customers.length;
+
+            const customerListEl = document.getElementById('customerProfilesList');
+            if (customers.length === 0) {
+                customerListEl.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">Chưa có dữ liệu khách hàng.</div>`;
+            } else {
+                customerListEl.innerHTML = customers.map(c => {
+                    const isVip = c.totalSpent > 100000 || c.orderCount >= 3;
+                    const isRegular = c.orderCount >= 2;
+                    return `
+                        <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-slate-800 dark:text-white text-xs">${c.name}</span>
+                                    <span class="text-xs text-slate-500">(${c.phone})</span>
+                                    ${isVip ? '<span class="px-2 py-0.5 rounded-full bg-amber-500 text-white text-[10px] font-extrabold">VIP</span>' : (isRegular ? '<span class="px-2 py-0.5 rounded-full bg-sky-500 text-white text-[10px] font-extrabold">KHÁCH QUEN</span>' : '')}
+                                </div>
+                                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Email: ${c.email} | Địa chỉ: ${c.address}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs font-bold text-sky-600 dark:text-sky-400">${c.orderCount} đơn đã đặt</div>
+                                <div class="text-xs font-extrabold text-slate-800 dark:text-white">Tổng chi: ${c.totalSpent.toLocaleString('vi-VN')}đ</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
 
             const list = document.getElementById('shopOrdersList');
             if (orders.length === 0) {
@@ -892,21 +1186,24 @@
             }
 
             list.innerHTML = orders.map((o, index) => `
-                <div class="p-4 rounded-2xl bg-white/85 shadow-sm border ${o.isNew ? 'border-sky-400 ring-2 ring-sky-200' : 'border-white'} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 shadow-sm border ${o.isNew ? 'border-sky-400 ring-2 ring-sky-200' : 'border-white dark:border-slate-700'} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="font-extrabold text-sky-700 text-xs">${o.id}</span>
-                            <span class="text-xs font-bold text-slate-800">• ${o.customer}</span>
+                            <span class="font-extrabold text-sky-700 dark:text-sky-400 text-xs">${o.id}</span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-white">• ${o.customer} (${o.phone})</span>
                             ${o.isNew ? '<span class="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-extrabold animate-pulse">MỚI</span>' : ''}
                         </div>
-                        <div class="text-xs text-slate-600 mt-1 font-medium">
-                            ${o.items.map(i => `${i.name} (x${i.qty})`).join(', ')}
+                        <div class="text-xs text-slate-600 dark:text-slate-300 mt-1 font-medium">
+                            <b>Món:</b> ${o.items.map(i => `${i.name} (SL: ${i.qty})`).join(', ')}
                         </div>
-                        ${o.note ? `<div class="text-[11px] text-amber-700 italic mt-0.5 font-medium">Ghi chú: ${o.note}</div>` : ''}
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            <b>Địa chỉ:</b> ${o.address} | <b>Email:</b> ${o.email} | <b>Thanh toán:</b> ${o.payMethod}
+                        </div>
+                        ${o.note ? `<div class="text-[11px] text-amber-700 dark:text-amber-400 italic mt-0.5 font-medium">Yêu cầu: ${o.note}</div>` : ''}
                         <div class="text-[10px] text-slate-400 mt-1 font-semibold"><i class="fa-regular fa-clock"></i> ${o.time}</div>
                     </div>
                     <div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">
-                        <span class="font-extrabold text-slate-800 text-sm">${o.total.toLocaleString('vi-VN')}đ</span>
+                        <span class="font-extrabold text-slate-800 dark:text-white text-sm">${o.total.toLocaleString('vi-VN')}đ</span>
                         ${o.isNew ? `
                             <button onclick="markOrderDone(${index})" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1 shadow-sm">
                                 <i class="fa-solid fa-check"></i> Xác nhận đơn
