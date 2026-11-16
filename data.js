@@ -7,13 +7,18 @@ const SHOP_DATA = {
         hotline: "0576.935.873",
         avatar: "images/jumjumshop.png",
         
-        // --- Thêm thông tin Favicon & Mạng xã hội ---
-        favicon: "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f964.png", // Icon ứng dụng / Favicon biểu tượng ly nước
-        zaloUrl: "https://zalo.me/0398476794",                                          // Link nhắn tin Zalo
-        facebookUrl: "https://www.facebook.com/nhzt.wiie",                                          // Link kết nối Facebook quán
+        // --- Favicon hình tròn (Bạn có thể thay link ảnh icon tròn của web vào đây) ---
+        favicon: "images/jumjumshop.png",
+        
+        // --- Liên kết và Icon riêng biệt cho Zalo & Facebook ---
+        zaloUrl: "https://zalo.me/0398476794",
+        zaloIcon: "images/zalo.png", // Đường dẫn icon Zalo riêng
+        
+        facebookUrl: "https://www.facebook.com/nhzt.wiie",
+        facebookIcon: "images/facebook.png", // Đường dẫn icon Facebook riêng
         
         // --- Âm thanh & Nhạc nền ---
-        bgMusic: "audio/jumjum music.mp3", 
+        bgMusic: "audio/jumjum music.mp3",
         musicTitle: "JUMJUM MUSIC"
     },
     spaceImages: [
@@ -70,7 +75,7 @@ const SHOP_DATA = {
         },
         {
             id: "sp06",
-            name: "Bánh Croissant Trừng Muối",
+            name: "Bánh Croissant Trứng Muối",
             category: "Bánh Ngọt",
             price: 38000,
             image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=500&q=80",
