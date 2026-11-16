@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUMJUM — Liquid Glass Experience</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- QRCode.js & HTML5-QRCode Scanner -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.42);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+            --accent: #0284c7;
+        }
+
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 45%, #e2e8f0 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Hiệu ứng đốm sáng chuyển động nền (Liquid Orbs) */
+        .liquid-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(70px);
+            z-index: -1;
+            animation: floatOrb 14s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+        .orb-1 { width: 380px; height: 380px; background: rgba(56, 189, 248, 0.35); top: -80px; left: -80px; }
+        .orb-2 { width: 420px; height: 420px; background: rgba(147, 197, 253, 0.4); bottom: -100px; right: -80px; animation-delay: -5s; }
+        .orb-3 { width: 260px; height: 260px; background: rgba(186, 230, 253, 0.45); top: 45%; left: 50%; animation-delay: -9s; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -35px) scale(1.12); }
+        }
+
+        /* Phong cách Liquid Glass */
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+            border-radius: 26px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+        }
+
+        /* Ánh sáng Spotlight đi theo chuột */
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            top: var(--mouse-y, -500px);
+            left: var(--mouse-x, -500px);
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.65) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.2s;
+        }
+
+        /* Hiệu ứng gợn sóng nước khi click */
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            border: 2px solid rgba(56, 189, 248, 0.55);
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            transform: scale(0);
+            animation: rippleAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Đĩa nhạc xoay */
+        @keyframes spinDisk {
+            100% { transform: rotate(360deg); }
+        }
+        .spinning { animation: spinDisk 6s linear infinite; }
+
+        /* Dock điều hướng nổi dưới đáy */
+        .glass-dock {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(24px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
+        }
+        .dock-btn {
+            transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .dock-btn:hover {
+            transform: translateY(-6px) scale(1.12);
+        }
+        .dock-btn.active {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: white;
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+        }
+
+        /* Ẩn thanh cuộn nhưng vẫn cuộn mượt */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); border-radius: 99px; }
+    </style>
+</head>
+<body class="pb-28">
+
+    <!-- Nền Liquid Orbs -->
+    <div class="liquid-orb orb-1"></div>
+    <div class="liquid-orb orb-2"></div>
+    <div class="liquid-orb orb-3"></div>
+
+    <!-- Thanh công cụ trên cùng (Nhạc nền, QR, Tài khoản) -->
+    <header class="sticky top-3 z-40 max-w-4xl mx-auto px-4">
+        <div class="liquid-glass px-4 py-2.5 flex items-center justify-between">
+            <!-- Nút điều khiển nhạc nền -->
+            <button id="musicToggleBtn" onclick="toggleMusic()" class="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/50 hover:bg-white/80 transition text-slate-700 text-xs font-medium" title="Bật/Tắt nhạc nền">
+                <div id="musicIconWrap" class="w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow">
+                    <i class="fa-solid fa-music text-xs"></i>
+                </div>
+                <span id="musicStatusText" class="hidden sm:inline max-w-[130px] truncate">Nhạc nền</span>
+            </button>
+
+            <!-- Tên thương hiệu thu gọn -->
+            <div class="font-bold tracking-widest text-sky-900 text-base flex items-center gap-1.5">
+                <i class="fa-solid fa-droplet text-sky-500"></i> JUMJUM
+            </div>
+
+            <!-- Cụm Icon tiện ích: Chia sẻ/QR & Đăng nhập -->
+            <div class="flex items-center gap-2">
+                <button onclick="openModal('qrModal')" class="w-9 h-9 rounded-full bg-white/60 hover:bg-white text-slate-700 flex items-center justify-center transition shadow-sm" title="QR Code & Chia sẻ">
+                    <i class="fa-solid fa-qrcode"></i>
+                </button>
+                <button id="authHeaderBtn" onclick="handleAuthClick()" class="w-9 h-9 rounded-full bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center transition shadow-sm relative" title="Tài khoản">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="shopNotifDot" class="hidden absolute -top-0.5 -right-0.5 w-3 h-3 bg-rose-500 border-2 border-white rounded-full animate-ping"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- KHU VỰC NỘI DUNG CHÍNH -->
+    <main class="max-w-4xl mx-auto px-4 mt-6">
+
+        <!-- ==================== GIAO DIỆN KHÁCH HÀNG ==================== -->
+        <div id="customerView">
+
+            <!-- TAB 1: HOME (Icon Shop) -->
+            <section id="tab-home" class="tab-section space-y-5">
+                <div class="liquid-glass spotlight-card p-6 sm:p-8 text-center">
+                    <div class="relative z-10 flex flex-col items-center">
+                        <!-- Avatar quán -->
+                        <div class="relative group">
+                            <div class="absolute -inset-1.5 bg-gradient-to-tr from-sky-400 to-indigo-300 rounded-full blur opacity-60 group-hover:opacity-90 transition"></div>
+                            <img id="shopAvatar" src="" alt="JUMJUM Avatar" class="relative w-28 h-28 rounded-full object-cover border-4 border-white/80 shadow-lg">
+                        </div>
+
+                        <!-- Tên quán & Slogan -->
+                        <h1 id="shopName" class="mt-4 text-3xl font-bold tracking-tight text-slate-800"></h1>
+                        <p id="shopSlogan" class="mt-1.5 text-sm sm:text-base text-sky-800/80 font-medium italic"></p>
+
+                        <!-- Thông tin liên hệ tối giản bằng Icon -->
+                        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg">
+                            <div class="bg-white/50 border border-white/70 rounded-2xl p-3.5 flex items-center gap-3 text-left">
+                                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-location-dot text-lg"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Địa chỉ</div>
+                                    <div id="shopAddress" class="text-xs sm:text-sm font-medium text-slate-700"></div>
+                                </div>
+                            </div>
+
+                            <a id="shopPhoneLink" href="#" class="bg-white/50 hover:bg-white/80 border border-white/70 rounded-2xl p-3.5 flex items-center gap-3 text-left transition">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-phone-volume text-lg"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Hotline</div>
+                                    <div id="shopHotline" class="text-xs sm:text-sm font-bold text-slate-800"></div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Nút hành động nhanh -->
+                        <div class="mt-6 flex flex-wrap justify-center gap-3">
+                            <button onclick="switchTab('order')" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white font-semibold text-sm shadow-lg shadow-sky-500/30 hover:scale-105 transition flex items-center gap-2">
+                                <i class="fa-solid fa-mug-hot"></i> Gọi món ngay
+                            </button>
+                            <button onclick="copyWebLink()" class="px-4 py-2.5 rounded-full bg-white/70 hover:bg-white text-slate-700 font-medium text-sm border border-white transition flex items-center gap-2">
+                                <i class="fa-solid fa-link"></i> Copy Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: GỌI MÓN -->
+            <section id="tab-order" class="tab-section hidden space-y-5">
+                <!-- Bộ lọc danh mục bằng icon/chip -->
+                <div class="flex items-center justify-between gap-2 overflow-x-auto pb-1" id="categoryFilter">
+                    <!-- Render động bằng JS -->
+                </div>
+
+                <!-- Lưới thẻ sản phẩm -->
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Render động bằng JS -->
+                </div>
+            </section>
+
+            <!-- TAB 3: ĐÁNH GIÁ -->
+            <section id="tab-review" class="tab-section hidden space-y-5">
+                <!-- Form gửi đánh giá -->
+                <div class="liquid-glass spotlight-card p-6">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-400"></i> Gửi trải nghiệm của bạn
+                    </h2>
+                    <div class="mt-4 space-y-3 relative z-10">
+                        <div class="flex items-center gap-2 text-2xl" id="starSelector">
+                            <i class="fa-solid fa-star text-amber-400 cursor-pointer transition hover:scale-125" data-star="1"></i>
+                            <i class="fa-solid fa-star text-amber-400 cursor-pointer transition hover:scale-125" data-star="2"></i>
+                            <i class="fa-solid fa-star text-amber-400 cursor-pointer transition hover:scale-125" data-star="3"></i>
+                            <i class="fa-solid fa-star text-amber-400 cursor-pointer transition hover:scale-125" data-star="4"></i>
+                            <i class="fa-solid fa-star text-amber-400 cursor-pointer transition hover:scale-125" data-star="5"></i>
+                        </div>
+                        <input type="text" id="reviewName" placeholder="Tên của bạn (hoặc để trống nếu là Khách)" class="w-full px-4 py-2.5 rounded-xl bg-white/60 border border-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm">
+                        <textarea id="reviewComment" rows="2" placeholder="Chia sẻ cảm nhận về đồ uống & dịch vụ tại JUMJUM..." class="w-full px-4 py-2.5 rounded-xl bg-white/60 border border-white focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm"></textarea>
+                        <button onclick="submitReview()" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold transition flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Gửi đánh giá
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Danh sách đánh giá -->
+                <div id="reviewList" class="space-y-3">
+                    <!-- Render động bằng JS -->
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== GIAO DIỆN QUẢN LÝ CỦA SHOP ==================== -->
+        <div id="shopDashboardView" class="hidden space-y-5">
+            <div class="liquid-glass p-6 flex flex-wrap items-center justify-between gap-4 border-sky-300">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-600 text-white flex items-center justify-center text-xl shadow-md">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-bold">CHẾ ĐỘ CHỦ SHOP</span>
+                        <h2 class="text-xl font-bold text-slate-800">Bảng Điều Khiển JUMJUM</h2>
+                    </div>
+                </div>
+                <button onclick="logoutAccount()" class="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold flex items-center gap-2 transition">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất Shop
+                </button>
+            </div>
+
+            <!-- Thống kê nhanh bằng Icon -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="liquid-glass p-4 text-center">
+                    <i class="fa-solid fa-bell-concierge text-sky-600 text-xl mb-1"></i>
+                    <div id="statTotalOrders" class="text-2xl font-bold text-slate-800">0</div>
+                    <div class="text-xs text-slate-500">Đơn hàng</div>
+                </div>
+                <div class="liquid-glass p-4 text-center">
+                    <i class="fa-solid fa-coins text-amber-500 text-xl mb-1"></i>
+                    <div id="statRevenue" class="text-lg sm:text-2xl font-bold text-slate-800">0đ</div>
+                    <div class="text-xs text-slate-500">Doanh thu</div>
+                </div>
+                <div class="liquid-glass p-4 text-center">
+                    <i class="fa-solid fa-star text-yellow-500 text-xl mb-1"></i>
+                    <div id="statReviews" class="text-2xl font-bold text-slate-800">0</div>
+                    <div class="text-xs text-slate-500">Đánh giá</div>
+                </div>
+            </div>
+
+            <!-- Danh sách đơn hàng gửi đến Shop -->
+            <div class="liquid-glass p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-sky-600"></i> Đơn hàng mới từ khách
+                    </h3>
+                    <button onclick="clearAllOrders()" class="text-xs text-rose-500 hover:underline">Xóa lịch sử</button>
+                </div>
+                <div id="shopOrdersList" class="space-y-3">
+                    <!-- Render động đơn hàng -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- NÚT GIỎ HÀNG NỔI (Chỉ hiện ở giao diện khách) -->
+    <button id="floatingCartBtn" onclick="openModal('cartModal')" class="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full bg-gradient-to-tr from-sky-600 to-blue-500 text-white shadow-xl shadow-sky-500/40 flex items-center justify-center hover:scale-110 transition">
+        <i class="fa-solid fa-bag-shopping text-xl"></i>
+        <span id="cartBadge" class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-rose-500 text-white text-xs font-bold flex items-center justify-center border-2 border-white">0</span>
+    </button>
+
+    <!-- THANH DOCK ĐIỀU HƯỚNG DƯỚI ĐÁY (Ưu tiên tối giản bằng Icon) -->
+    <nav id="bottomDock" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 glass-dock px-3 py-2 rounded-full flex items-center gap-3">
+        <!-- Tab Home: Icon hình Shop -->
+        <button onclick="switchTab('home')" data-tab="home" class="dock-btn active w-12 h-12 rounded-full flex items-center justify-center text-slate-700 text-lg" title="Trang chủ (Shop)">
+            <i class="fa-solid fa-shop"></i>
+        </button>
+        <!-- Tab Gọi món -->
+        <button onclick="switchTab('order')" data-tab="order" class="dock-btn w-12 h-12 rounded-full flex items-center justify-center text-slate-700 text-lg" title="Gọi món">
+            <i class="fa-solid fa-mug-saucer"></i>
+        </button>
+        <!-- Tab Đánh giá -->
+        <button onclick="switchTab('review')" data-tab="review" class="dock-btn w-12 h-12 rounded-full flex items-center justify-center text-slate-700 text-lg" title="Đánh giá">
+            <i class="fa-solid fa-star-half-stroke"></i>
+        </button>
+    </nav>
+
+    <!-- ==================== CÁC MODAL TƯƠNG TÁC ==================== -->
+
+    <!-- 1. Modal Giỏ Hàng & Đặt Món -->
+    <div id="cartModal" class="fixed inset-0 z-50 hidden bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/85 w-full max-w-md p-6 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200/70">
+                <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping text-sky-600"></i> Giỏ hàng của bạn
+                </h3>
+                <button onclick="closeModal('cartModal')" class="w-8 h-8 rounded-full bg-slate-200/70 hover:bg-slate-300 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="cartItemsContainer" class="py-4 overflow-y-auto space-y-3 flex-1">
+                <!-- Items render động -->
+            </div>
+
+            <div class="pt-3 border-t border-slate-200/70 space-y-3">
+                <input type="text" id="orderCustomerName" placeholder="Tên người nhận..." class="w-full px-3.5 py-2 rounded-xl bg-white/80 border border-slate-200 text-sm focus:outline-none">
+                <input type="text" id="orderNote" placeholder="Ghi chú (ít đá, nhiều trân châu, bàn số...)" class="w-full px-3.5 py-2 rounded-xl bg-white/80 border border-slate-200 text-sm focus:outline-none">
+                <div class="flex items-center justify-between font-bold text-base text-slate-800">
+                    <span>Tổng cộng:</span>
+                    <span id="cartTotalPrice" class="text-sky-600 text-lg">0đ</span>
+                </div>
+                <button onclick="placeOrder()" class="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold shadow-lg shadow-sky-500/30 hover:opacity-95 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-circle"></i> Gửi đơn đến JUMJUM
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Modal QR Code (Tạo QR, Tải QR, Copy Link & Quét QR) -->
+    <div id="qrModal" class="fixed inset-0 z-50 hidden bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/85 w-full max-w-sm p-6 text-center">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-qrcode text-sky-600"></i> Chia sẻ & Quét QR
+                </h3>
+                <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-slate-200/70 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Chuyển chế độ QR của Web / Camera Scan -->
+            <div class="flex bg-slate-200/60 p-1 rounded-xl mb-4 text-xs font-semibold">
+                <button id="btnShowMyQr" onclick="switchQrMode('myqr')" class="flex-1 py-2 rounded-lg bg-white text-sky-700 shadow-sm transition">Mã QR Web</button>
+                <button id="btnScanQr" onclick="switchQrMode('scan')" class="flex-1 py-2 rounded-lg text-slate-600 transition">Quét QR</button>
+            </div>
+
+            <!-- Khu vực hiển thị QR Web -->
+            <div id="myQrSection" class="flex flex-col items-center">
+                <div id="qrcodeCanvas" class="p-3 bg-white rounded-2xl shadow-inner border border-slate-100"></div>
+                <p class="text-xs text-slate-500 mt-3">Quét mã để truy cập nhanh thực đơn JUMJUM</p>
+                <div class="grid grid-cols-2 gap-2.5 w-full mt-4">
+                    <button onclick="copyWebLink()" class="py-2.5 px-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-copy text-sky-600"></i> Copy Link
+                    </button>
+                    <button onclick="downloadQR()" class="py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-xs font-semibold text-white flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Tải QR
+                    </button>
+                </div>
+            </div>
+
+            <!-- Khu vực Camera Quét QR -->
+            <div id="scanQrSection" class="hidden">
+                <div id="qr-reader" class="w-full rounded-2xl overflow-hidden bg-black/5"></div>
+                <p id="scanResultText" class="text-xs text-sky-700 font-medium mt-3">Đưa camera vào mã QR để quét</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Modal Đăng Nhập (Khách & Chủ Shop) -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/90 w-full max-w-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-sky-600"></i> Đăng nhập hệ thống
+                </h3>
+                <button onclick="closeModal('authModal')" class="w-8 h-8 rounded-full bg-slate-200/70 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Đăng nhập nhanh cho Khách -->
+            <div class="space-y-3">
+                <div class="p-3.5 rounded-2xl bg-sky-50/80 border border-sky-100">
+                    <div class="text-xs font-bold text-sky-800 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-mug-hot"></i> Dành cho Khách hàng
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="guestNameInput" placeholder="Nhập tên của bạn..." class="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none">
+                        <button onclick="loginAsGuest()" class="px-4 py-2 rounded-xl bg-sky-600 text-white text-xs font-semibold hover:bg-sky-700">Vào quán</button>
+                    </div>
+                </div>
+
+                <div class="relative flex py-1 items-center">
+                    <div class="flex-grow border-t border-slate-200"></div>
+                    <span class="flex-shrink mx-3 text-[11px] text-slate-400 uppercase">Hoặc Quản trị Shop</span>
+                    <div class="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <!-- Đăng nhập Chủ Shop -->
+                <div class="space-y-2.5">
+                    <input type="email" id="shopEmailInput" placeholder="Email của shop..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none">
+                    <input type="password" id="shopPassInput" placeholder="Mật khẩu..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none">
+                    <button onclick="loginAsShop()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-key"></i> Đăng nhập Tài khoản Shop
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player ẩn -->
+    <audio id="bgAudio" loop></audio>
+
+    <!-- Toast Thông báo nổi -->
+    <div id="toastBox" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-3">
+        <div class="px-5 py-2.5 rounded-full bg-slate-800/90 backdrop-blur-md text-white text-xs font-medium shadow-xl flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-sky-400"></i>
+            <span id="toastMsg">Thông báo</span>
+        </div>
+    </div>
+
+    <!-- Nạp tệp dữ liệu data.js -->
+    <script src="data.js"></script>
+
+    <!-- Logic Xử lý Ứng dụng -->
+    <script>
+        // --- KHỞI TẠO TRẠNG THÁI ---
+        let cart = JSON.parse(localStorage.getItem('jumjum_cart')) || [];
+        let orders = JSON.parse(localStorage.getItem('jumjum_orders')) || [];
+        let reviews = JSON.parse(localStorage.getItem('jumjum_reviews')) || SHOP_DATA.initialReviews;
+        let currentUser = JSON.parse(localStorage.getItem('jumjum_user')) || null;
+        let selectedStar = 5;
+        let selectedCategory = 'Tất cả';
+        let isPlayingMusic = false;
+        let html5QrCode = null;
+
+        // --- KHỞI CHẠY KHI TẢI TRANG ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initShopInfo();
+            renderCategories();
+            renderProducts();
+            renderReviews();
+            updateCartUI();
+            generateWebQR();
+            checkAuthState();
+            initInteractiveEffects();
+        });
+
+        // 1. Nạp thông tin quán từ data.js
+        function initShopInfo() {
+            document.getElementById('shopAvatar').src = SHOP_DATA.info.avatar;
+            document.getElementById('shopName').textContent = SHOP_DATA.info.name;
+            document.getElementById('shopSlogan').textContent = `"${SHOP_DATA.info.slogan}"`;
+            document.getElementById('shopAddress').textContent = SHOP_DATA.info.address;
+            document.getElementById('shopHotline').textContent = SHOP_DATA.info.hotline;
+            document.getElementById('shopPhoneLink').href = `tel:${SHOP_DATA.info.hotline.replace(/\./g, '')}`;
+            document.getElementById('bgAudio').src = SHOP_DATA.info.bgMusic;
+        }
+
+        // 2. Hiệu ứng tương tác vật lý (Spotlight & Water Ripple)
+        function initInteractiveEffects() {
+            // Spotlight theo chuột
+            document.addEventListener('mousemove', (e) => {
+                document.querySelectorAll('.spotlight-card').forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                });
+            });
+
+            // Gợn sóng nước khi chạm/click
+            document.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.width = '40px';
+                ripple.style.height = '40px';
+                ripple.style.left = `${e.clientX - 20}px`;
+                ripple.style.top = `${e.clientY - 20}px`;
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 800);
+            });
+        }
+
+        // 3. Điều hướng Tab
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.dock-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
+            });
+        }
+
+        // 4. Danh mục & Sản phẩm (Tab Gọi Món)
+        function renderCategories() {
+            const cats = ['Tất cả', ...new Set(SHOP_DATA.products.map(p => p.category))];
+            const container = document.getElementById('categoryFilter');
+            container.innerHTML = cats.map(c => `
+                <button onclick="filterCategory('${c}')" class="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition ${selectedCategory === c ? 'bg-sky-600 text-white shadow-md' : 'bg-white/60 text-slate-700 hover:bg-white'}">
+                    ${c}
+                </button>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            selectedCategory = cat;
+            renderCategories();
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const filtered = selectedCategory === 'Tất cả'
+                ? SHOP_DATA.products
+                : SHOP_DATA.products.filter(p => p.category === selectedCategory);
+
+            grid.innerHTML = filtered.map(p => {
+                const inCart = cart.find(item => item.id === p.id);
+                const qty = inCart ? inCart.qty : 0;
+                return `
+                <div class="liquid-glass spotlight-card p-4 flex flex-col justify-between group">
+                    <div class="relative z-10">
+                        <div class="relative h-40 rounded-2xl overflow-hidden mb-3">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-2 left-2 px-2.5 py-1 rounded-full bg-white/80 backdrop-blur-md text-[10px] font-bold text-sky-800">
+                                ${p.category}
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-base">${p.name}</h3>
+                        <p class="text-xs text-slate-500 mt-1 line-clamp-2">${p.desc}</p>
+                    </div>
+
+                    <div class="relative z-10 mt-4 pt-3 border-t border-white/60 flex items-center justify-between">
+                        <span class="font-bold text-sky-700 text-base">${p.price.toLocaleString('vi-VN')}đ</span>
+                        <div class="flex items-center gap-2 bg-white/70 rounded-full p-1 border border-white">
+                            ${qty > 0 ? `
+                                <button onclick="updateQty('${p.id}', -1)" class="w-7 h-7 rounded-full bg-slate-200/80 hover:bg-slate-300 text-slate-700 flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <span class="text-xs font-bold w-4 text-center">${qty}</span>
+                            ` : ''}
+                            <button onclick="updateQty('${p.id}', 1)" class="w-7 h-7 rounded-full bg-sky-600 hover:bg-sky-700 text-white flex items-center justify-center text-xs shadow">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // 5. Giỏ hàng & Đặt đơn
+        function updateQty(productId, delta) {
+            const product = SHOP_DATA.products.find(p => p.id === productId);
+            const idx = cart.findIndex(item => item.id === productId);
+
+            if (idx > -1) {
+                cart[idx].qty += delta;
+                if (cart[idx].qty <= 0) cart.splice(idx, 1);
+            } else if (delta > 0) {
+                cart.push({ ...product, qty: 1 });
+                showToast(`Đã thêm ${product.name}`);
+            }
+
+            localStorage.setItem('jumjum_cart', JSON.stringify(cart));
+            renderProducts();
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
+            const totalPrice = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+            document.getElementById('cartBadge').textContent = totalQty;
+            document.getElementById('cartTotalPrice').textContent = `${totalPrice.toLocaleString('vi-VN')}đ`;
+
+            const container = document.getElementById('cartItemsContainer');
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm"><i class="fa-solid fa-mug-hot text-2xl mb-2 block"></i>Giỏ hàng đang trống</div>`;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between bg-white/70 p-3 rounded-2xl border border-white">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">${item.name}</div>
+                            <div class="text-xs text-sky-600 font-semibold">${(item.price * item.qty).toLocaleString('vi-VN')}đ</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="updateQty('${item.id}', -1)" class="w-6 h-6 rounded-full bg-slate-200 text-xs"><i class="fa-solid fa-minus"></i></button>
+                        <span class="text-xs font-bold">${item.qty}</span>
+                        <button onclick="updateQty('${item.id}', 1)" class="w-6 h-6 rounded-full bg-sky-600 text-white text-xs"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function placeOrder() {
+            if (cart.length === 0) return showToast("Vui lòng chọn món trước khi đặt!");
+
+            const customerName = document.getElementById('orderCustomerName').value.trim()
+                || (currentUser && currentUser.role === 'guest' ? currentUser.name : 'Khách vãng lai');
+            const note = document.getElementById('orderNote').value.trim();
+            const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+            const newOrder = {
+                id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                customer: customerName,
+                note: note,
+                items: [...cart],
+                total: total,
+                time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' ' + new Date().toLocaleDateString('vi-VN'),
+                isNew: true
+            };
+
+            orders.unshift(newOrder);
+            localStorage.setItem('jumjum_orders', JSON.stringify(orders));
+
+            // Làm mới giỏ hàng
+            cart = [];
+            localStorage.setItem('jumjum_cart', JSON.stringify(cart));
+            renderProducts();
+            updateCartUI();
+            closeModal('cartModal');
+
+            // Bật chấm đỏ thông báo cho tài khoản Shop
+            document.getElementById('shopNotifDot').classList.remove('hidden');
+            showToast("Đặt món thành công! Hệ thống đã báo cho JUMJUM.");
+        }
+
+        // 6. Đánh giá 5 sao
+        document.querySelectorAll('#starSelector i').forEach(star => {
+            star.addEventListener('click', () => {
+                selectedStar = parseInt(star.dataset.star);
+                document.querySelectorAll('#starSelector i').forEach((s, idx) => {
+                    s.classList.toggle('text-amber-400', idx < selectedStar);
+                    s.classList.toggle('text-slate-300', idx >= selectedStar);
+                });
+            });
+        });
+
+        function submitReview() {
+            const comment = document.getElementById('reviewComment').value.trim();
+            if (!comment) return showToast("Hãy nhập nội dung bình luận nhé!");
+
+            const nameInput = document.getElementById('reviewName').value.trim();
+            const userName = nameInput || (currentUser ? currentUser.name : "Khách yêu JUMJUM");
+
+            reviews.unshift({
+                id: Date.now(),
+                user: userName,
+                rating: selectedStar,
+                comment: comment,
+                date: new Date().toLocaleDateString('vi-VN')
+            });
+
+            localStorage.setItem('jumjum_reviews', JSON.stringify(reviews));
+            document.getElementById('reviewComment').value = '';
+            renderReviews();
+            showToast("Cảm ơn đánh giá 5 sao của bạn!");
+        }
+
+        function renderReviews() {
+            const list = document.getElementById('reviewList');
+            list.innerHTML = reviews.map(r => `
+                <div class="liquid-glass p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-full bg-sky-100 text-sky-700 font-bold flex items-center justify-center text-sm">
+                                ${r.user.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">${r.user}</div>
+                                <div class="text-[11px] text-amber-400">
+                                    ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-[11px] text-slate-400">${r.date}</span>
+                    </div>
+                    <p class="mt-2.5 text-xs sm:text-sm text-slate-600">${r.comment}</p>
+                </div>
+            `).join('');
+        }
+
+        // 7. Nhạc nền
+        function toggleMusic() {
+            const audio = document.getElementById('bgAudio');
+            const iconWrap = document.getElementById('musicIconWrap');
+            const statusText = document.getElementById('musicStatusText');
+
+            if (isPlayingMusic) {
+                audio.pause();
+                iconWrap.classList.remove('spinning');
+                statusText.textContent = "Nhạc nền";
+            } else {
+                audio.play().catch(() => showToast("Trình duyệt chặn tự phát, hãy chạm lại!"));
+                iconWrap.classList.add('spinning');
+                statusText.textContent = SHOP_DATA.info.musicTitle;
+            }
+            isPlayingMusic = !isPlayingMusic;
+        }
+
+        // 8. QR Code, Copy Link, Download QR & Scan QR
+        function generateWebQR() {
+            const qrContainer = document.getElementById('qrcodeCanvas');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: window.location.href,
+                width: 170,
+                height: 170,
+                colorDark: "#0369a1",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function copyWebLink() {
+            navigator.clipboard.writeText(window.location.href);
+            showToast("Đã sao chép liên kết quán JUMJUM!");
+        }
+
+        function downloadQR() {
+            const img = document.querySelector('#qrcodeCanvas img');
+            if (!img) return;
+            const link = document.createElement('a');
+            link.href = img.src;
+            link.download = 'JUMJUM-QR.png';
+            link.click();
+            showToast("Đang tải xuống mã QR...");
+        }
+
+        function switchQrMode(mode) {
+            const myQrSec = document.getElementById('myQrSection');
+            const scanSec = document.getElementById('scanQrSection');
+            const btnMy = document.getElementById('btnShowMyQr');
+            const btnScan = document.getElementById('btnScanQr');
+
+            if (mode === 'myqr') {
+                myQrSec.classList.remove('hidden');
+                scanSec.classList.add('hidden');
+                btnMy.classList.add('bg-white', 'text-sky-700', 'shadow-sm');
+                btnScan.classList.remove('bg-white', 'text-sky-700', 'shadow-sm');
+                stopQrScanner();
+            } else {
+                myQrSec.classList.add('hidden');
+                scanSec.classList.remove('hidden');
+                btnScan.classList.add('bg-white', 'text-sky-700', 'shadow-sm');
+                btnMy.classList.remove('bg-white', 'text-sky-700', 'shadow-sm');
+                startQrScanner();
+            }
+        }
+
+        function startQrScanner() {
+            html5QrCode = new Html5Qrcode("qr-reader");
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 200, height: 200 } },
+                (decodedText) => {
+                    document.getElementById('scanResultText').textContent = `Kết quả: ${decodedText}`;
+                    showToast("Quét mã thành công!");
+                    if (decodedText.startsWith('http')) window.open(decodedText, '_blank');
+                }
+            ).catch(() => {
+                document.getElementById('scanResultText').textContent = "Không tìm thấy camera hoặc chưa cấp quyền.";
+            });
+        }
+
+        function stopQrScanner() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().catch(() => {});
+            }
+        }
+
+        function closeQrModal() {
+            stopQrScanner();
+            closeModal('qrModal');
+        }
+
+        // 9. Phân quyền Đăng nhập Khách & Chủ Shop
+        function handleAuthClick() {
+            if (currentUser && currentUser.role === 'shop') {
+                // Đang ở chế độ shop
+                showToast("Bạn đang đăng nhập tài khoản Shop");
+            } else if (currentUser && currentUser.role === 'guest') {
+                if (confirm(`Xin chào ${currentUser.name}! Bạn muốn đăng xuất hoặc chuyển sang tài khoản Shop?`)) {
+                    logoutAccount();
+                    openModal('authModal');
+                }
+            } else {
+                openModal('authModal');
+            }
+        }
+
+        function loginAsGuest() {
+            const name = document.getElementById('guestNameInput').value.trim() || "Khách hàng thân thiết";
+            currentUser = { role: 'guest', name: name };
+            localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
+            document.getElementById('orderCustomerName').value = name;
+            document.getElementById('reviewName').value = name;
+            closeModal('authModal');
+            checkAuthState();
+            showToast(`Chào mừng ${name} đến với JUMJUM!`);
+        }
+
+        function loginAsShop() {
+            const email = document.getElementById('shopEmailInput').value.trim();
+            const pass = document.getElementById('shopPassInput').value.trim();
+
+            if (email === SHOP_DATA.adminAccount.email && pass === SHOP_DATA.adminAccount.password) {
+                currentUser = SHOP_DATA.adminAccount;
+                localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
+                closeModal('authModal');
+                checkAuthState();
+                showToast("Đăng nhập quản trị JUMJUM thành công!");
+            } else {
+                showToast("Sai email hoặc mật khẩu của Shop!");
+            }
+        }
+
+        function logoutAccount() {
+            currentUser = null;
+            localStorage.removeItem('jumjum_user');
+            checkAuthState();
+            showToast("Đã đăng xuất!");
+        }
+
+        function checkAuthState() {
+            const customerView = document.getElementById('customerView');
+            const shopView = document.getElementById('shopDashboardView');
+            const bottomDock = document.getElementById('bottomDock');
+            const floatingCart = document.getElementById('floatingCartBtn');
+            const notifDot = document.getElementById('shopNotifDot');
+
+            // Kiểm tra có đơn hàng mới chưa xem không
+            const hasNewOrders = orders.some(o => o.isNew);
+            if (hasNewOrders) notifDot.classList.remove('hidden');
+            else notifDot.classList.add('hidden');
+
+            if (currentUser && currentUser.role === 'shop') {
+                // Hiển thị giao diện Shop
+                customerView.classList.add('hidden');
+                bottomDock.classList.add('hidden');
+                floatingCart.classList.add('hidden');
+                shopView.classList.remove('hidden');
+                renderShopDashboard();
+            } else {
+                // Hiển thị giao diện Khách hàng
+                shopView.classList.add('hidden');
+                customerView.classList.remove('hidden');
+                bottomDock.classList.remove('hidden');
+                floatingCart.classList.remove('hidden');
+            }
+        }
+
+        function renderShopDashboard() {
+            const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
+            document.getElementById('statTotalOrders').textContent = orders.length;
+            document.getElementById('statRevenue').textContent = totalRevenue.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('statReviews').textContent = reviews.length;
+
+            const list = document.getElementById('shopOrdersList');
+            if (orders.length === 0) {
+                list.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">Chưa có đơn hàng nào được đặt.</div>`;
+                return;
+            }
+
+            list.innerHTML = orders.map((o, index) => `
+                <div class="p-4 rounded-2xl bg-white/75 border ${o.isNew ? 'border-sky-400 ring-2 ring-sky-200' : 'border-white'} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-sky-700 text-xs">${o.id}</span>
+                            <span class="text-xs font-bold text-slate-800">• ${o.customer}</span>
+                            ${o.isNew ? '<span class="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold animate-pulse">MỚI</span>' : ''}
+                        </div>
+                        <div class="text-xs text-slate-600 mt-1">
+                            ${o.items.map(i => `${i.name} (x${i.qty})`).join(', ')}
+                        </div>
+                        ${o.note ? `<div class="text-[11px] text-amber-700 italic mt-0.5">Ghi chú: ${o.note}</div>` : ''}
+                        <div class="text-[10px] text-slate-400 mt-1"><i class="fa-regular fa-clock"></i> ${o.time}</div>
+                    </div>
+                    <div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">
+                        <span class="font-bold text-slate-800 text-sm">${o.total.toLocaleString('vi-VN')}đ</span>
+                        ${o.isNew ? `
+                            <button onclick="markOrderDone(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1">
+                                <i class="fa-solid fa-check"></i> Nhận đơn
+                            </button>
+                        ` : `<span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-check-double"></i> Đã xác nhận</span>`}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function markOrderDone(index) {
+            orders[index].isNew = false;
+            localStorage.setItem('jumjum_orders', JSON.stringify(orders));
+            renderShopDashboard();
+            checkAuthState();
+            showToast("Đã xác nhận đơn hàng!");
+        }
+
+        function clearAllOrders() {
+            if (confirm("Xóa toàn bộ lịch sử đơn hàng?")) {
+                orders = [];
+                localStorage.setItem('jumjum_orders', JSON.stringify(orders));
+                renderShopDashboard();
+            }
+        }
+
+        // Tiện ích Modal & Toast
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+        function showToast(msg) {
+            const box = document.getElementById('toastBox');
+            document.getElementById('toastMsg').textContent = msg;
+            box.classList.remove('opacity-0', '-translate-y-3');
+            setTimeout(() => box.classList.add('opacity-0', '-translate-y-3'), 2600);
+        }
+    </script>
+</body>
+</html>
