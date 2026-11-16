@@ -2,7 +2,7 @@
 const SHOP_DATA = {
     info: {
         name: "JUMJUM",
-        slogan: "Chạm vị thanh mát — Trọn khoảnh khắc say mê",
+        slogan: "Taste the Fresh, Feel the Joy",
         address: "Nguyễn Văn Cánh, P. Phú Tân, Vĩnh Long",
         hotline: "0576.935.873",
         avatar: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=300&q=80",
