@@ -2,10 +2,10 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>JUMJUM — Taste the Fresh, Feel the Joy</title>
     <meta property="og:title" content="JUMJUM — Taste the Fresh, Feel the Joy">
-    <meta property="og:description" content="Khám phá thực đơn tươi ngon và không gian tuyệt vời tại JUMJUM.">
+    <meta property="og:description" content="Bạn đang thiếu năng lượng - Có JUMJUM đây!">
     <meta property="og:image" content="images/jumjumshop.png">
     
     <!-- Favicon chuẩn 100% hiển thị tức thì mọi trình duyệt -->
@@ -103,32 +103,30 @@
             border-radius: 28px;
             position: relative;
             overflow: hidden;
-            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, background 0.35s ease;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease;
         }
 
         .tactile-btn {
-            transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.26s ease, filter 0.2s ease;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.2s ease;
             cursor: pointer;
             user-select: none;
+            touch-action: manipulation;
         }
         .tactile-btn:hover {
-            transform: translateY(-3px) scale(1.025);
-            box-shadow: 0 12px 24px -6px rgba(2, 132, 199, 0.28), inset 0 1.5px 1.5px rgba(255,255,255,0.85);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 20px -5px rgba(2, 132, 199, 0.25), inset 0 1px 1px rgba(255,255,255,0.85);
         }
         .tactile-btn:active {
-            transform: translateY(2.5px) scale(0.94) !important;
-            box-shadow: inset 0 4px 10px rgba(15, 23, 42, 0.26) !important;
+            transform: translateY(2px) scale(0.95) !important;
+            box-shadow: inset 0 3px 8px rgba(15, 23, 42, 0.22) !important;
         }
 
         .tactile-card {
-            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         }
         .tactile-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 42px -10px rgba(2, 132, 199, 0.22), inset 0 1.5px 2px var(--glass-highlight);
-        }
-        .tactile-card:active {
-            transform: scale(0.985);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px -8px rgba(2, 132, 199, 0.18), inset 0 1px 2px var(--glass-highlight);
         }
 
         .spotlight-card::before {
@@ -153,13 +151,13 @@
             border: 2px solid rgba(56, 189, 248, 0.8);
             background: radial-gradient(circle, rgba(255,255,255,0.45) 0%, transparent 70%);
             transform: scale(0);
-            animation: rippleWave 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: rippleWave 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             pointer-events: none;
             z-index: 9999;
         }
         @keyframes rippleWave {
             0% { transform: scale(0); opacity: 0.9; }
-            100% { transform: scale(5.2); opacity: 0; }
+            100% { transform: scale(4.5); opacity: 0; }
         }
 
         @keyframes spinDisk {
@@ -168,7 +166,7 @@
         .spinning { animation: spinDisk 5s linear infinite; }
 
         .glass-dock {
-            background: rgba(248, 252, 255, 0.82);
+            background: rgba(248, 252, 255, 0.85);
             backdrop-filter: blur(26px) saturate(210%);
             border: 1.5px solid rgba(255, 255, 255, 0.95);
             box-shadow: 0 14px 42px rgba(15, 23, 42, 0.15), inset 0 1px 1px #fff;
@@ -180,10 +178,11 @@
         }
 
         .dock-btn {
-            transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            touch-action: manipulation;
         }
         .dock-btn:hover {
-            transform: translateY(-6px) scale(1.12);
+            transform: translateY(-4px) scale(1.08);
         }
         .dock-btn:active {
             transform: translateY(2px) scale(0.92);
@@ -191,7 +190,7 @@
         .dock-btn.active {
             background: linear-gradient(135deg, #0284c7, #38bdf8);
             color: white;
-            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.42);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
         }
 
         @media print {
@@ -200,7 +199,7 @@
             #invoicePrintArea { position: fixed; left: 0; top: 0; width: 100%; background: white !important; color: black !important; }
         }
 
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.45); border-radius: 99px; }
     </style>
 </head>
@@ -227,7 +226,7 @@
                 </button>
             </div>
 
-            <!-- Tên thương hiệu JUMJUM (Không có biểu tượng giọt nước) & Đồng hồ thời gian thực -->
+            <!-- Tên thương hiệu JUMJUM & Đồng hồ thời gian thực -->
             <div class="text-center min-w-0">
                 <div class="font-extrabold tracking-widest text-sky-900 dark:text-sky-300 text-sm sm:text-base flex items-center justify-center gap-1.5 whitespace-nowrap">
                     <span id="headerShopName">JUMJUM</span>
@@ -510,7 +509,7 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUẦY (Bàn phím với icon xóa ⌫ thẩm mĩ) -->
+            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUẦY -->
             <div id="admin-tab-pos" class="admin-section hidden space-y-5">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     <div class="lg:col-span-7 space-y-4">
@@ -666,7 +665,7 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 5: QUẢN LÝ TÀI KHOẢN ADMIN (Hỗ trợ nhiều Admin) -->
+            <!-- ADMIN TAB 5: QUẢN LÝ TÀI KHOẢN ADMIN -->
             <div id="admin-tab-admins" class="admin-section hidden space-y-4">
                 <div class="liquid-glass p-5 space-y-3">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
@@ -880,7 +879,7 @@
         </div>
     </div>
 
-    <!-- 3. Hộp thoại Hồ Sơ (User hiển thị avatar biểu tượng account mặc định) -->
+    <!-- 3. Hộp thoại Hồ Sơ -->
     <div id="profileModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 shadow-2xl">
             <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
@@ -964,7 +963,7 @@
         </div>
     </div>
 
-    <!-- 5. Hộp thoại Mã QR (Thiết kế lại QR thẩm mỹ hơn khi download) -->
+    <!-- 5. Hộp thoại Mã QR -->
     <div id="qrModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 text-center shadow-2xl">
             <div class="flex items-center justify-between gap-2 mb-4">
@@ -1161,7 +1160,7 @@
             initInteractiveEffects();
         });
 
-        // Âm thanh thông báo nhẹ nhàng, ấn tượng (Đã xóa giọng đọc hoàn toàn)
+        // Âm thanh thông báo nhẹ nhàng, ấn tượng
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
         function playClickSound() {
@@ -1171,13 +1170,13 @@
             osc.type = 'sine';
             const now = audioCtx.currentTime;
             osc.frequency.setValueAtTime(520, now);
-            osc.frequency.exponentialRampToValueAtTime(880, now + 0.065);
-            gain.gain.setValueAtTime(0.08, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+            osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start(now);
-            osc.stop(now + 0.08);
+            osc.stop(now + 0.065);
         }
 
         function playAdminNotificationSound() {
@@ -1187,14 +1186,14 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle';
-                const start = audioCtx.currentTime + idx * 0.12;
+                const start = audioCtx.currentTime + idx * 0.1;
                 osc.frequency.setValueAtTime(freq, start);
-                gain.gain.setValueAtTime(0.18, start);
-                gain.gain.exponentialRampToValueAtTime(0.001, start + 0.45);
+                gain.gain.setValueAtTime(0.15, start);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(start);
-                osc.stop(start + 0.46);
+                osc.stop(start + 0.36);
             });
         }
 
@@ -1416,7 +1415,7 @@
                     ctx.fill();
                 });
 
-                phase += 0.018;
+                phase += 0.015;
                 requestAnimationFrame(drawWaves);
             }
             drawWaves();
@@ -1453,18 +1452,14 @@
             });
 
             document.addEventListener('click', (e) => {
-                for (let i = 0; i < 2; i++) {
-                    setTimeout(() => {
-                        const ripple = document.createElement('div');
-                        ripple.className = 'ripple-ring';
-                        ripple.style.width = '36px';
-                        ripple.style.height = '36px';
-                        ripple.style.left = `${e.clientX - 18}px`;
-                        ripple.style.top = `${e.clientY - 18}px`;
-                        document.body.appendChild(ripple);
-                        setTimeout(() => ripple.remove(), 850);
-                    }, i * 110);
-                }
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple-ring';
+                ripple.style.width = '36px';
+                ripple.style.height = '36px';
+                ripple.style.left = `${e.clientX - 18}px`;
+                ripple.style.top = `${e.clientY - 18}px`;
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 750);
             });
         }
 
@@ -1484,7 +1479,7 @@
         function renderSpaceGallery() {
             document.getElementById('spaceGallery').innerHTML = spaceImages.map(img => `
                 <div class="tactile-card rounded-2xl overflow-hidden h-24 sm:h-28 border border-white/85 dark:border-slate-700 shadow-sm group">
-                    <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <img src="${img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                 </div>
             `).join('');
         }
@@ -1806,7 +1801,7 @@
             showToast(`Đã gửi yêu cầu từ Bàn ${tableCode} đến nhân viên!`);
         }
 
-        // Hồ sơ và đăng nhập (User hiển thị avt hồ sơ biểu tượng account mặc định)
+        // Hồ sơ và đăng nhập
         function handleProfileOrAuthClick() {
             if (!currentUser) {
                 document.getElementById('shopEmailInput').value = "";
@@ -1828,14 +1823,41 @@
             openModal('profileModal');
         }
 
+        // ĐÃ KHẮC PHỤC LỖI TẢI ẢNH: Sử dụng Promise nén và đọc file an toàn tuyệt đối trên mobile & PC
         function handleProfileAvatarChange(input) {
             const file = input.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
-                document.getElementById('profileAvatarPreview').src = e.target.result;
-                currentUser.avatar = e.target.result;
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 400;
+                    const MAX_HEIGHT = 400;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    } else {
+                        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    document.getElementById('profileAvatarPreview').src = compressedDataUrl;
+                    currentUser.avatar = compressedDataUrl;
+                    localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
+                    checkAuthState();
+                    showToast("Đã cập nhật ảnh đại diện thành công!");
+                };
+                img.src = e.target.result;
             };
+            reader.onerror = () => showToast("Không thể đọc tệp ảnh, vui lòng thử lại!");
             reader.readAsDataURL(file);
         }
 
@@ -1861,7 +1883,7 @@
                 email: '',
                 address: '',
                 payMethod: 'Chuyển khoản ngân hàng',
-                avatar: '', // Sử dụng biểu tượng account mặc định
+                avatar: '',
                 savedVouchers: []
             };
             localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
@@ -2387,16 +2409,36 @@
             `).join('');
         }
 
+        // ĐÃ KHẮC PHỤC LỖI TẢI ẢNH: Tải không gian
         function uploadSpaceImages(input) {
             const files = Array.from(input.files);
             if (!files.length) return;
             files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    spaceImages.unshift(e.target.result);
-                    localStorage.setItem('jumjum_space_images', JSON.stringify(spaceImages));
-                    renderSpaceGallery();
-                    renderAdminMenuAndSpaceManager();
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_SIZE = 800;
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > height) {
+                            if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                        } else {
+                            if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const compressed = canvas.toDataURL('image/jpeg', 0.85);
+
+                        spaceImages.unshift(compressed);
+                        localStorage.setItem('jumjum_space_images', JSON.stringify(spaceImages));
+                        renderSpaceGallery();
+                        renderAdminMenuAndSpaceManager();
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             });
@@ -2436,13 +2478,32 @@
             showToast(`Đã xóa thẻ thức ăn "${removed[0]}"!`);
         }
 
+        // ĐÃ KHẮC PHỤC LỖI TẢI ẢNH: Xem trước ảnh món mới
         function previewNewProductImage(input) {
             const file = input.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
-                newUploadedProductImgBase64 = e.target.result;
-                document.getElementById('newProdImgLabel').textContent = "Đã chọn: " + file.name;
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 600;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                    } else {
+                        if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    newUploadedProductImgBase64 = canvas.toDataURL('image/jpeg', 0.85);
+
+                    document.getElementById('newProdImgLabel').textContent = "Đã chọn: " + file.name;
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
@@ -2487,16 +2548,35 @@
             showToast("Đã cập nhật thông tin món!");
         }
 
+        // ĐÃ KHẮC PHỤC LỖI TẢI ẢNH: Cập nhật ảnh món có sẵn
         function updateExistingProductImage(idx, input) {
             const file = input.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
-                products[idx].image = e.target.result;
-                localStorage.setItem('jumjum_products', JSON.stringify(products));
-                renderProducts();
-                renderAdminMenuAndSpaceManager();
-                showToast("Đã cập nhật hình ảnh món mới!");
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 600;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                    } else {
+                        if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    products[idx].image = canvas.toDataURL('image/jpeg', 0.85);
+
+                    localStorage.setItem('jumjum_products', JSON.stringify(products));
+                    renderProducts();
+                    renderAdminMenuAndSpaceManager();
+                    showToast("Đã cập nhật hình ảnh món mới!");
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
@@ -2605,7 +2685,6 @@
             showToast("Đã sao chép liên kết JUMJUM!");
         }
 
-        // Tải xuống mã QR thẩm mỹ hơn
         function downloadAestheticQR() {
             const cardEl = document.getElementById('qrcodeCardBadge');
             if (!window.html2canvas) {
