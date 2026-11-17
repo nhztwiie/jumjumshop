@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUMJUM — Taste the Fresh, Feel the Joy</title>
-    <!-- Favicon mặc định (JS sẽ tự động bo tròn ảnh images/jumjumshop.png ngay khi tải trang) -->
+    <!-- Favicon mặc định (JS sẽ tự động cắt bo tròn 100% ảnh images/jumjumshop.png ngay khi tải trang) -->
     <link id="dynamicFavicon" rel="icon" type="image/png" href="images/jumjumshop.png">
     
     <!-- Tailwind CSS -->
@@ -309,7 +309,7 @@
                             </a>
                         </div>
 
-                        <!-- Liên hệ Facebook & Zalo với Icon tùy chỉnh -->
+                        <!-- Liên hệ Facebook & Zalo với Icon tùy chỉnh images/facebook.png & images/zalo.png -->
                         <div class="mt-4 flex flex-wrap justify-center gap-3 w-full max-w-lg">
                             <a id="fbLink" href="https://www.facebook.com/nhzt.wiie" target="_blank" onclick="playClickSound()" class="tactile-btn flex-1 bg-blue-500/15 hover:bg-blue-500/25 border border-blue-400/40 rounded-2xl p-3 flex items-center justify-center gap-2.5 text-blue-700 dark:text-blue-300 font-bold text-xs shadow-sm">
                                 <img src="images/facebook.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" class="w-5 h-5 object-contain rounded-full">
@@ -319,7 +319,7 @@
                             <a id="zaloLink" href="https://zalo.me/0398476794" target="_blank" onclick="playClickSound()" class="tactile-btn flex-1 bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/40 rounded-2xl p-3 flex items-center justify-center gap-2.5 text-sky-700 dark:text-sky-300 font-bold text-xs shadow-sm">
                                 <img src="images/zalo.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" class="w-5 h-5 object-contain rounded-full">
                                 <i class="fa-solid fa-comment-dots text-base hidden"></i>
-                                <span>Nhắn tin Zalo</span>
+                                <span>Zalo JUMJUM</span>
                             </a>
                         </div>
 
@@ -340,7 +340,7 @@
                 <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </section>
 
-            <!-- TAB NHẬN MÓN & GỌI PHỤC VỤ TẠI BÀN (Tab riêng theo yêu cầu) -->
+            <!-- TAB NHẬN MÓN & GỌI PHỤC VỤ TẠI BÀN -->
             <section id="tab-service" class="tab-section hidden space-y-5">
                 <!-- Xác nhận đã nhận được món -->
                 <div class="liquid-glass spotlight-card p-6">
@@ -418,7 +418,7 @@
                 <div class="flex items-center gap-3.5">
                     <img id="adminDashAvatar" src="images/jumjumshop.png" onerror="this.src='https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&q=80&w=200'" class="w-12 h-12 rounded-2xl object-cover border-2 border-white shadow-lg">
                     <div>
-                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold tracking-wider">ADMIN SHOP • lnh.quii@gmail.com</span>
+                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold tracking-wider">ADMIN SHOP • jumjumshop@gmail.com</span>
                         <h2 id="adminDashName" class="text-lg sm:text-xl font-bold text-slate-800 dark:text-white">Quản Trị Hệ Thống JUMJUM</h2>
                     </div>
                 </div>
@@ -472,7 +472,6 @@
 
             <!-- ADMIN TAB 1: ĐƠN HÀNG, YÊU CẦU BÀN & XUẤT HÓA ĐƠN THẬT -->
             <div id="admin-tab-orders" class="admin-section space-y-4">
-                <!-- Yêu cầu phục vụ tại bàn -->
                 <div class="liquid-glass p-5">
                     <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-3 text-sm">
                         <i class="fa-solid fa-bell-concierge text-amber-500"></i> Yêu cầu gọi phục vụ / gọi món tại bàn (Mã 3 số)
@@ -480,7 +479,6 @@
                     <div id="adminTableCallsList" class="space-y-2.5"></div>
                 </div>
 
-                <!-- Danh sách đơn hàng -->
                 <div class="liquid-glass p-5">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 text-sm">
@@ -492,45 +490,49 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUÁN (POS + MÁY TÍNH + QR MB BANK + THỐNG KÊ MÓN TRONG NGÀY) -->
+            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUÁN (POS + BÀN PHÍM ĐẦY ĐỦ CỘNG TRỪ NHÂN CHIA + QR MB BANK + THỐNG KÊ MÓN) -->
             <div id="admin-tab-pos" class="admin-section hidden space-y-5">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                    <!-- Chọn món nhanh & Bàn phím máy tính -->
                     <div class="lg:col-span-7 space-y-4">
                         <div class="liquid-glass p-5">
                             <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2">
                                 <i class="fa-solid fa-cash-register text-sky-600"></i> Chọn món tại quầy
                             </h3>
-                            <div id="posProductGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-64 overflow-y-auto pr-1"></div>
+                            <div id="posProductGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto pr-1"></div>
                         </div>
 
-                        <!-- Bàn phím máy tính tiền vật lý -->
+                        <!-- Bàn phím máy tính tiền vật lý đầy đủ Cộng (+), Trừ (−), Nhân (×), Chia (÷) -->
                         <div class="liquid-glass p-5">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Bàn phím máy tính & Tiền khách đưa</span>
+                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Máy tính tiền (Cộng • Trừ • Nhân • Chia)</span>
                                 <span id="posChangeText" class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">Tiền thối lại: 0đ</span>
                             </div>
                             <input type="text" id="calcDisplay" readonly value="0" class="w-full px-4 py-2.5 rounded-xl bg-white/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-right font-extrabold text-xl text-slate-800 dark:text-white mb-3 shadow-inner">
                             <div class="grid grid-cols-4 gap-2 text-sm font-bold">
-                                <button onclick="playClickSound(); calcInput('7')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">7</button>
-                                <button onclick="playClickSound(); calcInput('8')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">8</button>
-                                <button onclick="playClickSound(); calcInput('9')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">9</button>
-                                <button onclick="playClickSound(); calcOp('/')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300">÷</button>
+                                <button onclick="playClickSound(); calcInput('7')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">7</button>
+                                <button onclick="playClickSound(); calcInput('8')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">8</button>
+                                <button onclick="playClickSound(); calcInput('9')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">9</button>
+                                <button onclick="playClickSound(); calcOp('/')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base" title="Chia">÷</button>
                                 
-                                <button onclick="playClickSound(); calcInput('4')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">4</button>
-                                <button onclick="playClickSound(); calcInput('5')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">5</button>
-                                <button onclick="playClickSound(); calcInput('6')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">6</button>
-                                <button onclick="playClickSound(); calcOp('*')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300">×</button>
+                                <button onclick="playClickSound(); calcInput('4')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">4</button>
+                                <button onclick="playClickSound(); calcInput('5')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">5</button>
+                                <button onclick="playClickSound(); calcInput('6')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">6</button>
+                                <button onclick="playClickSound(); calcOp('*')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base" title="Nhân">×</button>
 
-                                <button onclick="playClickSound(); calcInput('1')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">1</button>
-                                <button onclick="playClickSound(); calcInput('2')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">2</button>
-                                <button onclick="playClickSound(); calcInput('3')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">3</button>
-                                <button onclick="playClickSound(); calcOp('-')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300">−</button>
+                                <button onclick="playClickSound(); calcInput('1')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">1</button>
+                                <button onclick="playClickSound(); calcInput('2')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">2</button>
+                                <button onclick="playClickSound(); calcInput('3')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">3</button>
+                                <button onclick="playClickSound(); calcOp('-')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base" title="Trừ">−</button>
 
-                                <button onclick="playClickSound(); calcClear()" class="tactile-btn py-2.5 rounded-xl bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-300">C</button>
-                                <button onclick="playClickSound(); calcInput('0')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">0</button>
-                                <button onclick="playClickSound(); calcInput('000')" class="tactile-btn py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 shadow-sm">000</button>
-                                <button onclick="playClickSound(); calcEqual()" class="tactile-btn py-2.5 rounded-xl bg-sky-600 text-white shadow">=</button>
+                                <button onclick="playClickSound(); calcClear()" class="tactile-btn py-2.5 rounded-xl bg-rose-100 dark:bg-rose-900/70 text-rose-600 dark:text-rose-300" title="Xóa">C</button>
+                                <button onclick="playClickSound(); calcInput('0')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">0</button>
+                                <button onclick="playClickSound(); calcInput('000')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">000</button>
+                                <button onclick="playClickSound(); calcOp('+')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base" title="Cộng">+</button>
+
+                                <button onclick="playClickSound(); calcBackspace()" class="tactile-btn py-2 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 col-span-2 text-xs">
+                                    <i class="fa-solid fa-delete-left mr-1"></i> Xóa 1 số
+                                </button>
+                                <button onclick="playClickSound(); calcEqual()" class="tactile-btn py-2 rounded-xl bg-sky-600 text-white shadow col-span-2 text-base" title="Bằng">=</button>
                             </div>
                         </div>
                     </div>
@@ -556,7 +558,6 @@
                                 <div class="p-3 rounded-2xl bg-white/85 dark:bg-slate-800/90 border border-sky-200 dark:border-slate-700 text-center">
                                     <div class="text-[11px] font-extrabold text-sky-800 dark:text-sky-300 uppercase">MB BANK • LE NHAT HUY • 0398476794</div>
                                     <div class="my-2 flex justify-center">
-                                        <!-- Hiển thị ảnh QR ngân hàng của bạn (images/qr-bank.png) hoặc tự sinh VietQR chuẩn MB Bank -->
                                         <img id="posBankQrImg" src="images/qr-bank.png" onerror="this.src='https://img.vietqr.io/image/MB-0398476794-compact2.png?accountName=LE%20NHAT%20HUY'" alt="QR MB Bank" class="w-44 h-44 object-contain rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
                                     </div>
                                     <button onclick="simulateBankQrScanned()" class="tactile-btn w-full py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow">
@@ -731,7 +732,8 @@
                             <input type="radio" name="payMethod" value="Bank" checked onchange="toggleAppSelector()"> Bank
                         </label>
                         <label class="tactile-btn flex items-center gap-1.5 p-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer font-semibold">
-                            <input type="radio" name="payMethod" value="EWallet" onchange="toggleAppSelector()"> Ví ĐT
+                            <input type="radio" name="payMethod" value="EWallet" onchange="toggleAppSelector()">
+                            <img src="images/zalo.png" onerror="this.style.display='none'" class="w-4 h-4 object-contain rounded-full"> Ví ĐT
                         </label>
                     </div>
 
@@ -746,7 +748,8 @@
                             <option value="acb">Mở App ACB ONE</option>
                         </select>
                     </div>
-                    <div id="ewalletAppSelectBox" class="mt-2 hidden">
+                    <div id="ewalletAppSelectBox" class="mt-2 hidden flex items-center gap-2">
+                        <img src="images/zalo.png" onerror="this.style.display='none'" class="w-6 h-6 object-contain rounded-full shrink-0">
                         <select id="selectedEwalletApp" class="w-full px-3 py-2 rounded-xl bg-sky-50/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-xs font-semibold text-sky-900 dark:text-sky-300">
                             <option value="zalopay">Mở Ví ZaloPay</option>
                             <option value="momo">Mở Ví MoMo</option>
@@ -766,7 +769,7 @@
         </div>
     </div>
 
-    <!-- 3. Modal Hồ Sơ Người Dùng & Admin (Đổi Avatar, Tên, SĐT, Địa chỉ, Email, Phương thức thanh toán) -->
+    <!-- 3. Modal Hồ Sơ Người Dùng & Admin -->
     <div id="profileModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 shadow-2xl">
             <div class="flex items-center justify-between pb-3 border-b border-slate-200/70 dark:border-slate-800">
@@ -779,7 +782,6 @@
             </div>
 
             <div class="py-4 space-y-3 text-xs">
-                <!-- Thay đổi Avatar -->
                 <div class="flex flex-col items-center">
                     <div class="relative group">
                         <img id="profileAvatarPreview" src="images/jumjumshop.png" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'" class="w-20 h-20 rounded-full object-cover border-4 border-sky-400/50 shadow-md">
@@ -826,7 +828,7 @@
         </div>
     </div>
 
-    <!-- 4. Modal Xuất Hóa Đơn Thật (Dành cho Admin Shop) -->
+    <!-- 4. Modal Xuất Hóa Đơn Thật -->
     <div id="invoiceModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white text-slate-900 w-full max-w-sm rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div id="invoicePrintArea" class="space-y-3 text-xs font-mono">
@@ -888,7 +890,7 @@
         </div>
     </div>
 
-    <!-- 6. Modal Đăng Nhập -->
+    <!-- 6. Modal Đăng Nhập (Đã cập nhật tài khoản Admin: jumjumshop@gmail.com / jumjumshop@161126 & Icon Zalo images/zalo.png) -->
     <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 shadow-2xl">
             <div class="flex items-center justify-between mb-4">
@@ -904,14 +906,16 @@
                 <div class="space-y-2">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Khách hàng đăng nhập nhanh</div>
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="playClickSound(); socialLogin('Google')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1 shadow-sm">
+                        <button onclick="playClickSound(); socialLogin('Google')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm">
                             <i class="fa-brands fa-google text-red-500"></i> Google
                         </button>
-                        <button onclick="playClickSound(); socialLogin('Zalo')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1 shadow-sm">
-                            <i class="fa-solid fa-comment text-sky-500"></i> Zalo
+                        <button onclick="playClickSound(); socialLogin('Zalo')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm">
+                            <img src="images/zalo.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" class="w-4 h-4 object-contain rounded-full">
+                            <i class="fa-solid fa-comment text-sky-500 hidden"></i> Zalo
                         </button>
-                        <button onclick="playClickSound(); socialLogin('Facebook')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1 shadow-sm">
-                            <i class="fa-brands fa-facebook text-blue-600"></i> FB
+                        <button onclick="playClickSound(); socialLogin('Facebook')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm">
+                            <img src="images/facebook.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block'" class="w-4 h-4 object-contain rounded-full">
+                            <i class="fa-brands fa-facebook text-blue-600 hidden"></i> FB
                         </button>
                     </div>
                 </div>
@@ -923,9 +927,9 @@
                 </div>
 
                 <div class="space-y-2.5">
-                    <input type="email" id="shopEmailInput" value="lnh.quii@gmail.com" placeholder="Email shop..." class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                    <input type="email" id="shopEmailInput" placeholder="Email Admin (jumjumshop@gmail.com)..." class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                     <div class="relative">
-                        <input type="password" id="shopPassInput" placeholder="Mật khẩu (VD: jumjum123)..." class="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                        <input type="password" id="shopPassInput" placeholder="Mật khẩu Admin..." class="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                         <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
                             <i id="eyeIcon" class="fa-solid fa-eye"></i>
                         </button>
@@ -952,9 +956,9 @@
     <script>
         // ==================== CẤU HÌNH EMAILJS & DỮ LIỆU SHOP ====================
         const EMAILJS_CONFIG = {
-            PUBLIC_KEY: "YOUR_EMAILJS_PUBLIC_KEY",   // Thay bằng Public Key từ EmailJS.com
-            SERVICE_ID: "YOUR_EMAILJS_SERVICE_ID",   // Thay bằng Service ID từ EmailJS.com
-            TEMPLATE_ID: "YOUR_EMAILJS_TEMPLATE_ID"  // Thay bằng Template ID từ EmailJS.com
+            PUBLIC_KEY: "YOUR_EMAILJS_PUBLIC_KEY",
+            SERVICE_ID: "YOUR_EMAILJS_SERVICE_ID",
+            TEMPLATE_ID: "YOUR_EMAILJS_TEMPLATE_ID"
         };
         if (window.emailjs && EMAILJS_CONFIG.PUBLIC_KEY !== "YOUR_EMAILJS_PUBLIC_KEY") {
             emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
@@ -971,7 +975,9 @@
                 musicTitle: "JUMJUM MUSIC",
                 zaloUrl: "https://zalo.me/0398476794",
                 facebookUrl: "https://www.facebook.com/nhzt.wiie",
-                adminEmail: "lnh.quii@gmail.com"
+                adminEmail: "jumjumshop@gmail.com",
+                adminPwd: "jumjumshop@161126",
+                orderNotifEmail: "lnh.quii@gmail.com"
             },
             spaceImages: [
                 "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600",
@@ -1037,23 +1043,59 @@
             initInteractiveEffects();
         });
 
-        // 1. VẼ FAVICON HÌNH TRÒN ĐỘNG TRÊN TAB TRÌNH DUYỆT
+        // 1. VẼ FAVICON HÌNH TRÒN 100% TRÊN TAB TRÌNH DUYỆT
         function createRoundFavicon(imgUrl) {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => {
+            const setFaviconFromImg = (imageObj) => {
+                const size = 128;
                 const canvas = document.createElement('canvas');
-                canvas.width = 64;
-                canvas.height = 64;
+                canvas.width = size;
+                canvas.height = size;
                 const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, size, size);
+                ctx.save();
                 ctx.beginPath();
-                ctx.arc(32, 32, 30, 0, Math.PI * 2);
+                ctx.arc(size / 2, size / 2, (size / 2) - 4, 0, Math.PI * 2);
                 ctx.closePath();
                 ctx.clip();
-                ctx.drawImage(img, 0, 0, 64, 64);
-                ctx.lineWidth = 3;
+
+                // Cắt hình vuông ở tâm ảnh để bo tròn đều không méo
+                const minSide = Math.min(imageObj.width, imageObj.height);
+                const sx = (imageObj.width - minSide) / 2;
+                const sy = (imageObj.height - minSide) / 2;
+                ctx.drawImage(imageObj, sx, sy, minSide, minSide, 0, 0, size, size);
+                ctx.restore();
+
+                // Viền bo tròn thanh mảnh
+                ctx.beginPath();
+                ctx.arc(size / 2, size / 2, (size / 2) - 4, 0, Math.PI * 2);
+                ctx.lineWidth = 6;
                 ctx.strokeStyle = '#38bdf8';
                 ctx.stroke();
+
+                const link = document.getElementById('dynamicFavicon');
+                link.type = 'image/png';
+                link.href = canvas.toDataURL('image/png');
+            };
+
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = () => setFaviconFromImg(img);
+            img.onerror = () => {
+                // Dự phòng vẽ biểu tượng tròn JUMJUM nếu chưa có file images/jumjumshop.png
+                const size = 128;
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                ctx.beginPath();
+                ctx.arc(size / 2, size / 2, (size / 2) - 2, 0, Math.PI * 2);
+                ctx.fillStyle = '#0284c7';
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 48px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('JJ', size / 2, size / 2);
                 document.getElementById('dynamicFavicon').href = canvas.toDataURL('image/png');
             };
             img.src = imgUrl;
@@ -1062,7 +1104,6 @@
         // 2. HỆ THỐNG ÂM THANH VẬT LÝ & THÔNG BÁO (WEB AUDIO API)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        // Âm thanh giọt nước dễ chịu khi tương tác
         function playClickSound() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
@@ -1079,10 +1120,9 @@
             osc.stop(now + 0.08);
         }
 
-        // Âm thanh chuông thông báo cho Admin Shop (Đơn mới, Gọi bàn, Nhận tiền QR)
         function playAdminNotificationSound() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            const notes = [659.25, 880, 1174.66]; // E5 - A5 - D6 thanh thoát
+            const notes = [659.25, 880, 1174.66];
             notes.forEach((freq, idx) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
@@ -1168,7 +1208,6 @@
                 });
             });
 
-            // Gợn sóng nước đa vòng khi chạm/click
             document.addEventListener('click', (e) => {
                 for (let i = 0; i < 2; i++) {
                     setTimeout(() => {
@@ -1411,10 +1450,9 @@
             document.getElementById('ewalletAppSelectBox').classList.toggle('hidden', method !== 'EWallet');
         }
 
-        function launchPaymentApp(method, amount, orderId) {
+        function launchPaymentApp(method) {
             if (method === 'Bank') {
                 const bankCode = document.getElementById('selectedPaymentApp').value;
-                // Deep link mở ứng dụng ngân hàng trên thiết bị di động (VietQR / App Scheme)
                 const deepLinks = {
                     mb: `mbbank://`,
                     vcb: `vietcombank://`,
@@ -1483,15 +1521,11 @@
             orders.unshift(newOrder);
             localStorage.setItem('jumjum_orders', JSON.stringify(orders));
 
-            // Gửi Email thông báo đến Admin Shop (lnh.quii@gmail.com) qua EmailJS
             sendOrderEmailViaEmailJS(newOrder);
-
-            // Phát âm thanh thông báo hệ thống
             playAdminNotificationSound();
 
-            // Tự động mở ứng dụng Bank hoặc Ví điện tử nếu khách chọn
             if (payMethod === 'Bank' || payMethod === 'EWallet') {
-                launchPaymentApp(payMethod, finalTotal, newOrder.id);
+                launchPaymentApp(payMethod);
             }
 
             cart = [];
@@ -1505,7 +1539,7 @@
         function sendOrderEmailViaEmailJS(order) {
             if (!window.emailjs || EMAILJS_CONFIG.PUBLIC_KEY === "YOUR_EMAILJS_PUBLIC_KEY") return;
             const templateParams = {
-                to_email: DEFAULT_SHOP_DATA.info.adminEmail,
+                to_email: DEFAULT_SHOP_DATA.info.orderNotifEmail,
                 order_id: order.id,
                 order_time: order.time,
                 customer_name: order.customer,
@@ -1582,7 +1616,7 @@
             showToast(`Đã gửi yêu cầu từ Bàn ${tableCode} đến nhân viên!`);
         }
 
-        // 9. HỒ SƠ NGƯỜI DÙNG & ADMIN (ĐỔI AVATAR, TÊN, SĐT, ĐỊA CHỈ, EMAIL, THANH TOÁN)
+        // 9. HỒ SƠ NGƯỜI DÙNG & ADMIN
         function handleProfileOrAuthClick() {
             if (!currentUser) {
                 openModal('authModal');
@@ -1643,9 +1677,12 @@
             showToast(`Đăng nhập thành công với ${provider}!`);
         }
 
+        // ĐĂNG NHẬP ADMIN VỚI EMAIL: jumjumshop@gmail.com & PWD: jumjumshop@161126
         function loginAsShop() {
             const email = document.getElementById('shopEmailInput').value.trim().toLowerCase();
-            if (email === DEFAULT_SHOP_DATA.info.adminEmail) {
+            const pwd = document.getElementById('shopPassInput').value.trim();
+
+            if (email === DEFAULT_SHOP_DATA.info.adminEmail && pwd === DEFAULT_SHOP_DATA.info.adminPwd) {
                 currentUser = {
                     role: 'shop',
                     name: 'Admin JUMJUM',
@@ -1658,9 +1695,9 @@
                 closeModal('authModal');
                 checkAuthState();
                 playAdminNotificationSound();
-                showToast("Chào mừng Chủ Shop JUMJUM!");
+                showToast("Đăng nhập Admin JUMJUM thành công!");
             } else {
-                showToast("Vui lòng nhập đúng email quản trị: lnh.quii@gmail.com");
+                showToast("Sai Email hoặc Mật khẩu Admin! Vui lòng kiểm tra lại.");
             }
         }
 
@@ -1704,7 +1741,7 @@
             }
         }
 
-        // 10. QUẢN TRỊ ADMIN SHOP (CÁC TAB, XUẤT HÓA ĐƠN, POS QUẦY, QUẢN LÝ MÓN, KHÁCH VIP)
+        // 10. QUẢN TRỊ ADMIN SHOP
         function switchAdminTab(tabKey) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
             document.getElementById(`admin-tab-${tabKey}`).classList.remove('hidden');
@@ -1726,7 +1763,6 @@
             const newCount = orders.filter(o => o.isNew).length + tableCalls.filter(c => !c.done).length;
             document.getElementById('adminOrderBadge').textContent = newCount;
 
-            // Render yêu cầu phục vụ tại bàn
             const callsEl = document.getElementById('adminTableCallsList');
             if (tableCalls.length === 0) {
                 callsEl.innerHTML = `<div class="text-xs text-slate-400">Chưa có yêu cầu gọi bàn nào.</div>`;
@@ -1746,7 +1782,6 @@
                 `).join('');
             }
 
-            // Render danh sách đơn hàng & nút Xuất Hóa Đơn
             const ordersEl = document.getElementById('shopOrdersList');
             if (orders.length === 0) {
                 ordersEl.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">Chưa có đơn hàng nào.</div>`;
@@ -1783,7 +1818,6 @@
                 `).join('');
             }
 
-            // Render Khách VIP / Khách quen & Lịch sử từng khách
             const customerMap = {};
             orders.forEach(o => {
                 const key = o.phone || o.customer;
@@ -1825,7 +1859,6 @@
                     `;
                 }).join('');
 
-            // Render đánh giá trong Admin
             document.getElementById('adminReviewsList').innerHTML = reviews.map(r => `
                 <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 text-xs">
                     <div class="flex justify-between font-bold">
@@ -1858,7 +1891,6 @@
             }
         }
 
-        // XUẤT HÓA ĐƠN THẬT
         function openInvoiceModal(idx) {
             const o = orders[idx];
             if (!o) return;
@@ -1889,7 +1921,7 @@
             openModal('invoiceModal');
         }
 
-        // 11. HỆ THỐNG TÍNH TIỀN TẠI QUÁN (POS + MÁY TÍNH + QR MB BANK + THỐNG KÊ MÓN TRONG NGÀY)
+        // 11. HỆ THỐNG TÍNH TIỀN TẠI QUÁN (POS + BÀN PHÍM CỘNG TRỪ NHÂN CHIA + QR MB BANK)
         function renderPosSystem() {
             document.getElementById('posProductGrid').innerHTML = products.map(p => `
                 <button onclick="playClickSound(); addToPosCart('${p.id}')" class="tactile-btn p-2.5 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 text-left shadow-sm">
@@ -1933,7 +1965,7 @@
             updatePosChange();
         }
 
-        // Bàn phím máy tính POS
+        // Bàn phím máy tính POS đầy đủ +, -, *, /
         let calcStr = "";
         function calcInput(val) {
             calcStr += val;
@@ -1941,8 +1973,15 @@
             updatePosChange();
         }
         function calcOp(op) {
+            if (!calcStr && op !== '-') return;
+            calcStr = calcStr.replace(/[\+\-\*\/]\s*$/, '');
             calcStr += ` ${op} `;
             document.getElementById('calcDisplay').value = calcStr;
+        }
+        function calcBackspace() {
+            calcStr = calcStr.trim().slice(0, -1).trim();
+            document.getElementById('calcDisplay').value = calcStr || "0";
+            updatePosChange();
         }
         function calcClear() {
             calcStr = "";
@@ -1950,13 +1989,18 @@
             updatePosChange();
         }
         function calcEqual() {
+            if (!calcStr) return;
             try {
+                // Chỉ cho phép số và các phép tính cơ bản +, -, *, /, .
+                if (!/^[0-9+\-*/.\s()]+$/.test(calcStr)) throw new Error("Invalid");
                 const res = Function('"use strict";return (' + calcStr + ')')();
-                calcStr = String(res);
-                document.getElementById('calcDisplay').value = Number(res).toLocaleString('vi-VN');
-                updatePosChange(Number(res));
+                if (!isFinite(res)) throw new Error("Math Error");
+                const rounded = Math.round(res * 100) / 100;
+                calcStr = String(rounded);
+                document.getElementById('calcDisplay').value = Number(rounded).toLocaleString('vi-VN');
+                updatePosChange(Number(rounded));
             } catch {
-                document.getElementById('calcDisplay').value = "Lỗi";
+                document.getElementById('calcDisplay').value = "Lỗi phép tính";
                 calcStr = "";
             }
         }
@@ -1967,7 +2011,6 @@
             document.getElementById('posChangeText').textContent = `Tiền thối lại: ${change.toLocaleString('vi-VN')}đ`;
         }
 
-        // Giả lập & Xác nhận khách đã quét QR MB Bank trên page -> Phát âm thanh & thông báo nhận tiền
         function simulateBankQrScanned() {
             const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
             playAdminNotificationSound();
@@ -2035,7 +2078,7 @@
                 `).join('');
         }
 
-        // 12. QUẢN LÝ THỰC ĐƠN TRONG ADMIN (THÊM MỚI, SỬA GIÁ, TẢI ẢNH, SỬA MÔ TẢ)
+        // 12. QUẢN LÝ THỰC ĐƠN TRONG ADMIN
         function previewNewProductImage(input) {
             const file = input.files[0];
             if (!file) return;
