@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUMJUM — Taste the Fresh, Feel the Joy</title>
-    <!-- Open Graph Meta Tags hiển thị Logo shop khi chia sẻ link -->
     <meta property="og:title" content="JUMJUM — Taste the Fresh, Feel the Joy">
     <meta property="og:description" content="Khám phá thực đơn tươi ngon và không gian tuyệt vời tại JUMJUM.">
     <meta property="og:image" content="images/jumjumshop.png">
     
-    <!-- Favicon hình tròn chuẩn tuyệt đối bằng SVG nhúng Base64 -->
-    <link id="dynamicFavicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Ccircle cx='64' cy='64' r='62' fill='%230284c7' stroke='%2338bdf8' stroke-width='4'/%3E%3Ctext x='64' y='78' font-family='sans-serif' font-size='48' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EJJ%3C/text%3E%3C/svg%3E">
-    <link id="dynamicAppleIcon" rel="apple-touch-icon" href="images/jumjumshop.png">
+    <!-- Favicon chuẩn 100% hiển thị tức thì mọi trình duyệt -->
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="images/jumjumshop.png">
+    <link rel="shortcut icon" type="image/png" href="images/jumjumshop.png">
+    <link rel="apple-touch-icon" href="images/jumjumshop.png">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -227,7 +227,7 @@
                 </button>
             </div>
 
-            <!-- Tên thương hiệu (Đã xóa biểu tượng giọt nước) & Đồng hồ thời gian thực -->
+            <!-- Tên thương hiệu JUMJUM (Không có biểu tượng giọt nước) & Đồng hồ thời gian thực -->
             <div class="text-center min-w-0">
                 <div class="font-extrabold tracking-widest text-sky-900 dark:text-sky-300 text-sm sm:text-base flex items-center justify-center gap-1.5 whitespace-nowrap">
                     <span id="headerShopName">JUMJUM</span>
@@ -289,7 +289,7 @@
                             </div>
                         </div>
 
-                        <!-- Thông tin liên hệ (Địa chỉ cân đối dẫn đến link Google Maps chuẩn) & Đường dây nóng -->
+                        <!-- Thông tin liên hệ (Địa chỉ hiển thị đầy đủ, không bị khuất, dẫn đến link Google Maps) -->
                         <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full max-w-2xl">
                             <a href="https://maps.app.goo.gl/9zAXofUzKNd6XVtP7" target="_blank" onclick="playClickSound()" class="tactile-btn bg-white/60 dark:bg-slate-800/60 border border-white/85 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm group">
                                 <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/60 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
@@ -297,7 +297,7 @@
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold whitespace-nowrap">Địa chỉ bản đồ</div>
-                                    <div id="shopAddress" class="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</div>
+                                    <div id="shopAddress" class="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-snug break-words">Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</div>
                                 </div>
                             </a>
 
@@ -367,7 +367,7 @@
                             </div>
                             <div class="sm:col-span-2">
                                 <label class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1 whitespace-nowrap">Yêu cầu gửi đến nhân viên JUMJUM</label>
-                                <input type="text" id="tableRequestInput" placeholder="Ví dụ: Cho xin thêm ống hút, khăn giấy, hoặc gọi thêm 1 Trà đào..." class="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-white dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 dark:text-white shadow-sm">
+                                <input type="text" id="tableRequestInput" placeholder="Ví dụ: Cho xin thêm ống hút, khăn giấy..." class="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-white dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 dark:text-white shadow-sm">
                             </div>
                         </div>
                         <button onclick="playClickSound(); sendTableServiceRequest()" class="tactile-btn px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white text-sm font-bold flex items-center gap-2 shadow-lg shadow-sky-500/30 whitespace-nowrap">
@@ -377,7 +377,7 @@
                 </div>
             </section>
 
-            <!-- TAB VOUCHER (User có thể nhận voucher vào tài khoản với hạn mức 1 tuần) -->
+            <!-- TAB VOUCHER (Hạn mức 1 tuần) -->
             <section id="tab-voucher" class="tab-section hidden space-y-4">
                 <div class="liquid-glass p-6 space-y-4">
                     <div class="flex flex-wrap items-center justify-between gap-2">
@@ -395,7 +395,7 @@
                 </div>
             </section>
 
-            <!-- TAB ĐÁNH GIÁ -->
+            <!-- TAB ĐÁNH GIÁ (Với tên đánh giá mẫu theo yêu cầu) -->
             <section id="tab-review" class="tab-section hidden space-y-5">
                 <div class="liquid-glass spotlight-card p-6">
                     <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
@@ -441,7 +441,7 @@
                 </div>
             </div>
 
-            <!-- Thống kê Tổng doanh thu, Số đơn hàng, Số lượng khách và Người theo dõi -->
+            <!-- Thống kê Tổng doanh thu, Số đơn hàng, Số khách và Người theo dõi -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="liquid-glass tactile-card p-4 text-center">
                     <i class="fa-solid fa-receipt text-sky-600 text-xl mb-1"></i>
@@ -479,6 +479,9 @@
                 <button onclick="playClickSound(); switchAdminTab('followers')" data-admintab="followers" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
                     <i class="fa-solid fa-heart mr-1 text-rose-500"></i> Người theo dõi JUMJUM
                 </button>
+                <button onclick="playClickSound(); switchAdminTab('admins')" data-admintab="admins" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-user-shield mr-1 text-sky-600"></i> Quản lý Admin
+                </button>
                 <button onclick="playClickSound(); switchAdminTab('customers')" data-admintab="customers" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
                     <i class="fa-solid fa-crown mr-1 text-amber-500"></i> Khách hàng thân thiết
                 </button>
@@ -507,7 +510,7 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUẦY (ĐA DẠNG NGÂN HÀNG + POS) -->
+            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUẦY (Bàn phím với icon xóa ⌫ thẩm mĩ) -->
             <div id="admin-tab-pos" class="admin-section hidden space-y-5">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     <div class="lg:col-span-7 space-y-4">
@@ -518,7 +521,7 @@
                             <div id="posProductGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto pr-1"></div>
                         </div>
 
-                        <!-- Bàn phím máy tính tiền đầy đủ Cộng (+), Trừ (−), Nhân (×), Chia (÷) và ⌫ -->
+                        <!-- Bàn phím máy tính tiền với kí hiệu xóa ⌫ chuẩn -->
                         <div class="liquid-glass p-5">
                             <div class="flex items-center justify-between gap-2 mb-2">
                                 <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">Máy tính tiền (Cộng • Trừ • Nhân • Chia)</span>
@@ -546,15 +549,15 @@
                                 <button onclick="playClickSound(); calcInput('000')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">000</button>
                                 <button onclick="playClickSound(); calcOp('+')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base" title="Cộng">+</button>
 
-                                <button onclick="playClickSound(); calcBackspace()" class="tactile-btn py-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 col-span-2 text-lg flex items-center justify-center" title="Xóa một chữ số">
-                                    ⌫
+                                <button onclick="playClickSound(); calcBackspace()" class="tactile-btn py-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 col-span-2 text-lg flex items-center justify-center font-bold tracking-wider" title="Xóa một chữ số">
+                                    ⌫ Xóa
                                 </button>
                                 <button onclick="playClickSound(); calcEqual()" class="tactile-btn py-2.5 rounded-xl bg-sky-600 text-white shadow col-span-2 text-base" title="Bằng">=</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Hóa đơn tại quầy & Mã QR Ngân Hàng Đa Dạng -->
+                    <!-- Hóa đơn tại quầy & Mã QR Ngân Hàng -->
                     <div class="lg:col-span-5 space-y-4">
                         <div class="liquid-glass p-5 flex flex-col justify-between">
                             <div>
@@ -572,7 +575,7 @@
                                 </div>
 
                                 <div class="p-3 rounded-2xl bg-white/85 dark:bg-slate-800/90 border border-sky-200 dark:border-slate-700 text-center space-y-2">
-                                    <div class="text-[11px] font-extrabold text-sky-800 dark:text-sky-300 uppercase whitespace-nowrap">QUÉT Mã QR THANH TOÁN</div>
+                                    <div class="text-[11px] font-extrabold text-sky-800 dark:text-sky-300 uppercase whitespace-nowrap">QUÉT MÃ QR THANH TOÁN</div>
                                     <div class="my-1 flex justify-center">
                                         <img id="posBankQrImg" src="images/qr-bank.png" onerror="this.src='https://img.vietqr.io/image/MB-0398476794-compact2.png?accountName=LE%20NHAT%20HUY'" alt="Mã QR Ngân hàng" class="w-36 h-36 object-contain rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
                                     </div>
@@ -589,7 +592,6 @@
                     </div>
                 </div>
 
-                <!-- Thống kê chi tiết số món bán được trong ngày -->
                 <div class="liquid-glass p-5">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2 whitespace-nowrap">
                         <i class="fa-solid fa-chart-pie text-emerald-500"></i> Chi tiết số món bán được trong ngày hôm nay
@@ -598,7 +600,7 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 3: QUẢN LÝ THỰC ĐƠN, THẺ THỨC ĂN VÀ KHÔNG GIAN -->
+            <!-- ADMIN TAB 3: QUẢN LÝ THỰC ĐƠN VÀ KHÔNG GIAN -->
             <div id="admin-tab-menu" class="admin-section hidden space-y-5">
                 <div class="liquid-glass p-5 space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
@@ -664,7 +666,28 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 5: KHÁCH HÀNG THÂN THIẾT VÀ LỊCH SỬ -->
+            <!-- ADMIN TAB 5: QUẢN LÝ TÀI KHOẢN ADMIN (Hỗ trợ nhiều Admin) -->
+            <div id="admin-tab-admins" class="admin-section hidden space-y-4">
+                <div class="liquid-glass p-5 space-y-3">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-user-shield text-sky-600"></i> Quản lý tài khoản Quản trị viên (Đăng nhập nhiều Admin)
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <input type="email" id="newAdminEmail" placeholder="Email Admin mới..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <input type="password" id="newAdminPwd" placeholder="Mật khẩu Admin mới..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                    </div>
+                    <button onclick="playClickSound(); addNewAdminAccount()" class="tactile-btn px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                        <i class="fa-solid fa-plus mr-1"></i> Thêm tài khoản Admin mới
+                    </button>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 whitespace-nowrap">Danh sách tài khoản Admin đang hoạt động</h3>
+                    <div id="adminAccountsList" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 6: KHÁCH HÀNG THÂN THIẾT -->
             <div id="admin-tab-customers" class="admin-section hidden">
                 <div class="liquid-glass p-5">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-4 flex items-center gap-2 whitespace-nowrap">
@@ -674,7 +697,7 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 6: CẤU HÌNH EMAILJS VÀ ĐÁNH GIÁ -->
+            <!-- ADMIN TAB 7: ĐÁNH GIÁ VÀ EMAILJS -->
             <div id="admin-tab-reviews_notif" class="admin-section hidden space-y-5">
                 <div class="liquid-glass p-5 space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
@@ -778,7 +801,7 @@
         </div>
     </div>
 
-    <!-- 2. Hộp thoại Giỏ Hàng Chuẩn Hóa Trực Quan & Đa Dạng Ngân Hàng -->
+    <!-- 2. Hộp thoại Giỏ Hàng -->
     <div id="cartModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 max-h-[88vh] flex flex-col shadow-2xl">
             <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
@@ -822,7 +845,6 @@
                         </label>
                     </div>
 
-                    <!-- Hỗ trợ đa dạng ngân hàng -->
                     <div id="bankAppSelectBox" class="mt-2">
                         <select id="selectedPaymentApp" class="w-full px-3 py-2 rounded-xl bg-sky-50/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-xs font-semibold text-sky-900 dark:text-sky-300">
                             <option value="mb">MB Bank (Quân Đội)</option>
@@ -858,7 +880,7 @@
         </div>
     </div>
 
-    <!-- 3. Hộp thoại Hồ Sơ (Avatar mặc định khi đăng nhập) -->
+    <!-- 3. Hộp thoại Hồ Sơ (User hiển thị avatar biểu tượng account mặc định) -->
     <div id="profileModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 shadow-2xl">
             <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
@@ -873,7 +895,7 @@
             <div class="py-4 space-y-3 text-xs">
                 <div class="flex flex-col items-center">
                     <div class="relative group">
-                        <img id="profileAvatarPreview" src="images/jumjumshop.png" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'" class="w-20 h-20 rounded-full object-cover border-4 border-sky-400/50 shadow-md">
+                        <img id="profileAvatarPreview" src="" class="w-20 h-20 rounded-full object-cover border-4 border-sky-400/50 shadow-md">
                         <label class="tactile-btn absolute bottom-0 right-0 w-7 h-7 rounded-full bg-sky-600 text-white flex items-center justify-center cursor-pointer shadow">
                             <i class="fa-solid fa-camera text-[11px]"></i>
                             <input type="file" accept="image/*" onchange="handleProfileAvatarChange(this)" class="hidden">
@@ -942,7 +964,7 @@
         </div>
     </div>
 
-    <!-- 5. Hộp thoại Mã QR và Quét Mã -->
+    <!-- 5. Hộp thoại Mã QR (Thiết kế lại QR thẩm mỹ hơn khi download) -->
     <div id="qrModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 text-center shadow-2xl">
             <div class="flex items-center justify-between gap-2 mb-4">
@@ -960,13 +982,16 @@
             </div>
 
             <div id="myQrSection" class="flex flex-col items-center">
-                <div id="qrcodeCanvas" class="p-3 bg-white rounded-2xl shadow-inner border border-slate-100"></div>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 whitespace-nowrap">Quét mã để truy cập nhanh thực đơn JUMJUM</p>
+                <div id="qrcodeCardBadge" class="p-4 bg-gradient-to-b from-sky-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-3xl shadow-md border border-sky-100 dark:border-slate-700 flex flex-col items-center">
+                    <div class="text-xs font-extrabold text-sky-800 dark:text-sky-300 tracking-wider mb-2 uppercase">JUMJUM • Quét để gọi món</div>
+                    <div id="qrcodeCanvas" class="p-3 bg-white rounded-2xl shadow-inner border border-slate-100"></div>
+                    <div class="text-[10px] text-slate-500 mt-2 italic">Taste the Fresh, Feel the Joy</div>
+                </div>
                 <div class="flex justify-center gap-3 w-full mt-4">
                     <button onclick="playClickSound(); copyWebLink()" class="tactile-btn w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm text-base" title="Sao chép liên kết">
                         <i class="fa-solid fa-copy text-sky-600"></i>
                     </button>
-                    <button onclick="playClickSound(); downloadQR()" class="tactile-btn w-12 h-12 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-sm text-base" title="Tải hình ảnh mã QR">
+                    <button onclick="playClickSound(); downloadAestheticQR()" class="tactile-btn w-12 h-12 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-sm text-base" title="Tải hình ảnh mã QR thẩm mỹ">
                         <i class="fa-solid fa-download"></i>
                     </button>
                 </div>
@@ -979,7 +1004,7 @@
         </div>
     </div>
 
-    <!-- 6. Hộp thoại Đăng Nhập (Ô Email trống, không gợi ý admin) -->
+    <!-- 6. Hộp thoại Đăng Nhập -->
     <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 shadow-2xl">
             <div class="flex items-center justify-between gap-2 mb-4">
@@ -1055,10 +1080,11 @@
                 musicTitle: "JUMJUM MUSIC",
                 zaloUrl: "https://zalo.me/0398476794",
                 facebookUrl: "https://www.facebook.com/nhzt.wiie",
-                adminEmail: "jumjumshop@gmail.com",
-                adminPwd: "jumjumshop@161126",
                 defaultNotifEmail: "lnh.quii@gmail.com"
             },
+            admins: [
+                { email: "jumjumshop@gmail.com", pwd: "jumjumshop@161126", name: "Quản Trị Viên Chính" }
+            ],
             spaceImages: [
                 "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600",
                 "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=600",
@@ -1083,20 +1109,20 @@
                 { id: "V20", code: "VINHLONG20", discount: 20, label: "Giảm 20 phần trăm khách hàng khu vực Vĩnh Long" }
             ],
             initialReviews: [
-                { id: 1, user: "Minh Thư", rating: 5, comment: "Trà mãng cầu tươi ngon xuất sắc, giao hàng rất nhanh tại Phú Tân!", date: "17/11/2026" },
-                { id: 2, user: "Hoàng Nam", rating: 5, comment: "Không gian JUMJUM đẹp, nhân viên nhiệt tình, bấm gọi phục vụ tại bàn rất tiện lợi.", date: "16/11/2026" }
+                { id: 1, user: "Anh Ba Ngọc Sơn", rating: 5, comment: "Trà mãng cầu tươi ngon xuất sắc, không gian phục vụ tuyệt vời!", date: "17/11/2026" },
+                { id: 2, user: "Christina Nguyễn Phương Hằng", rating: 5, comment: "Đồ uống rất hợp khẩu vị, nhân viên nhanh nhẹn và lịch sự.", date: "16/11/2026" },
+                { id: 3, user: "Trường Giang", rating: 5, comment: "Quán có view đẹp, trà sữa trân châu đường đen béo ngậy vừa miệng.", date: "15/11/2026" },
+                { id: 4, user: "Nam Em", rating: 5, comment: "Tuyệt vời ông mặt trời! Sẽ ủng hộ JUMJUM dài dài.", date: "14/11/2026" }
             ]
         };
 
-        // ==================== TRẠNG THÁI LƯU TRỮ LOCALSTORAGE ====================
+        // ==================== TRẠNG THÁI LOCALSTORAGE ====================
         let products = JSON.parse(localStorage.getItem('jumjum_products')) || DEFAULT_SHOP_DATA.products;
         let spaceImages = JSON.parse(localStorage.getItem('jumjum_space_images')) || DEFAULT_SHOP_DATA.spaceImages;
         let foodTags = JSON.parse(localStorage.getItem('jumjum_food_tags')) || DEFAULT_SHOP_DATA.foodTags;
+        let adminAccounts = JSON.parse(localStorage.getItem('jumjum_admins')) || DEFAULT_SHOP_DATA.admins;
         let emailJsSettings = JSON.parse(localStorage.getItem('jumjum_emailjs_settings')) || {
-            publicKey: "",
-            serviceId: "",
-            templateId: "",
-            receiverEmail: DEFAULT_SHOP_DATA.info.defaultNotifEmail
+            publicKey: "", serviceId: "", templateId: "", receiverEmail: DEFAULT_SHOP_DATA.info.defaultNotifEmail
         };
 
         let cart = JSON.parse(localStorage.getItem('jumjum_cart')) || [];
@@ -1104,7 +1130,7 @@
         let orders = JSON.parse(localStorage.getItem('jumjum_orders')) || [];
         let tableCalls = JSON.parse(localStorage.getItem('jumjum_table_calls')) || [];
         let reviews = JSON.parse(localStorage.getItem('jumjum_reviews')) || DEFAULT_SHOP_DATA.initialReviews;
-        let followers = JSON.parse(localStorage.getItem('jumjum_followers')) || []; // Danh sách người theo dõi
+        let followers = JSON.parse(localStorage.getItem('jumjum_followers')) || [];
         let currentUser = JSON.parse(localStorage.getItem('jumjum_user')) || null;
         let broadcastMsg = localStorage.getItem('jumjum_broadcast') || "";
 
@@ -1118,7 +1144,6 @@
 
         // ==================== KHỞI TẠO HỆ THỐNG ====================
         window.addEventListener('DOMContentLoaded', () => {
-            createRoundFavicon(DEFAULT_SHOP_DATA.info.avatar);
             initEmailJsSdk();
             initLiquidWaveCanvas();
             initRealtimeClock();
@@ -1136,29 +1161,7 @@
             initInteractiveEffects();
         });
 
-        // 1. FAVICON HÌNH TRÒN 100%
-        function createRoundFavicon(imgUrl) {
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-                <defs><clipPath id="clip"><circle cx="64" cy="64" r="60"/></clipPath></defs>
-                <circle cx="64" cy="64" r="62" fill="#0284c7"/>
-                <image href="${imgUrl}" x="4" y="4" width="120" height="120" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip)"/>
-                <circle cx="64" cy="64" r="60" fill="none" stroke="#38bdf8" stroke-width="5"/>
-            </svg>`;
-            document.getElementById('dynamicFavicon').href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-        }
-
-        // 2. GIỌNG ĐỌC TỰ NHIÊN (WEB SPEECH API) & ÂM THANH
-        function speakVoice(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'vi-VN';
-                utterance.rate = 1.0;
-                utterance.pitch = 1.0;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
+        // Âm thanh thông báo nhẹ nhàng, ấn tượng (Đã xóa giọng đọc hoàn toàn)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
         function playClickSound() {
@@ -1177,7 +1180,7 @@
             osc.stop(now + 0.08);
         }
 
-        function playAdminNotificationSound(voiceText = "") {
+        function playAdminNotificationSound() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const notes = [659.25, 880, 1174.66];
             notes.forEach((freq, idx) => {
@@ -1193,32 +1196,25 @@
                 osc.start(start);
                 osc.stop(start + 0.46);
             });
-            if (voiceText) {
-                setTimeout(() => speakVoice(voiceText), 350);
-            }
         }
 
-        // 3. TÍNH NĂNG THEO DÕI SHOP CHO USER
+        // Tính năng Theo dõi Shop
         function toggleFollowShop() {
             if (!currentUser || currentUser.role === 'shop') {
                 return showToast("Vui lòng đăng nhập tài khoản khách hàng để theo dõi JUMJUM!");
             }
-            const userKey = currentUser.email || currentUser.name;
             const idx = followers.findIndex(f => (f.email && f.email === currentUser.email) || f.name === currentUser.name);
 
             if (idx > -1) {
                 followers.splice(idx, 1);
                 showToast("Đã bỏ theo dõi JUMJUM.");
-                speakVoice("Đã bỏ theo dõi JUMJUM");
             } else {
                 followers.push({
                     name: currentUser.name,
                     email: currentUser.email || "Không có",
-                    phone: currentUser.phone || "Không có",
                     time: new Date().toLocaleDateString('vi-VN')
                 });
                 showToast("Cảm ơn bạn đã theo dõi JUMJUM!");
-                speakVoice("Cảm ơn bạn đã theo dõi JUMJUM");
             }
             localStorage.setItem('jumjum_followers', JSON.stringify(followers));
             updateFollowButtonUI();
@@ -1248,7 +1244,7 @@
             }
         }
 
-        // 4. VOUCHER LƯU VÀO TÀI KHOẢN (HẠN MỨC 1 TUẦN)
+        // Quản lý Voucher (Hạn mức 1 tuần)
         function renderVouchers() {
             document.getElementById('voucherList').innerHTML = DEFAULT_SHOP_DATA.vouchers.map(v => `
                 <div class="tactile-card p-4 rounded-2xl bg-white/75 dark:bg-slate-800/80 border border-white dark:border-slate-700 shadow-sm flex items-center justify-between gap-3">
@@ -1275,7 +1271,7 @@
 
             const voucherInfo = DEFAULT_SHOP_DATA.vouchers.find(v => v.code === code);
             const expireDate = new Date();
-            expireDate.setDate(expireDate.getDate() + 7); // Hạn mức tồn tại 1 tuần
+            expireDate.setDate(expireDate.getDate() + 7);
 
             currentUser.savedVouchers.push({
                 code: voucherInfo.code,
@@ -1287,7 +1283,6 @@
             localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
             renderSavedUserVouchers();
             showToast(`Đã lưu voucher ${code} vào tài khoản! (Hạn sử dụng 1 tuần)`);
-            speakVoice("Đã nhận voucher thành công");
         }
 
         function renderSavedUserVouchers() {
@@ -1333,7 +1328,7 @@
             if (appliedVoucher) showToast(`Đã áp dụng mã ưu đãi ${appliedVoucher.code}`);
         }
 
-        // 5. CÁC HÀM TIỆN ÍCH & EMAILJS
+        // EmailJS config
         function initEmailJsSdk() {
             if (window.emailjs && emailJsSettings.publicKey) {
                 emailjs.init(emailJsSettings.publicKey);
@@ -1367,7 +1362,6 @@
             localStorage.setItem('jumjum_emailjs_settings', JSON.stringify(emailJsSettings));
             initEmailJsSdk();
             showToast("Đã lưu cấu hình EmailJS thành công!");
-            speakVoice("Đã lưu cấu hình Email");
         }
 
         function sendOrderEmailViaEmailJS(order) {
@@ -1622,7 +1616,6 @@
             updateCartUI();
         }
 
-        // Giỏ hàng trực quan chuẩn hóa
         function updateCartUI() {
             const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
             let subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
@@ -1739,7 +1732,7 @@
             localStorage.setItem('jumjum_orders', JSON.stringify(orders));
 
             sendOrderEmailViaEmailJS(newOrder);
-            playAdminNotificationSound("Đã đặt hàng thành công");
+            playAdminNotificationSound();
 
             if (payMethod === 'Chuyển khoản ngân hàng' || payMethod === 'Ví điện tử') {
                 launchPaymentApp(payMethod);
@@ -1753,7 +1746,6 @@
             showToast(`Đặt đơn ${newOrder.id} thành công! Đã gửi thông báo đến JUMJUM.`);
         }
 
-        // Nhận món và yêu cầu phục vụ (Giọng đọc tự nhiên yêu cầu)
         function renderUserActiveOrders() {
             const container = document.getElementById('userActiveOrdersList');
             if (orders.length === 0) {
@@ -1781,7 +1773,7 @@
             orders[idx].receivedByCustomer = true;
             orders[idx].status = "Khách hàng đã nhận món";
             localStorage.setItem('jumjum_orders', JSON.stringify(orders));
-            playAdminNotificationSound("Đã thanh toán thành công");
+            playAdminNotificationSound();
             renderUserActiveOrders();
             showToast("Cảm ơn bạn đã xác nhận nhận món! Chúc bạn ngon miệng.");
         }
@@ -1810,12 +1802,11 @@
             document.getElementById('tableRequestInput').value = '';
             document.getElementById('shopNotifDot').classList.remove('hidden');
 
-            // Giọng đọc chân thực tự nhiên
-            playAdminNotificationSound(`Khách hàng bàn số ${tableCode} có yêu cầu cần phục vụ`);
+            playAdminNotificationSound();
             showToast(`Đã gửi yêu cầu từ Bàn ${tableCode} đến nhân viên!`);
         }
 
-        // Hồ sơ và đăng nhập (Avatar mặc định khi đăng nhập user)
+        // Hồ sơ và đăng nhập (User hiển thị avt hồ sơ biểu tượng account mặc định)
         function handleProfileOrAuthClick() {
             if (!currentUser) {
                 document.getElementById('shopEmailInput').value = "";
@@ -1828,7 +1819,7 @@
 
         function openProfileModal() {
             if (!currentUser) return;
-            document.getElementById('profileAvatarPreview').src = currentUser.avatar || DEFAULT_SHOP_DATA.info.avatar;
+            document.getElementById('profileAvatarPreview').src = currentUser.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200";
             document.getElementById('profDisplayName').value = currentUser.name || '';
             document.getElementById('profPhone').value = currentUser.phone || '';
             document.getElementById('profEmail').value = currentUser.email || '';
@@ -1870,7 +1861,7 @@
                 email: '',
                 address: '',
                 payMethod: 'Chuyển khoản ngân hàng',
-                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+                avatar: '', // Sử dụng biểu tượng account mặc định
                 savedVouchers: []
             };
             localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
@@ -1884,11 +1875,13 @@
             const email = document.getElementById('shopEmailInput').value.trim().toLowerCase();
             const pwd = document.getElementById('shopPassInput').value.trim();
 
-            if (email === DEFAULT_SHOP_DATA.info.adminEmail && pwd === DEFAULT_SHOP_DATA.info.adminPwd) {
+            const matchedAdmin = adminAccounts.find(a => a.email.toLowerCase() === email && a.pwd === pwd);
+
+            if (matchedAdmin) {
                 currentUser = {
                     role: 'shop',
-                    name: 'Quản Trị Viên JUMJUM',
-                    email: DEFAULT_SHOP_DATA.info.adminEmail,
+                    name: matchedAdmin.name || 'Quản Trị Viên JUMJUM',
+                    email: matchedAdmin.email,
                     phone: DEFAULT_SHOP_DATA.info.hotline,
                     address: DEFAULT_SHOP_DATA.info.address,
                     avatar: DEFAULT_SHOP_DATA.info.avatar
@@ -1897,9 +1890,9 @@
                 closeModal('authModal');
                 checkAuthState();
                 playAdminNotificationSound();
-                showToast("Đăng nhập Quản trị hệ thống JUMJUM thành công!");
+                showToast(`Đăng nhập Quản trị thành công (${matchedAdmin.name})!`);
             } else {
-                showToast("Email hoặc mật khẩu không chính xác!");
+                showToast("Email hoặc mật khẩu Quản trị không chính xác!");
             }
         }
 
@@ -1919,7 +1912,10 @@
             const headerAvt = document.getElementById('headerUserAvatar');
             const headerIcon = document.getElementById('headerUserIcon');
 
-            if (currentUser && currentUser.avatar) {
+            if (currentUser && currentUser.role === 'guest' && !currentUser.avatar) {
+                headerAvt.classList.add('hidden');
+                headerIcon.classList.remove('hidden');
+            } else if (currentUser && currentUser.avatar) {
                 headerAvt.src = currentUser.avatar;
                 headerAvt.classList.remove('hidden');
                 headerIcon.classList.add('hidden');
@@ -1945,6 +1941,49 @@
             }
         }
 
+        // Quản lý nhiều Admin
+        function addNewAdminAccount() {
+            const email = document.getElementById('newAdminEmail').value.trim().toLowerCase();
+            const pwd = document.getElementById('newAdminPwd').value.trim();
+            if (!email || !pwd) return showToast("Vui lòng nhập đủ Email và Mật khẩu cho Admin mới!");
+
+            if (adminAccounts.some(a => a.email.toLowerCase() === email)) {
+                return showToast("Email tài khoản Admin này đã tồn tại!");
+            }
+
+            adminAccounts.push({ email, pwd, name: `Admin (${email.split('@')[0]})` });
+            localStorage.setItem('jumjum_admins', JSON.stringify(adminAccounts));
+            document.getElementById('newAdminEmail').value = '';
+            document.getElementById('newAdminPwd').value = '';
+            renderAdminAccountsList();
+            showToast("Đã thêm tài khoản Admin thành công!");
+        }
+
+        function renderAdminAccountsList() {
+            const container = document.getElementById('adminAccountsList');
+            if (!container) return;
+            container.innerHTML = adminAccounts.map((a, idx) => `
+                <div class="p-3 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2 text-xs">
+                    <div>
+                        <span class="font-bold text-slate-800 dark:text-white">${a.name}</span> — <span class="text-sky-600">${a.email}</span>
+                    </div>
+                    ${adminAccounts.length > 1 ? `
+                        <button onclick="playClickSound(); removeAdminAccount(${idx})" class="text-rose-500 hover:text-rose-700">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function removeAdminAccount(idx) {
+            if (adminAccounts.length <= 1) return showToast("Phải giữ lại ít nhất 1 tài khoản Admin chính!");
+            adminAccounts.splice(idx, 1);
+            localStorage.setItem('jumjum_admins', JSON.stringify(adminAccounts));
+            renderAdminAccountsList();
+            showToast("Đã xóa tài khoản Admin!");
+        }
+
         // Quản trị viên JUMJUM
         function switchAdminTab(tabKey) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
@@ -1958,6 +1997,7 @@
             if (tabKey === 'pos') renderPosSystem();
             if (tabKey === 'menu') renderAdminMenuAndSpaceManager();
             if (tabKey === 'followers') renderAdminFollowersList();
+            if (tabKey === 'admins') renderAdminAccountsList();
             if (tabKey === 'reviews_notif') loadEmailJsFieldsToAdmin();
         }
 
@@ -2065,7 +2105,6 @@
             `).join('');
         }
 
-        // Render danh sách người theo dõi cho Admin xem
         function renderAdminFollowersList() {
             const container = document.getElementById('adminFollowersList');
             if (followers.length === 0) {
@@ -2149,7 +2188,6 @@
             openModal('invoiceModal');
         }
 
-        // Bàn phím POS tại quầy
         function renderPosSystem() {
             document.getElementById('posProductGrid').innerHTML = products.map(p => `
                 <button onclick="playClickSound(); addToPosCart('${p.id}')" class="tactile-btn p-2.5 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 text-left shadow-sm">
@@ -2239,8 +2277,8 @@
 
         function simulateBankQrScanned() {
             const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
-            playAdminNotificationSound("Nhận chuyển khoản thành công");
-            showToast(`Nhận thành công ${total.toLocaleString('vi-VN')} VND qua chuyển khoản ngân hàng!`);
+            playAdminNotificationSound();
+            showToast(`Nhận thành công ${total.toLocaleString('vi-VN')} VND qua chuyển khoản!`);
             if (posCart.length > 0) savePosOrderToSystem("Chuyển khoản ngân hàng");
         }
 
@@ -2302,7 +2340,6 @@
                 `).join('');
         }
 
-        // Quản lý Không gian, Thẻ thức ăn và Thực đơn
         function renderAdminMenuAndSpaceManager() {
             document.getElementById('adminSpaceGalleryPreview').innerHTML = spaceImages.map((img, idx) => `
                 <div class="relative rounded-2xl overflow-hidden h-24 border border-white dark:border-slate-700 shadow-sm group">
@@ -2568,13 +2605,27 @@
             showToast("Đã sao chép liên kết JUMJUM!");
         }
 
-        function downloadQR() {
-            const img = document.querySelector('#qrcodeCanvas img');
-            if (!img) return;
-            const link = document.createElement('a');
-            link.href = img.src;
-            link.download = 'JUMJUM-QR.png';
-            link.click();
+        // Tải xuống mã QR thẩm mỹ hơn
+        function downloadAestheticQR() {
+            const cardEl = document.getElementById('qrcodeCardBadge');
+            if (!window.html2canvas) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                script.onload = () => executeDownloadQR(cardEl);
+                document.head.appendChild(script);
+            } else {
+                executeDownloadQR(cardEl);
+            }
+        }
+
+        function executeDownloadQR(el) {
+            html2canvas(el, { backgroundColor: null, scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'JUMJUM-QR-Aesthetic.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast("Đã tải xuống mã QR thẩm mỹ thành công!");
+            });
         }
 
         function switchQrMode(mode) {
