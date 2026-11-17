@@ -8,9 +8,8 @@
     <meta property="og:description" content="Bạn đang thiếu năng lượng - Có JUMJUM đây!">
     <meta property="og:image" content="images/jumjumshop.png">
     
-    <!-- Favicon chuẩn 100% hiển thị tức thì mọi trình duyệt -->
+    <!-- Favicon chuẩn tự động sinh từ logo + chống lỗi 404/cache tuyệt đối -->
     <link id="dynamicFavicon" rel="icon" type="image/png" href="images/jumjumshop.png">
-    <link rel="shortcut icon" type="image/png" href="images/jumjumshop.png">
     <link rel="apple-touch-icon" href="images/jumjumshop.png">
     
     <!-- Tailwind CSS -->
@@ -1144,6 +1143,7 @@
         // ==================== KHỞI TẠO HỆ THỐNG ====================
         window.addEventListener('DOMContentLoaded', () => {
             initEmailJsSdk();
+            syncRealLogoToFavicon();
             initLiquidWaveCanvas();
             initRealtimeClock();
             initAutoThemeByTime();
@@ -1158,7 +1158,47 @@
             generateWebQR();
             checkAuthState();
             initInteractiveEffects();
+            
+            // Lắng nghe sự kiện storage (hoạt động web thực thụ: đồng bộ tức thì giữa tab khách hàng và tab admin)
+            window.addEventListener('storage', (e) => {
+                if (['jumjum_orders', 'jumjum_table_calls', 'jumjum_reviews', 'jumjum_followers'].includes(e.key)) {
+                    orders = JSON.parse(localStorage.getItem('jumjum_orders')) || orders;
+                    tableCalls = JSON.parse(localStorage.getItem('jumjum_table_calls')) || tableCalls;
+                    reviews = JSON.parse(localStorage.getItem('jumjum_reviews')) || reviews;
+                    followers = JSON.parse(localStorage.getItem('jumjum_followers')) || followers;
+                    if (currentUser && currentUser.role === 'shop') {
+                        playAdminNotificationSound();
+                        renderAllAdminData();
+                    }
+                }
+            });
         });
+
+        // Tự động đồng bộ ảnh logo sang Favicon chuẩn 64x64 và chống cache
+        function syncRealLogoToFavicon() {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                canvas.width = 64;
+                canvas.height = 64;
+                const ctx = canvas.getContext('2d');
+                ctx.beginPath();
+                ctx.arc(32, 32, 32, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(img, 0, 0, 64, 64);
+                const pngDataUrl = canvas.toDataURL('image/png');
+
+                document.querySelectorAll("link[rel*='icon']").forEach(el => el.remove());
+                const newFavicon = document.createElement('link');
+                newFavicon.rel = 'icon';
+                newFavicon.type = 'image/png';
+                newFavicon.href = pngDataUrl;
+                document.head.appendChild(newFavicon);
+            };
+            img.src = 'images/jumjumshop.png?v=' + Date.now();
+        }
 
         // Âm thanh thông báo nhẹ nhàng, ấn tượng
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1728,6 +1768,11 @@
 
             sendOrderEmailViaEmailJS(newOrder);
             playAdminNotificationSound();
+            
+            // Kích hoạt cập nhật giao diện Admin ngay lập tức (hoạt động web thực thụ)
+            if (currentUser && currentUser.role === 'shop') {
+                renderAllAdminData();
+            }
 
             if (payMethod === 'Chuyển khoản ngân hàng' || payMethod === 'Ví điện tử') {
                 launchPaymentApp(payMethod);
@@ -1770,6 +1815,9 @@
             localStorage.setItem('jumjum_orders', JSON.stringify(orders));
             playAdminNotificationSound();
             renderUserActiveOrders();
+            if (currentUser && currentUser.role === 'shop') {
+                renderAllAdminData();
+            }
             showToast("Cảm ơn bạn đã xác nhận nhận món! Chúc bạn ngon miệng.");
         }
 
@@ -1798,6 +1846,9 @@
             document.getElementById('shopNotifDot').classList.remove('hidden');
 
             playAdminNotificationSound();
+            if (currentUser && currentUser.role === 'shop') {
+                renderAllAdminData();
+            }
             showToast(`Đã gửi yêu cầu từ Bàn ${tableCode} đến nhân viên!`);
         }
 
@@ -1823,7 +1874,7 @@
             openModal('profileModal');
         }
 
-        // ĐÃ KHẮC PHỤC LỖI TẢI ẢNH: Sử dụng Promise nén và đọc file an toàn tuyệt đối trên mobile & PC
+        // ĐÃ KHẮC PHỤC LỖI TẢI ẢNH: Đọc file an toàn tuyệt đối trên mobile & PC
         function handleProfileAvatarChange(input) {
             const file = input.files[0];
             if (!file) return;
@@ -2016,6 +2067,10 @@
                     ? "admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-sky-600 text-white text-xs font-bold whitespace-nowrap shadow"
                     : "admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm";
             });
+            if (tabKey === 'orders') {
+                // Khi mở tab đơn hàng, ẩn chấm đỏ thông báo
+                document.getElementById('shopNotifDot').classList.add('hidden');
+            }
             if (tabKey === 'pos') renderPosSystem();
             if (tabKey === 'menu') renderAdminMenuAndSpaceManager();
             if (tabKey === 'followers') renderAdminFollowersList();
@@ -2030,7 +2085,13 @@
             document.getElementById('statTotalFollowers').textContent = followers.length;
 
             const newCount = orders.filter(o => o.isNew).length + tableCalls.filter(c => !c.done).length;
-            document.getElementById('adminOrderBadge').textContent = newCount;
+            const badgeEl = document.getElementById('adminOrderBadge');
+            badgeEl.textContent = newCount;
+            if (newCount > 0) {
+                document.getElementById('shopNotifDot').classList.remove('hidden');
+            } else {
+                document.getElementById('shopNotifDot').classList.add('hidden');
+            }
 
             const callsEl = document.getElementById('adminTableCallsList');
             if (tableCalls.length === 0) {
@@ -2627,6 +2688,9 @@
             document.getElementById('reviewComment').value = '';
             renderReviews();
             playAdminNotificationSound();
+            if (currentUser && currentUser.role === 'shop') {
+                renderAllAdminData();
+            }
             showToast("Cảm ơn bạn đã gửi đánh giá cho JUMJUM!");
         }
 
