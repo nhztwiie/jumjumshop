@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUMJUM — Taste the Fresh, Feel the Joy</title>
-    <!-- Favicon hình tròn chuẩn SVG Data URI hiển thị tức thì và tự động lồng ảnh images/jumjumshop.png -->
-    <link id="dynamicFavicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3CclipPath id='circleClip'%3E%3Ccircle cx='64' cy='64' r='60'/%3E%3C/clipPath%3E%3C/defs%3E%3Ccircle cx='64' cy='64' r='62' fill='%230284c7' stroke='%2338bdf8' stroke-width='4'/%3E%3Ctext x='64' y='78' font-family='sans-serif' font-size='48' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EJJ%3C/text%3E%3C/svg%3E">
+    <!-- Open Graph Meta Tags hiển thị Logo shop khi chia sẻ link -->
+    <meta property="og:title" content="JUMJUM — Taste the Fresh, Feel the Joy">
+    <meta property="og:description" content="Khám phá thực đơn tươi ngon và không gian tuyệt vời tại JUMJUM.">
+    <meta property="og:image" content="images/jumjumshop.png">
+    
+    <!-- Favicon hình tròn chuẩn tuyệt đối bằng SVG nhúng Base64 -->
+    <link id="dynamicFavicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Ccircle cx='64' cy='64' r='62' fill='%230284c7' stroke='%2338bdf8' stroke-width='4'/%3E%3Ctext x='64' y='78' font-family='sans-serif' font-size='48' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EJJ%3C/text%3E%3C/svg%3E">
     <link id="dynamicAppleIcon" rel="apple-touch-icon" href="images/jumjumshop.png">
     
     <!-- Tailwind CSS -->
@@ -222,10 +227,10 @@
                 </button>
             </div>
 
-            <!-- Thương hiệu & Đồng hồ thời gian thực -->
+            <!-- Tên thương hiệu (Đã xóa biểu tượng giọt nước) & Đồng hồ thời gian thực -->
             <div class="text-center min-w-0">
                 <div class="font-extrabold tracking-widest text-sky-900 dark:text-sky-300 text-sm sm:text-base flex items-center justify-center gap-1.5 whitespace-nowrap">
-                    <i class="fa-solid fa-droplet text-sky-500"></i> <span id="headerShopName">JUMJUM</span>
+                    <span id="headerShopName">JUMJUM</span>
                 </div>
                 <div id="realtimeClock" class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-wider whitespace-nowrap">00:00:00</div>
             </div>
@@ -267,7 +272,15 @@
                         <h1 id="shopName" class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-white whitespace-nowrap">JUMJUM</h1>
                         <p id="shopSlogan" class="mt-1.5 text-sm sm:text-base text-sky-800 dark:text-sky-300 font-medium italic whitespace-nowrap">"Taste the Fresh, Feel the Joy"</p>
 
-                        <!-- Thông báo mới từ JUMJUM gửi đến khách hàng -->
+                        <!-- Nút Theo dõi Shop cho User -->
+                        <div class="mt-4">
+                            <button id="followShopBtn" onclick="playClickSound(); toggleFollowShop()" class="tactile-btn px-6 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-xs font-bold shadow-md flex items-center gap-2 whitespace-nowrap">
+                                <i id="followIcon" class="fa-regular fa-heart text-sm"></i> <span id="followText">Theo dõi JUMJUM</span>
+                            </button>
+                            <div id="followerCountDisplay" class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-1.5">0 người đang theo dõi</div>
+                        </div>
+
+                        <!-- Thông báo mới từ JUMJUM -->
                         <div id="customerBroadcastBanner" class="hidden mt-4 w-full max-w-xl p-3.5 rounded-2xl bg-sky-500/15 border border-sky-400/40 text-xs text-sky-900 dark:text-sky-200 flex items-center gap-3 text-left">
                             <i class="fa-solid fa-bullhorn text-sky-600 dark:text-sky-400 text-base shrink-0 animate-bounce"></i>
                             <div>
@@ -276,23 +289,23 @@
                             </div>
                         </div>
 
-                        <!-- Thông tin liên hệ (Địa chỉ & Đường dây nóng) -->
+                        <!-- Thông tin liên hệ (Địa chỉ cân đối dẫn đến link Google Maps chuẩn) & Đường dây nóng -->
                         <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full max-w-2xl">
-                            <div class="tactile-card bg-white/60 dark:bg-slate-800/60 border border-white/85 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm">
+                            <a href="https://maps.app.goo.gl/9zAXofUzKNd6XVtP7" target="_blank" onclick="playClickSound()" class="tactile-btn bg-white/60 dark:bg-slate-800/60 border border-white/85 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm group">
                                 <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/60 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-location-dot text-lg"></i>
+                                    <i class="fa-solid fa-location-dot text-lg group-hover:scale-110 transition"></i>
                                 </div>
-                                <div class="min-w-0">
-                                    <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold whitespace-nowrap">Địa chỉ JUMJUM</div>
-                                    <div id="shopAddress" class="text-xs font-semibold text-slate-700 dark:text-slate-200 sm:whitespace-nowrap">Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold whitespace-nowrap">Địa chỉ bản đồ</div>
+                                    <div id="shopAddress" class="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</div>
                                 </div>
-                            </div>
+                            </a>
 
                             <a id="shopPhoneLink" href="tel:0876935873" onclick="playClickSound()" class="tactile-btn bg-white/60 dark:bg-slate-800/60 border border-white/85 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm">
                                 <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                                     <i class="fa-solid fa-phone-volume text-lg"></i>
                                 </div>
-                                <div class="min-w-0">
+                                <div class="min-w-0 flex-1">
                                     <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold whitespace-nowrap">Đường dây nóng đặt món</div>
                                     <div id="shopHotline" class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0876.935.873</div>
                                 </div>
@@ -364,16 +377,21 @@
                 </div>
             </section>
 
-            <!-- TAB VOUCHER (TỰ ĐỘNG TẠO VÀO THỨ 2, THỨ 4, THỨ 6, CHỦ NHẬT) -->
+            <!-- TAB VOUCHER (User có thể nhận voucher vào tài khoản với hạn mức 1 tuần) -->
             <section id="tab-voucher" class="tab-section hidden space-y-4">
-                <div class="liquid-glass p-6">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <div class="liquid-glass p-6 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
                             <i class="fa-solid fa-ticket text-rose-500"></i> Kho Voucher Ưu Đãi JUMJUM
                         </h2>
-                        <span id="autoVoucherScheduleTag" class="px-3 py-1 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[11px] font-bold whitespace-nowrap">Tự động cập nhật Thứ Hai, Thứ Tư, Thứ Sáu, Chủ Nhật</span>
+                        <span class="px-3 py-1 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[11px] font-bold whitespace-nowrap">Nhận voucher lưu vào tài khoản (Hạn mức 1 tuần)</span>
                     </div>
                     <div id="voucherList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
+
+                    <div class="pt-4 border-t border-slate-200/70 dark:border-slate-700">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 whitespace-nowrap">Voucher đã lưu trong tài khoản của bạn</h3>
+                        <div id="userSavedVouchersList" class="space-y-2.5"></div>
+                    </div>
                 </div>
             </section>
 
@@ -423,8 +441,8 @@
                 </div>
             </div>
 
-            <!-- Thống kê Tổng doanh thu, Số đơn hàng, Số lượng khách -->
-            <div class="grid grid-cols-3 gap-3">
+            <!-- Thống kê Tổng doanh thu, Số đơn hàng, Số lượng khách và Người theo dõi -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="liquid-glass tactile-card p-4 text-center">
                     <i class="fa-solid fa-receipt text-sky-600 text-xl mb-1"></i>
                     <div id="statTotalOrders" class="text-2xl font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0</div>
@@ -432,13 +450,18 @@
                 </div>
                 <div class="liquid-glass tactile-card p-4 text-center">
                     <i class="fa-solid fa-coins text-amber-500 text-xl mb-1"></i>
-                    <div id="statRevenue" class="text-base sm:text-2xl font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0 đồng</div>
+                    <div id="statRevenue" class="text-sm sm:text-lg font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0 VND</div>
                     <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold whitespace-nowrap">Tổng doanh thu</div>
                 </div>
                 <div class="liquid-glass tactile-card p-4 text-center">
                     <i class="fa-solid fa-users text-emerald-500 text-xl mb-1"></i>
                     <div id="statTotalCustomers" class="text-2xl font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0</div>
                     <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold whitespace-nowrap">Số lượng khách</div>
+                </div>
+                <div class="liquid-glass tactile-card p-4 text-center">
+                    <i class="fa-solid fa-heart text-rose-500 text-xl mb-1"></i>
+                    <div id="statTotalFollowers" class="text-2xl font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold whitespace-nowrap">Người theo dõi</div>
                 </div>
             </div>
 
@@ -453,11 +476,14 @@
                 <button onclick="playClickSound(); switchAdminTab('menu')" data-admintab="menu" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
                     <i class="fa-solid fa-mug-hot mr-1 text-amber-500"></i> Quản lý Thực đơn và Không gian
                 </button>
+                <button onclick="playClickSound(); switchAdminTab('followers')" data-admintab="followers" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-heart mr-1 text-rose-500"></i> Người theo dõi JUMJUM
+                </button>
                 <button onclick="playClickSound(); switchAdminTab('customers')" data-admintab="customers" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
-                    <i class="fa-solid fa-crown mr-1 text-amber-500"></i> Khách hàng thân thiết và Lịch sử
+                    <i class="fa-solid fa-crown mr-1 text-amber-500"></i> Khách hàng thân thiết
                 </button>
                 <button onclick="playClickSound(); switchAdminTab('reviews_notif')" data-admintab="reviews_notif" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
-                    <i class="fa-solid fa-bullhorn mr-1 text-sky-500"></i> Đánh giá và Cấu hình EmailJS
+                    <i class="fa-solid fa-bullhorn mr-1 text-sky-500"></i> Đánh giá và EmailJS
                 </button>
             </div>
 
@@ -481,7 +507,7 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUẦY (BÀN PHÍM CỘNG TRỪ NHÂN CHIA + KÍ HIỆU XÓA ⌫) -->
+            <!-- ADMIN TAB 2: HỆ THỐNG TÍNH TIỀN TẠI QUẦY (ĐA DẠNG NGÂN HÀNG + POS) -->
             <div id="admin-tab-pos" class="admin-section hidden space-y-5">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     <div class="lg:col-span-7 space-y-4">
@@ -492,11 +518,11 @@
                             <div id="posProductGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto pr-1"></div>
                         </div>
 
-                        <!-- Bàn phím máy tính tiền đầy đủ Cộng (+), Trừ (−), Nhân (×), Chia (÷) và kí hiệu xóa ⌫ -->
+                        <!-- Bàn phím máy tính tiền đầy đủ Cộng (+), Trừ (−), Nhân (×), Chia (÷) và ⌫ -->
                         <div class="liquid-glass p-5">
                             <div class="flex items-center justify-between gap-2 mb-2">
                                 <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">Máy tính tiền (Cộng • Trừ • Nhân • Chia)</span>
-                                <span id="posChangeText" class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">Tiền thối lại: 0 đồng</span>
+                                <span id="posChangeText" class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">Tiền thối lại: 0 VND</span>
                             </div>
                             <input type="text" id="calcDisplay" readonly value="0" class="w-full px-4 py-2.5 rounded-xl bg-white/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-right font-extrabold text-xl text-slate-800 dark:text-white mb-3 shadow-inner">
                             <div class="grid grid-cols-4 gap-2 text-sm font-bold">
@@ -528,7 +554,7 @@
                         </div>
                     </div>
 
-                    <!-- Hóa đơn tại quầy & Mã QR Ngân Hàng MB Bank -->
+                    <!-- Hóa đơn tại quầy & Mã QR Ngân Hàng Đa Dạng -->
                     <div class="lg:col-span-5 space-y-4">
                         <div class="liquid-glass p-5 flex flex-col justify-between">
                             <div>
@@ -542,21 +568,21 @@
                             <div class="border-t border-slate-200/70 dark:border-slate-700 pt-3 space-y-3">
                                 <div class="flex justify-between font-extrabold text-base whitespace-nowrap">
                                     <span>Tổng cộng:</span>
-                                    <span id="posTotalDisplay" class="text-sky-600 dark:text-sky-400">0 đồng</span>
+                                    <span id="posTotalDisplay" class="text-sky-600 dark:text-sky-400">0 VND</span>
                                 </div>
 
-                                <div class="p-3 rounded-2xl bg-white/85 dark:bg-slate-800/90 border border-sky-200 dark:border-slate-700 text-center">
-                                    <div class="text-[11px] font-extrabold text-sky-800 dark:text-sky-300 uppercase whitespace-nowrap">NGÂN HÀNG QUÂN ĐỘI • LE NHAT HUY • 0398476794</div>
-                                    <div class="my-2 flex justify-center">
-                                        <img id="posBankQrImg" src="images/qr-bank.png" onerror="this.src='https://img.vietqr.io/image/MB-0398476794-compact2.png?accountName=LE%20NHAT%20HUY'" alt="Mã QR Ngân hàng" class="w-44 h-44 object-contain rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+                                <div class="p-3 rounded-2xl bg-white/85 dark:bg-slate-800/90 border border-sky-200 dark:border-slate-700 text-center space-y-2">
+                                    <div class="text-[11px] font-extrabold text-sky-800 dark:text-sky-300 uppercase whitespace-nowrap">QUÉT Mã QR THANH TOÁN</div>
+                                    <div class="my-1 flex justify-center">
+                                        <img id="posBankQrImg" src="images/qr-bank.png" onerror="this.src='https://img.vietqr.io/image/MB-0398476794-compact2.png?accountName=LE%20NHAT%20HUY'" alt="Mã QR Ngân hàng" class="w-36 h-36 object-contain rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
                                     </div>
                                     <button onclick="simulateBankQrScanned()" class="tactile-btn w-full py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow whitespace-nowrap">
-                                        <i class="fa-solid fa-qrcode"></i> Xác nhận khách đã quét mã QR và Nhận tiền
+                                        <i class="fa-solid fa-qrcode"></i> Xác nhận đã nhận chuyển khoản
                                     </button>
                                 </div>
 
                                 <button onclick="playClickSound(); completePosCashOrder()" class="tactile-btn w-full py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
-                                    <i class="fa-solid fa-money-bill-wave mr-1"></i> Thanh toán Tiền mặt và Lưu đơn hàng
+                                    <i class="fa-solid fa-money-bill-wave mr-1"></i> Thanh toán Tiền mặt và Lưu đơn
                                 </button>
                             </div>
                         </div>
@@ -572,9 +598,8 @@
                 </div>
             </div>
 
-            <!-- ADMIN TAB 3: QUẢN LÝ THỰC ĐƠN, THẺ THỨC ĂN VÀ KHÔNG GIAN JUMJUM -->
+            <!-- ADMIN TAB 3: QUẢN LÝ THỰC ĐƠN, THẺ THỨC ĂN VÀ KHÔNG GIAN -->
             <div id="admin-tab-menu" class="admin-section hidden space-y-5">
-                <!-- 1. Quản lý Ảnh Không Gian JUMJUM -->
                 <div class="liquid-glass p-5 space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
@@ -588,13 +613,12 @@
                     <div id="adminSpaceGalleryPreview" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1"></div>
                 </div>
 
-                <!-- 2. Quản lý Thẻ Thức Ăn (Danh mục món) -->
                 <div class="liquid-glass p-5 space-y-3">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
                         <i class="fa-solid fa-tags text-amber-500"></i> Quản lý thẻ thức ăn và danh mục
                     </h3>
                     <div class="flex flex-col sm:flex-row gap-2">
-                        <input type="text" id="newFoodTagInput" placeholder="Nhập tên thẻ thức ăn mới (Ví dụ: Cà Phê, Sinh Tố, Bánh Ngọt)..." class="flex-1 px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs dark:text-white">
+                        <input type="text" id="newFoodTagInput" placeholder="Nhập tên thẻ thức ăn mới..." class="flex-1 px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs dark:text-white">
                         <button onclick="playClickSound(); addNewFoodTag()" class="tactile-btn px-5 py-2.5 rounded-xl bg-amber-500 text-white text-xs font-bold shadow whitespace-nowrap">
                             <i class="fa-solid fa-plus mr-1"></i> Thêm thẻ thức ăn
                         </button>
@@ -602,7 +626,6 @@
                     <div id="adminFoodTagsList" class="flex flex-wrap gap-2 pt-1"></div>
                 </div>
 
-                <!-- 3. Thêm món mới vào thực đơn -->
                 <div class="liquid-glass p-5 space-y-3">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
                         <i class="fa-solid fa-plus-circle text-sky-600"></i> Cài đặt và Thêm món mới vào thực đơn
@@ -610,7 +633,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                         <input type="text" id="newProdName" placeholder="Tên món ăn hoặc thức uống..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                         <select id="newProdCategorySelect" class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white font-semibold"></select>
-                        <input type="number" id="newProdPrice" placeholder="Giá bán (Việt Nam Đồng)..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <input type="number" id="newProdPrice" placeholder="Giá bán (VND)..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                         <label class="px-3.5 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-dashed border-sky-400 cursor-pointer flex items-center justify-center gap-2 text-sky-700 dark:text-sky-300 font-semibold whitespace-nowrap">
                             <i class="fa-solid fa-cloud-arrow-up"></i> <span id="newProdImgLabel">Tải hình ảnh món lên</span>
                             <input type="file" id="newProdImageFile" accept="image/*" onchange="previewNewProductImage(this)" class="hidden">
@@ -625,65 +648,66 @@
                     </button>
                 </div>
 
-                <!-- 4. Danh sách món hiện tại để chỉnh sửa trực tiếp -->
                 <div class="liquid-glass p-5">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 whitespace-nowrap">Danh sách món đang phục vụ (Chỉnh sửa trực tiếp)</h3>
                     <div id="adminProductEditList" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- ADMIN TAB 4: KHÁCH HÀNG THÂN THIẾT VÀ LỊCH SỬ ĐẶT HÀNG -->
+            <!-- ADMIN TAB 4: DANH SÁCH NGƯỜI THEO DÕI JUMJUM -->
+            <div id="admin-tab-followers" class="admin-section hidden">
+                <div class="liquid-glass p-5 space-y-4">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-heart text-rose-500"></i> Danh sách người dùng đang theo dõi JUMJUM
+                    </h3>
+                    <div id="adminFollowersList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 5: KHÁCH HÀNG THÂN THIẾT VÀ LỊCH SỬ -->
             <div id="admin-tab-customers" class="admin-section hidden">
                 <div class="liquid-glass p-5">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-4 flex items-center gap-2 whitespace-nowrap">
-                        <i class="fa-solid fa-crown text-amber-500"></i> Danh sách Khách hàng, Huy hiệu Thân thiết và Lịch sử đặt hàng
+                        <i class="fa-solid fa-crown text-amber-500"></i> Danh sách Khách hàng và Lịch sử đặt hàng
                     </h3>
                     <div id="customerProfilesList" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- ADMIN TAB 5: CẤU HÌNH EMAILJS, GỬI THÔNG BÁO VÀ XEM ĐÁNH GIÁ -->
+            <!-- ADMIN TAB 6: CẤU HÌNH EMAILJS VÀ ĐÁNH GIÁ -->
             <div id="admin-tab-reviews_notif" class="admin-section hidden space-y-5">
-                <!-- Khu vực nhập các mã của EmailJS.com để gửi thông báo đơn hàng qua thư điện tử -->
                 <div class="liquid-glass p-5 space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
-                            <i class="fa-solid fa-envelope-circle-check text-emerald-600"></i> Cấu hình kết nối EmailJS.com gửi thông báo đơn hàng
+                            <i class="fa-solid fa-envelope-circle-check text-emerald-600"></i> Cấu hình kết nối EmailJS gửi thông báo đơn hàng
                         </h3>
                         <span id="emailJsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-[10px] font-bold whitespace-nowrap">Chưa kết nối mã EmailJS</span>
                     </div>
-                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                        Nhập 3 mã định danh lấy từ tài khoản <b>EmailJS.com</b> của bạn để hệ thống tự động gửi thư chi tiết mỗi khi khách đặt hàng thành công.
-                    </p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                         <div>
-                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Public Key (Khóa công khai)</label>
-                            <input type="text" id="ejsPublicKeyInput" placeholder="Nhập Public Key từ mục Account..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Public Key</label>
+                            <input type="text" id="ejsPublicKeyInput" placeholder="Nhập Public Key..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                         </div>
                         <div>
-                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Service ID (Mã dịch vụ thư)</label>
-                            <input type="text" id="ejsServiceIdInput" placeholder="Ví dụ: service_xxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Service ID</label>
+                            <input type="text" id="ejsServiceIdInput" placeholder="service_xxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                         </div>
                         <div>
-                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Template ID (Mã mẫu thư)</label>
-                            <input type="text" id="ejsTemplateIdInput" placeholder="Ví dụ: template_xxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Template ID</label>
+                            <input type="text" id="ejsTemplateIdInput" placeholder="template_xxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                         </div>
                         <div>
-                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Thư điện tử nhận thông báo đơn hàng</label>
-                            <input type="email" id="ejsReceiverEmailInput" placeholder="Nhập địa chỉ thư điện tử nhận đơn..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Email nhận thông báo đơn hàng</label>
+                            <input type="email" id="ejsReceiverEmailInput" placeholder="Email nhận đơn..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-2 pt-1">
                         <button onclick="playClickSound(); saveEmailJsSettings()" class="tactile-btn px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow whitespace-nowrap">
                             <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu cấu hình EmailJS
                         </button>
-                        <button onclick="playClickSound(); testEmailJsConnection()" class="tactile-btn px-4 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 text-sky-700 dark:text-sky-300 border border-sky-300 dark:border-slate-700 text-xs font-bold shadow-sm whitespace-nowrap">
-                            <i class="fa-solid fa-paper-plane mr-1"></i> Gửi thư kiểm tra thử
-                        </button>
                     </div>
                 </div>
 
-                <!-- Phát thông báo đến khách hàng -->
                 <div class="liquid-glass p-5">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2 whitespace-nowrap">
                         <i class="fa-solid fa-bullhorn text-sky-600"></i> Gửi thông báo ưu đãi đến toàn bộ khách hàng
@@ -694,7 +718,6 @@
                     </div>
                 </div>
 
-                <!-- Đánh giá từ khách hàng -->
                 <div class="liquid-glass p-5">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2 whitespace-nowrap">
                         <i class="fa-solid fa-star text-amber-400"></i> Đánh giá từ khách hàng
@@ -746,7 +769,7 @@
             <div class="pt-3 border-t border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-2">
                 <div>
                     <div class="text-[10px] text-slate-400 uppercase font-bold whitespace-nowrap">Tổng giá món</div>
-                    <div id="toppingCalculatedPrice" class="text-base font-extrabold text-sky-600 dark:text-sky-400 whitespace-nowrap">0 đồng</div>
+                    <div id="toppingCalculatedPrice" class="text-base font-extrabold text-sky-600 dark:text-sky-400 whitespace-nowrap">0 VND</div>
                 </div>
                 <button onclick="playClickSound(); confirmAddProductWithToppings()" class="tactile-btn px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
                     <i class="fa-solid fa-cart-plus mr-1"></i> Thêm vào giỏ hàng
@@ -755,7 +778,7 @@
         </div>
     </div>
 
-    <!-- 2. Hộp thoại Giỏ Hàng và Thanh Toán -->
+    <!-- 2. Hộp thoại Giỏ Hàng Chuẩn Hóa Trực Quan & Đa Dạng Ngân Hàng -->
     <div id="cartModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 max-h-[88vh] flex flex-col shadow-2xl">
             <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
@@ -775,20 +798,20 @@
                     <input type="tel" id="orderPhone" placeholder="Số điện thoại *" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <input type="email" id="orderEmail" placeholder="Thư điện tử của bạn" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                    <input type="email" id="orderEmail" placeholder="Email của bạn" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                     <input type="text" id="orderAddress" placeholder="Địa chỉ nhận hàng *" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                 </div>
-                <input type="text" id="orderNote" placeholder="Yêu cầu khách hàng (Ví dụ: ít đá, bảy mươi phần trăm đường, giao giờ nghỉ trưa...)" class="w-full px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                <input type="text" id="orderNote" placeholder="Yêu cầu khách hàng (Ví dụ: ít đá, 70% đường...)" class="w-full px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                 
                 <select id="voucherSelect" onchange="playClickSound(); applyVoucher()" class="w-full px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
-                    <option value="">-- Chọn mã Voucher ưu đãi --</option>
+                    <option value="">-- Chọn mã Voucher đã lưu trong tài khoản --</option>
                 </select>
 
                 <div>
-                    <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1 whitespace-nowrap">Phương thức thanh toán (Tự động mở ứng dụng):</div>
+                    <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1 whitespace-nowrap">Phương thức thanh toán:</div>
                     <div class="grid grid-cols-3 gap-2 text-xs">
                         <label class="tactile-btn flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer font-semibold whitespace-nowrap">
-                            <input type="radio" name="payMethod" value="Tiền mặt khi nhận hàng" onchange="toggleAppSelector()"> Tiền mặt
+                            <input type="radio" name="payMethod" value="Tiền mặt" onchange="toggleAppSelector()"> Tiền mặt
                         </label>
                         <label class="tactile-btn flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer font-semibold whitespace-nowrap">
                             <input type="radio" name="payMethod" value="Chuyển khoản ngân hàng" checked onchange="toggleAppSelector()"> Ngân hàng
@@ -799,29 +822,34 @@
                         </label>
                     </div>
 
+                    <!-- Hỗ trợ đa dạng ngân hàng -->
                     <div id="bankAppSelectBox" class="mt-2">
                         <select id="selectedPaymentApp" class="w-full px-3 py-2 rounded-xl bg-sky-50/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-xs font-semibold text-sky-900 dark:text-sky-300">
-                            <option value="mb">Mở ứng dụng Ngân hàng Quân Đội (MB Bank)</option>
-                            <option value="vcb">Mở ứng dụng Vietcombank</option>
-                            <option value="tcb">Mở ứng dụng Techcombank</option>
-                            <option value="bidv">Mở ứng dụng BIDV SmartBanking</option>
-                            <option value="icb">Mở ứng dụng VietinBank iPay</option>
-                            <option value="acb">Mở ứng dụng ACB ONE</option>
+                            <option value="mb">MB Bank (Quân Đội)</option>
+                            <option value="vcb">Vietcombank</option>
+                            <option value="tcb">Techcombank</option>
+                            <option value="bidv">BIDV SmartBanking</option>
+                            <option value="icb">VietinBank iPay</option>
+                            <option value="acb">ACB ONE</option>
+                            <option value="vpb">VPBank NEO</option>
+                            <option value="tpb">TPBank LiveBank</option>
+                            <option value="agb">Agribank E-Mobile Banking</option>
+                            <option value="scb">Sacombank Pay</option>
                         </select>
                     </div>
                     <div id="ewalletAppSelectBox" class="mt-2 hidden flex items-center gap-2">
                         <img src="images/zalo.png" onerror="this.style.display='none'" class="w-6 h-6 object-contain rounded-full shrink-0">
                         <select id="selectedEwalletApp" class="w-full px-3 py-2 rounded-xl bg-sky-50/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-xs font-semibold text-sky-900 dark:text-sky-300">
-                            <option value="zalopay">Mở Ví điện tử ZaloPay</option>
-                            <option value="momo">Mở Ví điện tử MoMo</option>
-                            <option value="vnpay">Mở Ví điện tử VNPAY</option>
+                            <option value="zalopay">Ví ZaloPay</option>
+                            <option value="momo">Ví MoMo</option>
+                            <option value="vnpay">Ví VNPAY</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between font-bold text-base text-slate-800 dark:text-white pt-1 whitespace-nowrap">
                     <span>Tổng thanh toán:</span>
-                    <span id="cartTotalPrice" class="text-sky-600 dark:text-sky-400 text-lg font-extrabold">0 đồng</span>
+                    <span id="cartTotalPrice" class="text-sky-600 dark:text-sky-400 text-lg font-extrabold">0 VND</span>
                 </div>
                 <button onclick="playClickSound(); placeOrder()" class="tactile-btn w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold shadow-lg shadow-sky-500/30 flex items-center justify-center gap-2 text-sm whitespace-nowrap">
                     <i class="fa-solid fa-check-circle"></i> Đặt hàng ngay
@@ -830,7 +858,7 @@
         </div>
     </div>
 
-    <!-- 3. Hộp thoại Hồ Sơ Người Dùng và Quản Trị Viên -->
+    <!-- 3. Hộp thoại Hồ Sơ (Avatar mặc định khi đăng nhập) -->
     <div id="profileModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 shadow-2xl">
             <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
@@ -864,7 +892,7 @@
                         <input type="tel" id="profPhone" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Thư điện tử</label>
+                        <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Email</label>
                         <input type="email" id="profEmail" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                     </div>
                 </div>
@@ -876,8 +904,8 @@
                     <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Phương thức thanh toán ưu tiên</label>
                     <select id="profPayMethod" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
                         <option value="Chuyển khoản ngân hàng">Chuyển khoản ngân hàng</option>
-                        <option value="Ví điện tử">Ví điện tử (ZaloPay hoặc MoMo)</option>
-                        <option value="Tiền mặt khi nhận hàng">Thanh toán tiền mặt khi nhận hàng</option>
+                        <option value="Ví điện tử">Ví điện tử</option>
+                        <option value="Tiền mặt">Tiền mặt</option>
                     </select>
                 </div>
 
@@ -914,7 +942,7 @@
         </div>
     </div>
 
-    <!-- 5. Hộp thoại Mã QR và Quét Mã QR -->
+    <!-- 5. Hộp thoại Mã QR và Quét Mã -->
     <div id="qrModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 text-center shadow-2xl">
             <div class="flex items-center justify-between gap-2 mb-4">
@@ -951,7 +979,7 @@
         </div>
     </div>
 
-    <!-- 6. Hộp thoại Đăng Nhập (Không gợi ý email quản trị, dùng chữ Facebook đầy đủ) -->
+    <!-- 6. Hộp thoại Đăng Nhập (Ô Email trống, không gợi ý admin) -->
     <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 shadow-2xl">
             <div class="flex items-center justify-between gap-2 mb-4">
@@ -988,9 +1016,9 @@
                 </div>
 
                 <div class="space-y-2.5">
-                    <input type="email" id="shopEmailInput" autocomplete="off" placeholder="Nhập thư điện tử đăng nhập..." class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                    <input type="email" id="shopEmailInput" autocomplete="new-email" placeholder="Nhập Email đăng nhập..." class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                     <div class="relative">
-                        <input type="password" id="shopPassInput" autocomplete="off" placeholder="Nhập mật khẩu..." class="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                        <input type="password" id="shopPassInput" autocomplete="new-password" placeholder="Nhập mật khẩu..." class="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
                         <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
                             <i id="eyeIcon" class="fa-solid fa-eye"></i>
                         </button>
@@ -1050,7 +1078,7 @@
                 { id: "p3", name: "Trà Mãng Cầu Tươi", category: "Trà Trái Cây", price: 30000, desc: "Mãng cầu xiêm dầm tươi chua ngọt hài hòa, giải nhiệt tức thì.", image: "images/mon-3.jpg", hasTopping: true },
                 { id: "p4", name: "Mẹt Ăn Vặt Thập Cẩm", category: "Ăn Vặt", price: 45000, desc: "Đầy đủ cá viên, bò viên, xúc xích, phô mai que chiên giòn rụm kèm tương chấm đặc biệt.", image: "images/mon-4.jpg", hasTopping: false }
             ],
-            baseVouchers: [
+            vouchers: [
                 { id: "V10", code: "JUMJUM10", discount: 10, label: "Giảm 10 phần trăm cho mọi đơn hàng" },
                 { id: "V20", code: "VINHLONG20", discount: 20, label: "Giảm 20 phần trăm khách hàng khu vực Vĩnh Long" }
             ],
@@ -1076,6 +1104,7 @@
         let orders = JSON.parse(localStorage.getItem('jumjum_orders')) || [];
         let tableCalls = JSON.parse(localStorage.getItem('jumjum_table_calls')) || [];
         let reviews = JSON.parse(localStorage.getItem('jumjum_reviews')) || DEFAULT_SHOP_DATA.initialReviews;
+        let followers = JSON.parse(localStorage.getItem('jumjum_followers')) || []; // Danh sách người theo dõi
         let currentUser = JSON.parse(localStorage.getItem('jumjum_user')) || null;
         let broadcastMsg = localStorage.getItem('jumjum_broadcast') || "";
 
@@ -1099,6 +1128,7 @@
             renderCategories();
             renderProducts();
             renderVouchers();
+            renderSavedUserVouchers();
             renderReviews();
             updateCartUI();
             generateWebQR();
@@ -1106,43 +1136,204 @@
             initInteractiveEffects();
         });
 
-        // 1. TẠO FAVICON HÌNH TRÒN CHUẨN SVG DATA URI
+        // 1. FAVICON HÌNH TRÒN 100%
         function createRoundFavicon(imgUrl) {
-            const applySvgCircleFavicon = (hrefImage) => {
-                const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-                    <defs>
-                        <clipPath id="roundAvatarClip">
-                            <circle cx="64" cy="64" r="60"/>
-                        </clipPath>
-                    </defs>
-                    <circle cx="64" cy="64" r="62" fill="#0284c7"/>
-                    <image href="${hrefImage}" x="4" y="4" width="120" height="120" preserveAspectRatio="xMidYMid slice" clip-path="url(#roundAvatarClip)"/>
-                    <circle cx="64" cy="64" r="60" fill="none" stroke="#38bdf8" stroke-width="5"/>
-                </svg>`;
-                const encodedSvg = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-                const link = document.getElementById('dynamicFavicon');
-                link.type = 'image/svg+xml';
-                link.href = encodedSvg;
-            };
-
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = 128;
-                canvas.height = 128;
-                const ctx = canvas.getContext('2d');
-                const minSide = Math.min(img.width, img.height);
-                const sx = (img.width - minSide) / 2;
-                const sy = (img.height - minSide) / 2;
-                ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, 128, 128);
-                const base64Data = canvas.toDataURL('image/png');
-                applySvgCircleFavicon(base64Data);
-            };
-            img.src = imgUrl;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <defs><clipPath id="clip"><circle cx="64" cy="64" r="60"/></clipPath></defs>
+                <circle cx="64" cy="64" r="62" fill="#0284c7"/>
+                <image href="${imgUrl}" x="4" y="4" width="120" height="120" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip)"/>
+                <circle cx="64" cy="64" r="60" fill="none" stroke="#38bdf8" stroke-width="5"/>
+            </svg>`;
+            document.getElementById('dynamicFavicon').href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
         }
 
-        // 2. KHỞI TẠO VÀ CẤU HÌNH EMAILJS.COM
+        // 2. GIỌNG ĐỌC TỰ NHIÊN (WEB SPEECH API) & ÂM THANH
+        function speakVoice(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'vi-VN';
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playClickSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(520, now);
+            osc.frequency.exponentialRampToValueAtTime(880, now + 0.065);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.08);
+        }
+
+        function playAdminNotificationSound(voiceText = "") {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const notes = [659.25, 880, 1174.66];
+            notes.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                const start = audioCtx.currentTime + idx * 0.12;
+                osc.frequency.setValueAtTime(freq, start);
+                gain.gain.setValueAtTime(0.18, start);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + 0.45);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(start);
+                osc.stop(start + 0.46);
+            });
+            if (voiceText) {
+                setTimeout(() => speakVoice(voiceText), 350);
+            }
+        }
+
+        // 3. TÍNH NĂNG THEO DÕI SHOP CHO USER
+        function toggleFollowShop() {
+            if (!currentUser || currentUser.role === 'shop') {
+                return showToast("Vui lòng đăng nhập tài khoản khách hàng để theo dõi JUMJUM!");
+            }
+            const userKey = currentUser.email || currentUser.name;
+            const idx = followers.findIndex(f => (f.email && f.email === currentUser.email) || f.name === currentUser.name);
+
+            if (idx > -1) {
+                followers.splice(idx, 1);
+                showToast("Đã bỏ theo dõi JUMJUM.");
+                speakVoice("Đã bỏ theo dõi JUMJUM");
+            } else {
+                followers.push({
+                    name: currentUser.name,
+                    email: currentUser.email || "Không có",
+                    phone: currentUser.phone || "Không có",
+                    time: new Date().toLocaleDateString('vi-VN')
+                });
+                showToast("Cảm ơn bạn đã theo dõi JUMJUM!");
+                speakVoice("Cảm ơn bạn đã theo dõi JUMJUM");
+            }
+            localStorage.setItem('jumjum_followers', JSON.stringify(followers));
+            updateFollowButtonUI();
+        }
+
+        function updateFollowButtonUI() {
+            const btn = document.getElementById('followShopBtn');
+            const icon = document.getElementById('followIcon');
+            const text = document.getElementById('followText');
+            const countEl = document.getElementById('statTotalFollowers');
+            const followerDisplay = document.getElementById('followerCountDisplay');
+
+            if (followerDisplay) followerDisplay.textContent = `${followers.length} người đang theo dõi`;
+            if (countEl) countEl.textContent = followers.length;
+
+            if (currentUser && currentUser.role !== 'shop') {
+                const isFollowing = followers.some(f => (f.email && f.email === currentUser.email) || f.name === currentUser.name);
+                if (isFollowing) {
+                    btn.className = "tactile-btn px-6 py-2.5 rounded-full bg-rose-500 text-white text-xs font-bold shadow-md flex items-center gap-2 whitespace-nowrap";
+                    icon.className = "fa-solid fa-heart text-sm";
+                    text.textContent = "Đang theo dõi JUMJUM";
+                } else {
+                    btn.className = "tactile-btn px-6 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-xs font-bold shadow-md flex items-center gap-2 whitespace-nowrap";
+                    icon.className = "fa-regular fa-heart text-sm";
+                    text.textContent = "Theo dõi JUMJUM";
+                }
+            }
+        }
+
+        // 4. VOUCHER LƯU VÀO TÀI KHOẢN (HẠN MỨC 1 TUẦN)
+        function renderVouchers() {
+            document.getElementById('voucherList').innerHTML = DEFAULT_SHOP_DATA.vouchers.map(v => `
+                <div class="tactile-card p-4 rounded-2xl bg-white/75 dark:bg-slate-800/80 border border-white dark:border-slate-700 shadow-sm flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400 whitespace-nowrap">${v.code}</span>
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[9px] font-bold whitespace-nowrap">Hạn: 7 ngày</span>
+                        </div>
+                        <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">${v.label}</div>
+                    </div>
+                    <button onclick="playClickSound(); saveVoucherToAccount('${v.code}')" class="tactile-btn px-3.5 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold shadow-sm whitespace-nowrap shrink-0">Nhận voucher</button>
+                </div>
+            `).join('');
+        }
+
+        function saveVoucherToAccount(code) {
+            if (!currentUser || currentUser.role === 'shop') {
+                return showToast("Vui lòng đăng nhập tài khoản khách hàng để nhận voucher!");
+            }
+            if (!currentUser.savedVouchers) currentUser.savedVouchers = [];
+            if (currentUser.savedVouchers.some(v => v.code === code)) {
+                return showToast("Bạn đã lưu voucher này trong tài khoản rồi!");
+            }
+
+            const voucherInfo = DEFAULT_SHOP_DATA.vouchers.find(v => v.code === code);
+            const expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 7); // Hạn mức tồn tại 1 tuần
+
+            currentUser.savedVouchers.push({
+                code: voucherInfo.code,
+                discount: voucherInfo.discount,
+                label: voucherInfo.label,
+                expireDate: expireDate.toLocaleDateString('vi-VN')
+            });
+
+            localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
+            renderSavedUserVouchers();
+            showToast(`Đã lưu voucher ${code} vào tài khoản! (Hạn sử dụng 1 tuần)`);
+            speakVoice("Đã nhận voucher thành công");
+        }
+
+        function renderSavedUserVouchers() {
+            const container = document.getElementById('userSavedVouchersList');
+            const selectEl = document.getElementById('voucherSelect');
+
+            if (!currentUser || currentUser.role === 'shop' || !currentUser.savedVouchers || currentUser.savedVouchers.length === 0) {
+                if (container) container.innerHTML = `<div class="text-xs text-slate-400 italic">Bạn chưa lưu voucher nào vào tài khoản.</div>`;
+                if (selectEl) selectEl.innerHTML = `<option value="">-- Chọn mã Voucher đã lưu trong tài khoản --</option>`;
+                return;
+            }
+
+            if (container) {
+                container.innerHTML = currentUser.savedVouchers.map(v => `
+                    <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+                        <div>
+                            <span class="font-bold text-sky-700 dark:text-sky-300">${v.code}</span> (${v.label})
+                            <div class="text-[10px] text-rose-500 font-semibold mt-0.5">Hạn sử dụng đến: ${v.expireDate}</div>
+                        </div>
+                        <button onclick="playClickSound(); selectSavedVoucher('${v.code}')" class="tactile-btn px-3 py-1 rounded-lg bg-sky-600 text-white font-bold whitespace-nowrap">Áp dụng</button>
+                    </div>
+                `).join('');
+            }
+
+            if (selectEl) {
+                selectEl.innerHTML = `<option value="">-- Chọn mã Voucher đã lưu trong tài khoản --</option>` + currentUser.savedVouchers.map(v => `
+                    <option value="${v.code}">${v.label} (${v.code} - Hạn: ${v.expireDate})</option>
+                `).join('');
+            }
+        }
+
+        function selectSavedVoucher(code) {
+            document.getElementById('voucherSelect').value = code;
+            applyVoucher();
+            openCartModal();
+        }
+
+        function applyVoucher() {
+            const code = document.getElementById('voucherSelect').value;
+            if (!currentUser || !currentUser.savedVouchers) return;
+            appliedVoucher = currentUser.savedVouchers.find(v => v.code === code) || null;
+            updateCartUI();
+            if (appliedVoucher) showToast(`Đã áp dụng mã ưu đãi ${appliedVoucher.code}`);
+        }
+
+        // 5. CÁC HÀM TIỆN ÍCH & EMAILJS
         function initEmailJsSdk() {
             if (window.emailjs && emailJsSettings.publicKey) {
                 emailjs.init(emailJsSettings.publicKey);
@@ -1153,7 +1344,7 @@
                     badge.textContent = "Đã kết nối EmailJS sẵn sàng";
                     badge.className = "px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold whitespace-nowrap";
                 } else {
-                    badge.textContent = "Chưa nhập đủ 3 mã EmailJS";
+                    badge.textContent = "Chưa nhập đủ mã EmailJS";
                     badge.className = "px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-[10px] font-bold whitespace-nowrap";
                 }
             }
@@ -1175,35 +1366,12 @@
             };
             localStorage.setItem('jumjum_emailjs_settings', JSON.stringify(emailJsSettings));
             initEmailJsSdk();
-            showToast("Đã lưu cấu hình EmailJS.com thành công!");
+            showToast("Đã lưu cấu hình EmailJS thành công!");
+            speakVoice("Đã lưu cấu hình Email");
         }
 
-        function testEmailJsConnection() {
-            saveEmailJsSettings();
-            if (!emailJsSettings.publicKey || !emailJsSettings.serviceId || !emailJsSettings.templateId) {
-                return showToast("Vui lòng điền đủ Public Key, Service ID và Template ID trước khi gửi thử!");
-            }
-            const testOrder = {
-                id: "KIEM-TRA-01",
-                time: new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN'),
-                customer: "Thư kiểm tra hệ thống JUMJUM",
-                phone: "0876.935.873",
-                email: emailJsSettings.receiverEmail,
-                address: "Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long",
-                note: "Thư kiểm tra kết nối EmailJS thành công",
-                voucher: "Không áp dụng",
-                payMethod: "Chuyển khoản ngân hàng",
-                toppingsText: "Trân châu đường đen",
-                itemsText: "Trà Sữa Trân Châu Đường Đen (Số lượng: 1)",
-                total: 30000
-            };
-            sendOrderEmailViaEmailJS(testOrder, true);
-        }
-
-        function sendOrderEmailViaEmailJS(order, isTest = false) {
-            if (!window.emailjs || !emailJsSettings.publicKey || !emailJsSettings.serviceId || !emailJsSettings.templateId) {
-                return;
-            }
+        function sendOrderEmailViaEmailJS(order) {
+            if (!window.emailjs || !emailJsSettings.publicKey || !emailJsSettings.serviceId || !emailJsSettings.templateId) return;
             const templateParams = {
                 to_email: emailJsSettings.receiverEmail || DEFAULT_SHOP_DATA.info.defaultNotifEmail,
                 order_id: order.id,
@@ -1217,79 +1385,9 @@
                 payment_method: order.payMethod,
                 toppings: order.toppingsText,
                 order_items: order.itemsText,
-                total_amount: order.total.toLocaleString('vi-VN') + ' đồng'
+                total_amount: order.total.toLocaleString('vi-VN') + ' VND'
             };
-            emailjs.send(emailJsSettings.serviceId, emailJsSettings.templateId, templateParams)
-                .then(() => {
-                    if (isTest) showToast(`Đã gửi thư kiểm tra tới ${templateParams.to_email}!`);
-                })
-                .catch(err => {
-                    if (isTest) showToast("Gửi thư thất bại, vui lòng kiểm tra lại 3 mã EmailJS!");
-                    console.warn("EmailJS:", err);
-                });
-        }
-
-        // 3. TỰ ĐỘNG TẠO VOUCHER VÀO THỨ 2, THỨ 4, THỨ 6, CHỦ NHẬT
-        function getActiveVouchersList() {
-            const now = new Date();
-            const dayOfWeek = now.getDay(); // 0: Chủ Nhật, 1: Thứ Hai, 3: Thứ Tư, 5: Thứ Sáu
-            const dateStr = now.toLocaleDateString('vi-VN');
-            const list = [...DEFAULT_SHOP_DATA.baseVouchers];
-
-            const scheduleMap = {
-                1: { code: "THU2_JUMJUM", discount: 15, label: `Ưu đãi Thứ Hai (${dateStr}): Giảm 15 phần trăm toàn bộ thực đơn` },
-                3: { code: "THU4_JUMJUM", discount: 15, label: `Ưu đãi Thứ Tư (${dateStr}): Giảm 15 phần trăm toàn bộ thực đơn` },
-                5: { code: "THU6_JUMJUM", discount: 20, label: `Ưu đãi Thứ Sáu (${dateStr}): Giảm 20 phần trăm mừng cuối tuần` },
-                0: { code: "CHUNHAT_JUMJUM", discount: 25, label: `Ưu đãi Chủ Nhật (${dateStr}): Giảm 25 phần trăm đặc biệt` }
-            };
-
-            if (scheduleMap[dayOfWeek]) {
-                list.unshift({
-                    id: "AUTO_DAY_" + dayOfWeek,
-                    code: scheduleMap[dayOfWeek].code,
-                    discount: scheduleMap[dayOfWeek].discount,
-                    label: scheduleMap[dayOfWeek].label,
-                    isAutoToday: true
-                });
-            }
-            return list;
-        }
-
-        // 4. ÂM THANH VẬT LÝ & SÓNG NƯỚC CANVAS
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        function playClickSound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            const now = audioCtx.currentTime;
-            osc.frequency.setValueAtTime(520, now);
-            osc.frequency.exponentialRampToValueAtTime(880, now + 0.065);
-            gain.gain.setValueAtTime(0.08, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now);
-            osc.stop(now + 0.08);
-        }
-
-        function playAdminNotificationSound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const notes = [659.25, 880, 1174.66];
-            notes.forEach((freq, idx) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle';
-                const start = audioCtx.currentTime + idx * 0.12;
-                osc.frequency.setValueAtTime(freq, start);
-                gain.gain.setValueAtTime(0.18, start);
-                gain.gain.exponentialRampToValueAtTime(0.001, start + 0.45);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(start);
-                osc.stop(start + 0.46);
-            });
+            emailjs.send(emailJsSettings.serviceId, emailJsSettings.templateId, templateParams).catch(err => console.warn("EmailJS:", err));
         }
 
         function initLiquidWaveCanvas() {
@@ -1376,7 +1474,6 @@
             });
         }
 
-        // 5. ĐIỀU HƯỚNG TAB VÀ HIỂN THỊ KHÔNG GIAN JUMJUM
         function switchTab(tabName) {
             document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById(`tab-${tabName}`).classList.remove('hidden');
@@ -1384,7 +1481,10 @@
                 btn.classList.toggle('active', btn.dataset.tab === tabName);
             });
             if (tabName === 'service') renderUserActiveOrders();
-            if (tabName === 'voucher') renderVouchers();
+            if (tabName === 'voucher') {
+                renderVouchers();
+                renderSavedUserVouchers();
+            }
         }
 
         function renderSpaceGallery() {
@@ -1405,7 +1505,6 @@
             }
         }
 
-        // 6. THỰC ĐƠN, THẺ THỨC ĂN VÀ CHỌN TOPPING
         function renderCategories() {
             const cats = ['Tất cả', ...new Set([...foodTags, ...products.map(p => p.category)])];
             document.getElementById('categoryFilter').innerHTML = cats.map(c => `
@@ -1437,7 +1536,7 @@
                     </div>
 
                     <div class="relative z-10 mt-4 pt-3 border-t border-white/70 dark:border-slate-700 flex items-center justify-between gap-2">
-                        <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${p.price.toLocaleString('vi-VN')} đồng</span>
+                        <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${p.price.toLocaleString('vi-VN')} VND</span>
                         <button onclick="playClickSound(); initiateAddToCart('${p.id}')" class="tactile-btn px-3.5 py-2 rounded-full bg-sky-600 text-white text-xs font-bold flex items-center gap-1.5 shadow whitespace-nowrap">
                             <i class="fa-solid fa-plus"></i> Chọn món
                         </button>
@@ -1459,7 +1558,7 @@
                             <input type="checkbox" class="topping-checkbox" data-name="${t.name}" data-price="${t.price}" onchange="playClickSound(); updateToppingPricePreview()">
                             ${t.name}
                         </span>
-                        <span class="font-bold text-sky-600 dark:text-sky-400 whitespace-nowrap">+${t.price.toLocaleString('vi-VN')} đồng</span>
+                        <span class="font-bold text-sky-600 dark:text-sky-400 whitespace-nowrap">+${t.price.toLocaleString('vi-VN')} VND</span>
                     </label>
                 `).join('');
                 updateToppingPricePreview();
@@ -1475,7 +1574,7 @@
             document.querySelectorAll('.topping-checkbox:checked').forEach(cb => {
                 total += parseInt(cb.dataset.price);
             });
-            document.getElementById('toppingCalculatedPrice').textContent = total.toLocaleString('vi-VN') + ' đồng';
+            document.getElementById('toppingCalculatedPrice').textContent = total.toLocaleString('vi-VN') + ' VND';
         }
 
         function confirmAddProductWithToppings() {
@@ -1523,6 +1622,7 @@
             updateCartUI();
         }
 
+        // Giỏ hàng trực quan chuẩn hóa
         function updateCartUI() {
             const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
             let subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
@@ -1530,7 +1630,7 @@
             const finalTotal = Math.max(0, subTotal - discountAmount);
 
             document.getElementById('cartBadge').textContent = totalQty;
-            document.getElementById('cartTotalPrice').textContent = `${finalTotal.toLocaleString('vi-VN')} đồng`;
+            document.getElementById('cartTotalPrice').textContent = `${finalTotal.toLocaleString('vi-VN')} VND`;
 
             const container = document.getElementById('cartItemsContainer');
             if (cart.length === 0) {
@@ -1539,26 +1639,26 @@
             }
 
             container.innerHTML = cart.map(item => `
-                <div class="flex items-center justify-between gap-2 bg-white/85 dark:bg-slate-800 p-3 rounded-2xl border border-white dark:border-slate-700 shadow-sm">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <img src="${item.image}" onerror="this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-12 h-12 rounded-xl object-cover shrink-0">
-                        <div class="min-w-0">
+                <div class="flex items-center justify-between gap-3 bg-white/85 dark:bg-slate-800 p-3.5 rounded-2xl border border-white dark:border-slate-700 shadow-sm">
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <img src="${item.image}" onerror="this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-slate-200">
+                        <div class="min-w-0 flex-1">
                             <div class="text-xs font-bold text-slate-800 dark:text-white truncate">${item.name}</div>
-                            ${item.toppings ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate">+ Topping: ${item.toppings}</div>` : ''}
-                            <div class="text-xs text-sky-600 dark:text-sky-400 font-bold whitespace-nowrap">${(item.price * item.qty).toLocaleString('vi-VN')} đồng</div>
+                            ${item.toppings ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate">+ ${item.toppings}</div>` : ''}
+                            <div class="text-[11px] text-sky-600 dark:text-sky-400 font-extrabold mt-0.5">${(item.price * item.qty).toLocaleString('vi-VN')} VND</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <button onclick="playClickSound(); updateCartItemQty('${item.cartItemId}', -1)" class="tactile-btn w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-xs flex items-center justify-center"><i class="fa-solid fa-minus"></i></button>
-                        <span class="text-xs font-bold w-4 text-center dark:text-white">${item.qty}</span>
-                        <button onclick="playClickSound(); updateCartItemQty('${item.cartItemId}', 1)" class="tactile-btn w-6 h-6 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center"><i class="fa-solid fa-plus"></i></button>
+                    <div class="flex items-center gap-2 shrink-0 bg-slate-100 dark:bg-slate-900 px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <button onclick="playClickSound(); updateCartItemQty('${item.cartItemId}', -1)" class="tactile-btn w-5 h-5 rounded-full bg-white dark:bg-slate-800 text-xs flex items-center justify-center shadow-sm"><i class="fa-solid fa-minus"></i></button>
+                        <span class="text-xs font-extrabold w-5 text-center dark:text-white">${item.qty}</span>
+                        <button onclick="playClickSound(); updateCartItemQty('${item.cartItemId}', 1)" class="tactile-btn w-5 h-5 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center shadow-sm"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
         function openCartModal() {
-            renderVouchers();
+            renderSavedUserVouchers();
             if (currentUser) {
                 if (currentUser.name) document.getElementById('orderCustomerName').value = currentUser.name;
                 if (currentUser.phone) document.getElementById('orderPhone').value = currentUser.phone;
@@ -1566,42 +1666,6 @@
                 if (currentUser.address) document.getElementById('orderAddress').value = currentUser.address;
             }
             openModal('cartModal');
-        }
-
-        // 7. VOUCHER TỰ ĐỘNG VÀ THANH TOÁN
-        function renderVouchers() {
-            const activeVouchers = getActiveVouchersList();
-            document.getElementById('voucherList').innerHTML = activeVouchers.map(v => `
-                <div class="tactile-card p-4 rounded-2xl bg-white/75 dark:bg-slate-800/80 border ${v.isAutoToday ? 'border-amber-400 ring-2 ring-amber-300/40' : 'border-white dark:border-slate-700'} shadow-sm flex items-center justify-between gap-3">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400 whitespace-nowrap">${v.code}</span>
-                            ${v.isAutoToday ? '<span class="px-2 py-0.5 rounded-full bg-amber-500 text-white text-[9px] font-extrabold whitespace-nowrap">TỰ ĐỘNG HÔM NAY</span>' : ''}
-                        </div>
-                        <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">${v.label}</div>
-                    </div>
-                    <button onclick="playClickSound(); selectVoucher('${v.code}')" class="tactile-btn px-3.5 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold shadow-sm whitespace-nowrap shrink-0">Áp dụng</button>
-                </div>
-            `).join('');
-
-            document.getElementById('voucherSelect').innerHTML = `<option value="">-- Chọn mã Voucher ưu đãi --</option>` + activeVouchers.map(v => `
-                <option value="${v.code}">${v.label} (${v.code})</option>
-            `).join('');
-        }
-
-        function selectVoucher(code) {
-            renderVouchers();
-            document.getElementById('voucherSelect').value = code;
-            applyVoucher();
-            openCartModal();
-        }
-
-        function applyVoucher() {
-            const code = document.getElementById('voucherSelect').value;
-            const activeVouchers = getActiveVouchersList();
-            appliedVoucher = activeVouchers.find(v => v.code === code) || null;
-            updateCartUI();
-            if (appliedVoucher) showToast(`Đã áp dụng mã ưu đãi ${appliedVoucher.code}`);
         }
 
         function toggleAppSelector() {
@@ -1614,22 +1678,15 @@
             if (method === 'Chuyển khoản ngân hàng') {
                 const bankCode = document.getElementById('selectedPaymentApp').value;
                 const deepLinks = {
-                    mb: `mbbank://`,
-                    vcb: `vietcombank://`,
-                    tcb: `techcombank://`,
-                    bidv: `bidvsmartbanking://`,
-                    icb: `vietinbankipay://`,
-                    acb: `acbone://`
+                    mb: `mbbank://`, vcb: `vietcombank://`, tcb: `techcombank://`,
+                    bidv: `bidvsmartbanking://`, icb: `vietinbankipay://`, acb: `acbone://`,
+                    vpb: `vpbankneo://`, tpb: `tpbanks://`, agb: `agribank://`, scb: `sacombankpay://`
                 };
                 showToast(`Đang mở ứng dụng ngân hàng (${bankCode.toUpperCase()})...`);
                 window.location.href = deepLinks[bankCode] || `https://dl.vietqr.io/pay?app=${bankCode}`;
             } else if (method === 'Ví điện tử') {
                 const walletCode = document.getElementById('selectedEwalletApp').value;
-                const walletSchemes = {
-                    zalopay: `zalopay://`,
-                    momo: `momo://`,
-                    vnpay: `vnpay://`
-                };
+                const walletSchemes = { zalopay: `zalopay://`, momo: `momo://`, vnpay: `vnpay://` };
                 showToast(`Đang mở ví điện tử (${walletCode.toUpperCase()})...`);
                 window.location.href = walletSchemes[walletCode];
             }
@@ -1681,8 +1738,8 @@
             orders.unshift(newOrder);
             localStorage.setItem('jumjum_orders', JSON.stringify(orders));
 
-            sendOrderEmailViaEmailJS(newOrder, false);
-            playAdminNotificationSound();
+            sendOrderEmailViaEmailJS(newOrder);
+            playAdminNotificationSound("Đã đặt hàng thành công");
 
             if (payMethod === 'Chuyển khoản ngân hàng' || payMethod === 'Ví điện tử') {
                 launchPaymentApp(payMethod);
@@ -1696,7 +1753,7 @@
             showToast(`Đặt đơn ${newOrder.id} thành công! Đã gửi thông báo đến JUMJUM.`);
         }
 
-        // 8. NHẬN MÓN VÀ GỌI PHỤC VỤ TẠI BÀN
+        // Nhận món và yêu cầu phục vụ (Giọng đọc tự nhiên yêu cầu)
         function renderUserActiveOrders() {
             const container = document.getElementById('userActiveOrdersList');
             if (orders.length === 0) {
@@ -1708,7 +1765,7 @@
                     <div class="space-y-0.5">
                         <div class="text-xs font-extrabold text-sky-700 dark:text-sky-400 whitespace-nowrap">${o.id} • ${o.channel} (${o.time})</div>
                         <div class="text-xs text-slate-700 dark:text-slate-200">${o.itemsText}</div>
-                        <div class="text-[11px] font-bold text-slate-500 whitespace-nowrap">Tổng tiền: ${o.total.toLocaleString('vi-VN')} đồng</div>
+                        <div class="text-[11px] font-bold text-slate-500 whitespace-nowrap">Tổng tiền: ${o.total.toLocaleString('vi-VN')} VND</div>
                     </div>
                     ${o.receivedByCustomer
                         ? `<span class="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-700 text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-circle-check mr-1"></i> Đã nhận được món</span>`
@@ -1724,7 +1781,7 @@
             orders[idx].receivedByCustomer = true;
             orders[idx].status = "Khách hàng đã nhận món";
             localStorage.setItem('jumjum_orders', JSON.stringify(orders));
-            playAdminNotificationSound();
+            playAdminNotificationSound("Đã thanh toán thành công");
             renderUserActiveOrders();
             showToast("Cảm ơn bạn đã xác nhận nhận món! Chúc bạn ngon miệng.");
         }
@@ -1752,11 +1809,13 @@
             localStorage.setItem('jumjum_table_calls', JSON.stringify(tableCalls));
             document.getElementById('tableRequestInput').value = '';
             document.getElementById('shopNotifDot').classList.remove('hidden');
-            playAdminNotificationSound();
+
+            // Giọng đọc chân thực tự nhiên
+            playAdminNotificationSound(`Khách hàng bàn số ${tableCode} có yêu cầu cần phục vụ`);
             showToast(`Đã gửi yêu cầu từ Bàn ${tableCode} đến nhân viên!`);
         }
 
-        // 9. HỒ SƠ VÀ ĐĂNG NHẬP
+        // Hồ sơ và đăng nhập (Avatar mặc định khi đăng nhập user)
         function handleProfileOrAuthClick() {
             if (!currentUser) {
                 document.getElementById('shopEmailInput').value = "";
@@ -1811,11 +1870,13 @@
                 email: '',
                 address: '',
                 payMethod: 'Chuyển khoản ngân hàng',
-                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+                savedVouchers: []
             };
             localStorage.setItem('jumjum_user', JSON.stringify(currentUser));
             closeModal('authModal');
             checkAuthState();
+            updateFollowButtonUI();
             showToast(`Đăng nhập thành công với ${provider}!`);
         }
 
@@ -1838,7 +1899,7 @@
                 playAdminNotificationSound();
                 showToast("Đăng nhập Quản trị hệ thống JUMJUM thành công!");
             } else {
-                showToast("Thư điện tử hoặc mật khẩu không chính xác!");
+                showToast("Email hoặc mật khẩu không chính xác!");
             }
         }
 
@@ -1846,6 +1907,7 @@
             currentUser = null;
             localStorage.removeItem('jumjum_user');
             checkAuthState();
+            updateFollowButtonUI();
             showToast("Đã đăng xuất khỏi tài khoản!");
         }
 
@@ -1879,10 +1941,11 @@
                 customerView.classList.remove('hidden');
                 bottomDock.classList.remove('hidden');
                 floatingCart.classList.remove('hidden');
+                updateFollowButtonUI();
             }
         }
 
-        // 10. QUẢN TRỊ VIÊN JUMJUM
+        // Quản trị viên JUMJUM
         function switchAdminTab(tabKey) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
             document.getElementById(`admin-tab-${tabKey}`).classList.remove('hidden');
@@ -1894,13 +1957,15 @@
             });
             if (tabKey === 'pos') renderPosSystem();
             if (tabKey === 'menu') renderAdminMenuAndSpaceManager();
+            if (tabKey === 'followers') renderAdminFollowersList();
             if (tabKey === 'reviews_notif') loadEmailJsFieldsToAdmin();
         }
 
         function renderAllAdminData() {
             const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
             document.getElementById('statTotalOrders').textContent = orders.length;
-            document.getElementById('statRevenue').textContent = totalRevenue.toLocaleString('vi-VN') + ' đồng';
+            document.getElementById('statRevenue').textContent = totalRevenue.toLocaleString('vi-VN') + ' VND';
+            document.getElementById('statTotalFollowers').textContent = followers.length;
 
             const newCount = orders.filter(o => o.isNew).length + tableCalls.filter(c => !c.done).length;
             document.getElementById('adminOrderBadge').textContent = newCount;
@@ -1936,15 +2001,15 @@
                                 <span class="px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-700 text-[10px] font-bold whitespace-nowrap">${o.channel}</span>
                                 <span class="text-xs font-bold text-slate-800 dark:text-white">• ${o.customer} (${o.phone})</span>
                                 ${o.isNew ? '<span class="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-extrabold animate-pulse whitespace-nowrap">ĐƠN MỚI</span>' : ''}
-                                ${o.receivedByCustomer ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold whitespace-nowrap">KHÁCH HÀNG ĐÃ NHẬN</span>' : ''}
+                                ${o.receivedByCustomer ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold whitespace-nowrap">ĐÃ NHẬN MÓN</span>' : ''}
                             </div>
                             <div class="text-xs text-slate-700 dark:text-slate-200"><b>Danh sách món:</b> ${o.itemsText}</div>
-                            <div class="text-[11px] text-slate-500 dark:text-slate-400"><b>Địa chỉ:</b> ${o.address} | <b>Thư điện tử:</b> ${o.email} | <b>Thanh toán:</b> ${o.payMethod} | <b>Voucher:</b> ${o.voucher}</div>
-                            ${o.note !== "Không có" ? `<div class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">Yêu cầu khách hàng: ${o.note}</div>` : ''}
+                            <div class="text-[11px] text-slate-500 dark:text-slate-400"><b>Địa chỉ:</b> ${o.address} | <b>Email:</b> ${o.email} | <b>Thanh toán:</b> ${o.payMethod} | <b>Voucher:</b> ${o.voucher}</div>
+                            ${o.note !== "Không có" ? `<div class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">Yêu cầu: ${o.note}</div>` : ''}
                             <div class="text-[10px] text-slate-400 whitespace-nowrap"><i class="fa-regular fa-clock"></i> ${o.time}</div>
                         </div>
                         <div class="flex sm:flex-col items-end justify-between gap-2 shrink-0">
-                            <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${o.total.toLocaleString('vi-VN')} đồng</span>
+                            <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${o.total.toLocaleString('vi-VN')} VND</span>
                             <div class="flex gap-1.5">
                                 <button onclick="playClickSound(); openInvoiceModal(${idx})" class="tactile-btn px-3 py-1.5 rounded-xl bg-amber-500 text-white text-[11px] font-bold shadow-sm whitespace-nowrap">
                                     <i class="fa-solid fa-print mr-1"></i> Xuất hóa đơn
@@ -1976,30 +2041,18 @@
             const custEl = document.getElementById('customerProfilesList');
             custEl.innerHTML = customers.length === 0
                 ? `<div class="text-xs text-slate-400">Chưa có dữ liệu khách hàng.</div>`
-                : customers.map(c => {
-                    const isVip = c.totalSpent >= 100000 || c.history.length >= 3;
-                    const isRegular = c.history.length >= 2;
-                    return `
-                        <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 shadow-sm space-y-2">
-                            <div class="flex flex-wrap items-center justify-between gap-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-extrabold text-sm text-slate-800 dark:text-white whitespace-nowrap">${c.name}</span>
-                                    <span class="text-xs text-slate-500 whitespace-nowrap">(${c.phone})</span>
-                                    ${isVip
-                                        ? `<span class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-extrabold flex items-center gap-1 shadow whitespace-nowrap"><i class="fa-solid fa-crown"></i> KHÁCH HÀNG ĐẶC BIỆT</span>`
-                                        : (isRegular ? `<span class="px-2.5 py-0.5 rounded-full bg-sky-500 text-white text-[10px] font-extrabold flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-award"></i> KHÁCH HÀNG THÂN THIẾT</span>` : '')
-                                    }
-                                </div>
-                                <div class="text-xs font-extrabold text-sky-600 dark:text-sky-400 whitespace-nowrap">${c.history.length} đơn hàng • Tổng chi tiêu: ${c.totalSpent.toLocaleString('vi-VN')} đồng</div>
+                : customers.map(c => `
+                    <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 shadow-sm space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="font-extrabold text-sm text-slate-800 dark:text-white whitespace-nowrap">${c.name}</span>
+                                <span class="text-xs text-slate-500 whitespace-nowrap">(${c.phone})</span>
                             </div>
-                            <div class="text-[11px] text-slate-500 dark:text-slate-400">Thư điện tử: ${c.email} | Địa chỉ: ${c.address}</div>
-                            <div class="pt-2 border-t border-slate-200/70 dark:border-slate-700 text-[11px] space-y-1">
-                                <div class="font-bold text-slate-600 dark:text-slate-300">Lịch sử đặt hàng:</div>
-                                ${c.history.map(h => `<div class="text-slate-500 dark:text-slate-400">• [${h.time}] ${h.id}: ${h.itemsText} — <b>${h.total.toLocaleString('vi-VN')} đồng</b></div>`).join('')}
-                            </div>
+                            <div class="text-xs font-extrabold text-sky-600 dark:text-sky-400 whitespace-nowrap">${c.history.length} đơn hàng • Tổng chi: ${c.totalSpent.toLocaleString('vi-VN')} VND</div>
                         </div>
-                    `;
-                }).join('');
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400">Email: ${c.email} | Địa chỉ: ${c.address}</div>
+                    </div>
+                `).join('');
 
             document.getElementById('adminReviewsList').innerHTML = reviews.map(r => `
                 <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 text-xs">
@@ -2010,6 +2063,39 @@
                     <p class="mt-1 text-slate-600 dark:text-slate-300">${r.comment}</p>
                 </div>
             `).join('');
+        }
+
+        // Render danh sách người theo dõi cho Admin xem
+        function renderAdminFollowersList() {
+            const container = document.getElementById('adminFollowersList');
+            if (followers.length === 0) {
+                container.innerHTML = `<div class="text-xs text-slate-400 italic">Chưa có khách hàng nào theo dõi JUMJUM.</div>`;
+                return;
+            }
+            container.innerHTML = followers.map((f, idx) => `
+                <div class="p-3.5 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 flex items-center justify-between gap-2 text-xs shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-600 font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-800 dark:text-white">${f.name}</div>
+                            <div class="text-[11px] text-slate-500 dark:text-slate-400">Email: ${f.email} | Ngày theo dõi: ${f.time}</div>
+                        </div>
+                    </div>
+                    <button onclick="playClickSound(); removeFollower(${idx})" class="tactile-btn w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center" title="Xóa">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeFollower(idx) {
+            followers.splice(idx, 1);
+            localStorage.setItem('jumjum_followers', JSON.stringify(followers));
+            renderAdminFollowersList();
+            updateFollowButtonUI();
+            showToast("Đã xóa khỏi danh sách theo dõi.");
         }
 
         function completeTableCall(idx) {
@@ -2041,7 +2127,7 @@
                 <div><b>Thời gian:</b> ${o.time}</div>
                 <div><b>Khách hàng:</b> ${o.customer}</div>
                 <div><b>Số điện thoại:</b> ${o.phone}</div>
-                <div><b>Thư điện tử:</b> ${o.email}</div>
+                <div><b>Email:</b> ${o.email}</div>
                 <div><b>Địa chỉ:</b> ${o.address}</div>
                 <div><b>Thanh toán:</b> ${o.payMethod}</div>
                 <div><b>Voucher:</b> ${o.voucher}</div>
@@ -2051,24 +2137,24 @@
                     ${o.items.map(i => `
                         <div class="flex justify-between">
                             <span>${i.name} (Số lượng: ${i.qty}) ${i.toppings ? `(+${i.toppings})` : ''}</span>
-                            <span>${(i.price * i.qty).toLocaleString('vi-VN')} đồng</span>
+                            <span>${(i.price * i.qty).toLocaleString('vi-VN')} VND</span>
                         </div>
                     `).join('')}
                 </div>
                 <div class="border-t border-dashed border-slate-300 pt-2 flex justify-between font-extrabold text-sm">
                     <span>TỔNG THANH TOÁN:</span>
-                    <span>${o.total.toLocaleString('vi-VN')} đồng</span>
+                    <span>${o.total.toLocaleString('vi-VN')} VND</span>
                 </div>
             `;
             openModal('invoiceModal');
         }
 
-        // 11. HỆ THỐNG TÍNH TIỀN TẠI QUẦY (BÀN PHÍM CỘNG TRỪ NHÂN CHIA + ⌫)
+        // Bàn phím POS tại quầy
         function renderPosSystem() {
             document.getElementById('posProductGrid').innerHTML = products.map(p => `
                 <button onclick="playClickSound(); addToPosCart('${p.id}')" class="tactile-btn p-2.5 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 text-left shadow-sm">
                     <div class="font-bold text-xs text-slate-800 dark:text-white truncate">${p.name}</div>
-                    <div class="text-[11px] font-extrabold text-sky-600 dark:text-sky-400 mt-1 whitespace-nowrap">${p.price.toLocaleString('vi-VN')} đồng</div>
+                    <div class="text-[11px] font-extrabold text-sky-600 dark:text-sky-400 mt-1 whitespace-nowrap">${p.price.toLocaleString('vi-VN')} VND</div>
                 </button>
             `).join('');
             updatePosCartUI();
@@ -2091,15 +2177,15 @@
 
         function updatePosCartUI() {
             const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
-            document.getElementById('posTotalDisplay').textContent = total.toLocaleString('vi-VN') + ' đồng';
+            document.getElementById('posTotalDisplay').textContent = total.toLocaleString('vi-VN') + ' VND';
             const listEl = document.getElementById('posCartList');
             listEl.innerHTML = posCart.length === 0
                 ? `<div class="text-xs text-slate-400 italic">Chưa chọn món tại quầy.</div>`
                 : posCart.map((i, idx) => `
                     <div class="flex items-center justify-between gap-2 text-xs bg-white/80 dark:bg-slate-800 px-3 py-2 rounded-xl">
-                        <span class="font-semibold truncate">${i.name} <b>(Số lượng: ${i.qty})</b></span>
+                        <span class="font-semibold truncate">${i.name} <b>(SL: ${i.qty})</b></span>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class="font-bold text-sky-600 whitespace-nowrap">${(i.price * i.qty).toLocaleString('vi-VN')} đồng</span>
+                            <span class="font-bold text-sky-600 whitespace-nowrap">${(i.price * i.qty).toLocaleString('vi-VN')} VND</span>
                             <button onclick="playClickSound(); posCart.splice(${idx},1); updatePosCartUI()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
@@ -2148,33 +2234,31 @@
             const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
             const given = cashGiven !== null ? cashGiven : (parseFloat(calcStr) || 0);
             const change = Math.max(0, given - total);
-            document.getElementById('posChangeText').textContent = `Tiền thối lại: ${change.toLocaleString('vi-VN')} đồng`;
+            document.getElementById('posChangeText').textContent = `Tiền thối lại: ${change.toLocaleString('vi-VN')} VND`;
         }
 
         function simulateBankQrScanned() {
             const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
-            playAdminNotificationSound();
-            showToast(`ĐÃ NHẬN TIỀN! Nhận ${total > 0 ? total.toLocaleString('vi-VN') + ' đồng' : 'thanh toán'} qua mã QR Ngân hàng Quân Đội (LE NHAT HUY)!`);
-            if (posCart.length > 0) {
-                savePosOrderToSystem("Chuyển khoản mã QR Ngân hàng Quân Đội");
-            }
+            playAdminNotificationSound("Nhận chuyển khoản thành công");
+            showToast(`Nhận thành công ${total.toLocaleString('vi-VN')} VND qua chuyển khoản ngân hàng!`);
+            if (posCart.length > 0) savePosOrderToSystem("Chuyển khoản ngân hàng");
         }
 
         function completePosCashOrder() {
             if (posCart.length === 0) return showToast("Vui lòng chọn món tại quầy!");
-            savePosOrderToSystem("Tiền mặt tại quầy");
+            savePosOrderToSystem("Tiền mặt");
         }
 
         function savePosOrderToSystem(payMethod) {
             const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
             const newOrder = {
                 id: 'QUAY-' + Math.floor(1000 + Math.random() * 9000),
-                customer: "Khách mua tại quầy",
+                customer: "Khách tại quầy",
                 phone: "Tại quầy JUMJUM",
                 email: "Không có",
                 address: "Dùng tại JUMJUM",
                 note: "Mua trực tiếp tại quầy",
-                voucher: "Không áp dụng",
+                voucher: "Không",
                 items: [...posCart],
                 itemsText: posCart.map(i => `${i.name} (Số lượng: ${i.qty})`).join('; '),
                 toppingsText: "Không có",
@@ -2211,39 +2295,35 @@
                     <div class="p-3 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 flex items-center justify-between gap-2 text-xs">
                         <div class="min-w-0">
                             <div class="font-bold text-slate-800 dark:text-white truncate">${name}</div>
-                            <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold whitespace-nowrap">Doanh thu: ${data.revenue.toLocaleString('vi-VN')} đồng</div>
+                            <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold whitespace-nowrap">Doanh thu: ${data.revenue.toLocaleString('vi-VN')} VND</div>
                         </div>
-                        <span class="px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 font-extrabold whitespace-nowrap shrink-0">Số lượng: ${data.qty}</span>
+                        <span class="px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 font-extrabold whitespace-nowrap shrink-0">SL: ${data.qty}</span>
                     </div>
                 `).join('');
         }
 
-        // 12. QUẢN LÝ KHÔNG GIAN, THẺ THỨC ĂN VÀ THỰC ĐƠN TRONG QUẢN TRỊ
+        // Quản lý Không gian, Thẻ thức ăn và Thực đơn
         function renderAdminMenuAndSpaceManager() {
-            // Hiển thị ảnh không gian JUMJUM
             document.getElementById('adminSpaceGalleryPreview').innerHTML = spaceImages.map((img, idx) => `
                 <div class="relative rounded-2xl overflow-hidden h-24 border border-white dark:border-slate-700 shadow-sm group">
                     <img src="${img}" class="w-full h-full object-cover">
-                    <button onclick="playClickSound(); deleteSpaceImage(${idx})" class="tactile-btn absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow" title="Xóa ảnh không gian">
+                    <button onclick="playClickSound(); deleteSpaceImage(${idx})" class="tactile-btn absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow" title="Xóa">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
             `).join('');
 
-            // Hiển thị thẻ thức ăn
             document.getElementById('adminFoodTagsList').innerHTML = foodTags.map((tag, idx) => `
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-800 dark:text-amber-200 text-xs font-bold whitespace-nowrap">
                     <i class="fa-solid fa-tag text-amber-500"></i> ${tag}
-                    <button onclick="playClickSound(); deleteFoodTag(${idx})" class="text-rose-500 hover:text-rose-700 ml-1" title="Xóa thẻ thức ăn">
+                    <button onclick="playClickSound(); deleteFoodTag(${idx})" class="text-rose-500 hover:text-rose-700 ml-1">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </button>
                 </span>
             `).join('');
 
-            // Cập nhật danh sách chọn thẻ thức ăn khi thêm món
             document.getElementById('newProdCategorySelect').innerHTML = foodTags.map(t => `<option value="${t}">${t}</option>`).join('');
 
-            // Hiển thị danh sách món ăn đang bán
             document.getElementById('adminProductEditList').innerHTML = products.map((p, idx) => `
                 <div class="p-3.5 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between text-xs">
                     <div class="flex items-center gap-3 flex-1 w-full min-w-0">
@@ -2262,7 +2342,7 @@
                     </div>
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0">
                         <input type="number" value="${p.price}" onchange="updateExistingProductField(${idx}, 'price', parseInt(this.value))" class="w-28 px-2.5 py-1.5 rounded-xl bg-sky-50 dark:bg-slate-900 border border-sky-300 font-bold text-sky-700 dark:text-sky-400 text-right">
-                        <button onclick="playClickSound(); deleteProduct(${idx})" class="tactile-btn w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0" title="Xóa món">
+                        <button onclick="playClickSound(); deleteProduct(${idx})" class="tactile-btn w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0" title="Xóa">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -2283,7 +2363,7 @@
                 };
                 reader.readAsDataURL(file);
             });
-            showToast(`Đã tải lên ${files.length} hình ảnh không gian JUMJUM!`);
+            showToast(`Đã tải lên ${files.length} hình ảnh không gian!`);
         }
 
         function deleteSpaceImage(idx) {
@@ -2402,7 +2482,6 @@
             showToast(msg ? "Đã phát thông báo đến trang chủ khách hàng!" : "Đã tắt thông báo!");
         }
 
-        // 13. ĐÁNH GIÁ, NHẠC NỀN VÀ MÃ QR CHIA SẺ
         document.querySelectorAll('#starSelector i').forEach(star => {
             star.addEventListener('click', () => {
                 playClickSound();
