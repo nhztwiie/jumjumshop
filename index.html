@@ -3,1004 +3,1039 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f8f4f0">
-<meta name="description" content="JUMJUM - Fresh drinks, sweet moments.">
-<meta property="og:title" content="JUMJUM - Taste the Fresh, Feel the Joy">
-<meta property="og:description" content="Khám phá thực đơn và đặt món tại JUMJUM.">
+<meta name="theme-color" content="#dff3fb">
+<title>JUMJUM — Taste the Fresh, Feel the Joy</title>
+<meta name="description" content="JUMJUM — Taste the Fresh, Feel the Joy. Đặt món, nhận ưu đãi và trải nghiệm dịch vụ.">
+<meta property="og:title" content="JUMJUM — Taste the Fresh, Feel the Joy">
+<meta property="og:description" content="Bạn đang thiếu năng lượng — Có JUMJUM đây!">
 <meta property="og:image" content="images/jumjumshop.png">
 <meta property="og:type" content="website">
-<title>JUMJUM — Taste the Fresh, Feel the Joy</title>
-<link rel="icon" type="image/png" href="images/jumjumshop.png">
+<link rel="icon" href="images/jumjumshop.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <style>
 :root{
- --bg:#f8f5f1;--surface:#fffdfb;--surface2:#f2ebe5;--ink:#30231f;
- --muted:#897970;--line:#e9ddd4;--brand:#9b5b46;--brand2:#c78c70;
- --accent:#e8c6a9;--green:#56745b;--red:#b84d4d;--gold:#c49b46;
- --shadow:0 14px 40px #5c3b2b12;--radius:23px;
+ --bg:#eaf6fb;--surface:rgba(255,255,255,.67);
+ --surface2:rgba(255,255,255,.88);--text:#173247;
+ --muted:#698397;--primary:#168ac0;--primary2:#48b9df;
+ --border:rgba(255,255,255,.85);
+ --shadow:0 12px 35px rgba(40,116,150,.12);
 }
 .dark{
- --bg:#191716;--surface:#25211f;--surface2:#312a27;--ink:#f8eee8;
- --muted:#b8a69d;--line:#453832;--brand:#d69a7d;--brand2:#a96e57;
- --accent:#6e4d3e;--green:#8dbb91;--red:#e08080;--gold:#e2bd69;
- --shadow:0 14px 40px #0003;
+ --bg:#101b2b;--surface:rgba(27,43,65,.75);
+ --surface2:rgba(31,51,76,.94);--text:#eaf5ff;
+ --muted:#9bb2c8;--primary:#42b6e5;--primary2:#187da9;
+ --border:rgba(151,207,239,.17);
+ --shadow:0 15px 40px rgba(0,0,0,.24);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",sans-serif;transition:background .25s,color .25s}
+body{
+ margin:0;min-height:100vh;background:var(--bg);color:var(--text);
+ font-family:'Plus Jakarta Sans',sans-serif;transition:.3s;
+ overflow-x:hidden;
+}
+body:before,body:after{
+ content:"";position:fixed;width:360px;height:360px;border-radius:50%;
+ filter:blur(85px);opacity:.22;z-index:-1;pointer-events:none;
+}
+body:before{background:#54c6ec;top:-120px;left:-130px}
+body:after{background:#82aef4;right:-150px;bottom:-120px}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 a{color:inherit;text-decoration:none}
-img{max-width:100%}
-.hidden{display:none!important}
+.glass{
+ background:var(--surface);border:1px solid var(--border);
+ box-shadow:var(--shadow);backdrop-filter:blur(22px);
+ -webkit-backdrop-filter:blur(22px);
+}
+.card{border-radius:24px;padding:18px}
+.btn{
+ border:0;border-radius:15px;padding:11px 16px;
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:white;font-weight:800;transition:.2s;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.btn:active{transform:scale(.97)}
+.btn-soft{
+ border:1px solid var(--border);background:var(--surface2);
+ color:var(--text);border-radius:14px;padding:10px 14px;font-weight:700;
+}
+.field{
+ width:100%;padding:12px 14px;border:1px solid var(--border);
+ border-radius:14px;background:var(--surface2);color:var(--text);
+ outline:none;margin-top:6px;
+}
+.field:focus{border-color:var(--primary);box-shadow:0 0 0 3px #38bdf833}
 .muted{color:var(--muted)}
 .small{font-size:12px}
-.container{width:min(1200px,calc(100% - 36px));margin:auto}
-.topbar{
- position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 82%,transparent);
- backdrop-filter:blur(20px);border-bottom:1px solid var(--line)
+.nav{
+ position:sticky;top:0;z-index:30;padding:12px 4%;
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
 }
-.nav{min-height:76px;display:flex;align-items:center;gap:18px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.5px;font-size:21px}
-.brand img{width:45px;height:45px;object-fit:cover;border-radius:50%;border:2px solid var(--accent)}
-.brand small{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);font-weight:600}
-.navlinks{display:flex;align-items:center;gap:5px;margin-left:auto}
-.navlinks button,.icon-btn,.profile-btn{
- border:0;background:transparent;color:var(--ink);border-radius:14px;padding:10px 12px
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px}
+.logo img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.navlinks{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.navlinks button{
+ background:transparent;border:0;padding:9px 12px;border-radius:12px;
+ color:var(--text);font-weight:700;font-size:13px;
 }
-.navlinks button:hover,.navlinks button.active,.icon-btn:hover{background:var(--surface2);color:var(--brand)}
-.nav-actions{display:flex;align-items:center;gap:7px}
-.btn{border:0;border-radius:14px;padding:12px 17px;font-weight:700;transition:.2s}
-.btn:hover{transform:translateY(-2px)}
-.primary{background:var(--brand);color:white;box-shadow:0 8px 20px #9b5b4628}
-.secondary{background:var(--surface2);color:var(--brand);border:1px solid var(--line)}
-.outline{background:transparent;border:1px solid var(--line);color:var(--ink)}
-.danger{background:#b84d4d;color:white}
-.badge{display:inline-flex;align-items:center;padding:5px 10px;border-radius:30px;background:var(--surface2);color:var(--brand);font-size:11px;font-weight:700}
+.navlinks button.active,.navlinks button:hover{background:var(--surface2);color:var(--primary)}
+.page{max-width:1180px;margin:auto;padding:24px 18px 110px}
+.section{display:none;animation:appear .3s ease}
+.section.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .hero{
- min-height:440px;margin:30px auto 0;border-radius:32px;overflow:hidden;position:relative;
- display:flex;align-items:center;padding:55px;color:white;
- background:linear-gradient(90deg,#261b18ed 0%,#36231dc9 48%,#36231d20 100%),
- url("https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1800&q=85") center/cover;
- box-shadow:var(--shadow)
+ min-height:300px;border-radius:30px;padding:35px;
+ display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:20px;
+ background:linear-gradient(120deg,#d6f1fbdd,#ffffff9c);
+ color:#173b53;overflow:hidden;
 }
-.hero-content{max-width:590px}
-.eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#f0c7ad;font-weight:700}
-.hero h1{font:800 clamp(42px,6vw,72px)/1.05 "Playfair Display",serif;margin:16px 0}
-.hero p{line-height:1.9;color:#f5e8df;max-width:470px}
-.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
-.hero .secondary{background:#ffffff20;color:white;border-color:#ffffff55}
-.section{padding:36px 0}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:20px}
-.section-head h2{font:700 30px "Playfair Display",serif;margin:0}
-.section-head p{margin:7px 0 0;color:var(--muted);font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-.product{transition:.25s}
-.product:hover{transform:translateY(-5px)}
-.product-image{height:185px;background:var(--surface2);position:relative;overflow:hidden}
-.product-image img{width:100%;height:100%;object-fit:cover;transition:.4s}
-.product:hover .product-image img{transform:scale(1.06)}
-.product-tag{position:absolute;top:12px;left:12px;background:#fff9f1;color:#84523f;padding:6px 10px;border-radius:30px;font-size:10px;font-weight:800}
-.product-content{padding:15px}
-.product-content h3{font-size:15px;margin:0 0 7px}
-.product-content p{font-size:12px;line-height:1.6;color:var(--muted);min-height:38px;margin:0 0 13px}
-.product-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.price{font-weight:800;color:var(--brand)}
-.add-btn{width:38px;height:38px;border:0;border-radius:13px;background:var(--surface2);color:var(--brand);font-size:22px}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0 20px}
-.chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:30px;padding:9px 14px;font-size:12px}
-.chip.active{background:var(--brand);color:white;border-color:var(--brand)}
-.promo{margin:25px 0;padding:26px 30px;border-radius:25px;background:linear-gradient(115deg,#f0d5c4,#f8e9d4);color:#58392c;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.promo h3{margin:0 0 6px;font:700 23px "Playfair Display",serif}
-.promo p{margin:0;font-size:13px}
-.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.info-card{padding:22px;background:var(--surface);border:1px solid var(--line);border-radius:20px}
-.info-card h3{margin:0 0 8px;font-size:15px}
-.info-card p{font-size:12px;color:var(--muted);line-height:1.7}
-.social{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.social a{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--brand);font-weight:700}
-.social img{width:23px;height:23px;object-fit:contain}
-.footer{margin-top:45px;border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:12px}
-.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-.bottom-nav{display:none}
-.overlay{position:fixed;inset:0;background:#160e0bc2;z-index:80;display:none;align-items:center;justify-content:center;padding:15px}
-.overlay.show{display:flex}
-.modal{width:min(680px,100%);max-height:90vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:25px;padding:24px;box-shadow:0 30px 100px #0005}
-.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.modal-head h2{font:700 24px "Playfair Display",serif;margin:0}
-.close{border:0;background:var(--surface2);color:var(--ink);border-radius:10px;padding:8px 12px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field.full{grid-column:1/-1}
-.field label{font-size:12px;color:var(--muted);font-weight:700}
-.field input,.field select,.field textarea{
- width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);
- background:var(--bg);color:var(--ink);outline:none
+.dark .hero{background:linear-gradient(120deg,#1e4964,#1b2d45);color:#edfaff}
+.hero h1{font-size:clamp(34px,5vw,58px);font-weight:900;line-height:1.08;margin:12px 0}
+.hero img{width:100%;max-height:260px;object-fit:cover;border-radius:25px}
+.grid-products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.product{overflow:hidden;padding:0}
+.product img{width:100%;height:170px;object-fit:cover;background:#dcecf3}
+.product-body{padding:15px}
+.price{color:var(--primary);font-weight:900}
+.badge{display:inline-block;border-radius:30px;padding:5px 10px;background:#36a9d51c;color:var(--primary);font-size:11px;font-weight:800}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.toolbar .field{width:auto;min-width:150px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.stack{display:grid;gap:12px}
+.tabs{display:flex;gap:8px;overflow:auto;padding:4px 0 12px}
+.tabs button{white-space:nowrap}
+.item-row{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--border)}
+.item-row img{width:58px;height:58px;border-radius:14px;object-fit:cover}
+.bottom-nav{
+ position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+ z-index:40;display:flex;gap:5px;padding:8px;border-radius:24px;
+ max-width:calc(100% - 20px);overflow:auto;
 }
-.field textarea{min-height:80px;resize:vertical}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand)}
-.cart-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}
-.qty{display:flex;align-items:center;gap:8px}
-.qty button{border:0;background:var(--surface2);color:var(--brand);border-radius:8px;width:28px;height:28px}
-.total-line{display:flex;justify-content:space-between;padding:17px 0;font-size:18px;font-weight:800}
-.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:150;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:30px;font-size:13px;transition:.25s;box-shadow:var(--shadow)}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.floating-cart{position:fixed;right:22px;bottom:22px;z-index:35;border:0;border-radius:50px;padding:15px 20px;background:var(--brand);color:white;font-weight:800;box-shadow:0 10px 28px #0003}
-.floating-cart span{background:white;color:var(--brand);border-radius:30px;padding:3px 7px;margin-left:5px}
-.admin-layout{display:grid;grid-template-columns:225px 1fr;gap:18px;margin:28px auto}
-.admin-side{padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:22px;height:max-content;position:sticky;top:95px}
-.admin-side button{width:100%;text-align:left;padding:12px;border:0;border-radius:12px;background:transparent;color:var(--ink);font-size:12px;margin:2px 0}
-.admin-side button.active,.admin-side button:hover{background:var(--surface2);color:var(--brand);font-weight:700}
-.admin-content{min-width:0}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
-.stat{padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:18px}
-.stat small{color:var(--muted);font-size:11px}
-.stat strong{display:block;font-size:23px;margin-top:8px;color:var(--brand)}
-.admin-panel{display:none}
-.admin-panel.active{display:block}
-.panel-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:15px}
-.panel-card h3{margin:0 0 15px;font-size:16px}
-.data-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:12px}
-.data-row:last-child{border-bottom:0}
-.table-wrap{overflow:auto}
-table{width:100%;border-collapse:collapse;font-size:12px;min-width:620px}
-th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
-th{color:var(--muted);font-weight:700}
-.status{display:inline-block;border-radius:30px;padding:5px 9px;background:var(--surface2);color:var(--brand);font-size:10px;font-weight:700}
-.status.done{background:#dcebdd;color:#37683b}
-.status.pending{background:#f6e7c8;color:#876522}
-.inline-actions{display:flex;gap:6px;flex-wrap:wrap}
-.inline-actions button{border:0;border-radius:9px;padding:7px 9px;background:var(--surface2);color:var(--brand);font-size:11px}
-.avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--surface2)}
-.qr-box{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
-.qr-box img{width:150px;height:150px;border-radius:12px;background:white;padding:8px}
-.star{font-size:24px;color:var(--gold)}
-.ripple{position:relative;overflow:hidden}
-.ripple-effect{position:absolute;border-radius:50%;background:#ffffff55;transform:scale(0);animation:ripple .65s linear;pointer-events:none}
-@keyframes ripple{to{transform:scale(4);opacity:0}}
-@media(max-width:900px){
- .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
- .navlinks{display:none}
- .stats{grid-template-columns:repeat(2,1fr)}
+.bottom-nav button{
+ width:47px;height:47px;border:0;border-radius:16px;
+ color:var(--muted);background:transparent;font-size:18px;flex-shrink:0;
+}
+.bottom-nav button.active{background:var(--primary);color:white}
+.modal{
+ position:fixed;inset:0;background:#06152699;z-index:80;
+ display:none;align-items:center;justify-content:center;padding:15px;
+}
+.modal.show{display:flex}
+.modal-box{width:min(550px,100%);max-height:90vh;overflow:auto;border-radius:25px;padding:22px}
+.toast{
+ position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+ z-index:100;background:#142c40;color:white;padding:12px 18px;
+ border-radius:14px;box-shadow:var(--shadow);display:none;
+ max-width:90%;font-size:13px;
+}
+.toast.show{display:block;animation:appear .2s}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{padding:17px;border-radius:20px}
+.stat strong{display:block;font-size:clamp(19px,3vw,27px);margin-top:8px}
+.admin-layout{display:grid;grid-template-columns:190px 1fr;gap:16px}
+.admin-menu{display:grid;gap:7px;align-content:start}
+.admin-menu button{text-align:left}
+.admin-panel{min-width:0}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:580px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--border);font-size:13px}
+th{color:var(--muted)}
+.star{color:#f4b942;cursor:pointer}
+#qrcode{background:white;padding:10px;border-radius:15px;display:inline-block}
+footer{text-align:center;padding:28px 12px;color:var(--muted);font-size:12px}
+.hidden{display:none!important}
+@media(max-width:760px){
+ .nav{padding:10px 12px}.navlinks{display:none}
+ .page{padding:16px 12px 100px}
+ .hero{grid-template-columns:1fr;padding:25px;min-height:auto}
+ .hero img{max-height:190px}
+ .stat-grid{grid-template-columns:repeat(2,1fr)}
  .admin-layout{grid-template-columns:1fr}
- .admin-side{position:static;display:flex;overflow:auto;gap:5px}
- .admin-side button{white-space:nowrap;width:auto}
+ .admin-menu{display:flex;overflow:auto}
+ .admin-menu button{white-space:nowrap}
+ .card{padding:15px}
 }
-@media(max-width:600px){
- .container{width:calc(100% - 24px)}
- .nav{min-height:65px}
- .brand{font-size:18px}
- .brand img{width:38px;height:38px}
- .hero{min-height:390px;padding:28px;border-radius:23px}
- .hero h1{font-size:43px}
- .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .product-image{height:135px}
- .product-content{padding:11px}
- .product-content h3{font-size:13px}
- .product-content p{font-size:11px}
- .section-head h2{font-size:25px}
- .info-grid{grid-template-columns:1fr}
- .form-grid{grid-template-columns:1fr}
- .field.full{grid-column:auto}
- .promo{padding:20px;align-items:flex-start;flex-direction:column}
- .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:40;background:var(--surface);border-top:1px solid var(--line);justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(20px)}
- .bottom-nav button{border:0;background:transparent;color:var(--muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px}
- .bottom-nav button span{font-size:19px}
- .floating-cart{bottom:78px;right:13px}
- .footer{padding-bottom:85px}
- .stats{gap:8px}
- .stat{padding:13px}
- .stat strong{font-size:19px}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}
 }
 </style>
 </head>
-<body>
 
-<header class="topbar">
- <div class="container nav">
-  <a class="brand" href="#" onclick="showTab('home');return false">
-   <img src="images/jumjumshop.png" alt="JUMJUM">
-   <span>JUMJUM<small>TASTE THE FRESH</small></span>
-  </a>
-  <nav class="navlinks">
-   <button class="active" data-tab="home" onclick="showTab('home')">Trang chủ</button>
-   <button data-tab="menu" onclick="showTab('menu')">Thực đơn</button>
-   <button data-tab="service" onclick="showTab('service')">Gọi phục vụ</button>
-   <button data-tab="voucher" onclick="showTab('voucher')">Ưu đãi</button>
-   <button data-tab="review" onclick="showTab('review')">Đánh giá</button>
-  </nav>
-  <div class="nav-actions">
-   <button class="icon-btn" onclick="toggleTheme()" title="Đổi giao diện">◐</button>
-   <button class="icon-btn" onclick="toggleMusic()" title="Nhạc nền">♫</button>
-   <button class="profile-btn" onclick="openProfile()">♙ <span id="headerUserName">Tài khoản</span></button>
-   <button class="btn secondary" onclick="openAuth()">Đăng nhập</button>
-  </div>
+<body>
+<header class="nav glass">
+ <a class="logo" href="#" onclick="go('home')">
+  <img src="images/jumjumshop.png" alt="JUMJUM">
+  <span>JUMJUM</span>
+ </a>
+ <nav class="navlinks">
+  <button onclick="go('home')">Trang chủ</button>
+  <button onclick="go('menu')">Thực đơn</button>
+  <button onclick="go('voucher')">Voucher</button>
+  <button onclick="go('service')">Gọi phục vụ</button>
+  <button onclick="go('review')">Đánh giá</button>
+ </nav>
+ <div class="toolbar">
+  <button class="btn-soft" onclick="toggleTheme()" title="Đổi giao diện"><i class="fa-solid fa-circle-half-stroke"></i></button>
+  <button class="btn-soft" onclick="openAuth()" title="Tài khoản"><i class="fa-regular fa-user"></i></button>
  </div>
 </header>
 
-<main id="customerView">
- <section id="tab-home" class="container">
-  <div class="hero">
-   <div class="hero-content">
-    <div class="eyebrow">Fresh drinks · Sweet moments</div>
-    <h1>Taste the Fresh,<br>Feel the Joy.</h1>
-    <p>Thưởng thức những thức uống tươi ngon, được chuẩn bị bằng sự chỉn chu trong từng chi tiết. Một chút ngọt ngào cho ngày thêm trọn vẹn.</p>
-    <div class="hero-actions">
-     <button class="btn primary" onclick="showTab('menu')">Khám phá thực đơn →</button>
-     <button class="btn secondary" onclick="showTab('service')">Gọi món tại bàn</button>
-    </div>
+<main class="page">
+<!-- TRANG CHỦ -->
+<section id="home" class="section active">
+ <div class="hero glass">
+  <div>
+   <span class="badge">TASTE THE FRESH, FEEL THE JOY</span>
+   <h1>Fresh mood.<br>Happy moments.</h1>
+   <p>Thưởng thức hương vị tươi mới, tận hưởng từng khoảnh khắc tại JUMJUM.</p>
+   <div class="toolbar mt-5">
+    <button class="btn" onclick="go('menu')"><i class="fa-solid fa-mug-hot"></i> Khám phá thực đơn</button>
+    <button class="btn-soft" onclick="go('voucher')">Ưu đãi hôm nay</button>
    </div>
   </div>
+  <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=900&q=85" alt="Không gian quán JUMJUM">
+ </div>
 
-  <section class="section">
-   <div class="section-head">
-    <div><span class="eyebrow">JUMJUM selection</span><h2>Món được yêu thích</h2><p>Những lựa chọn nổi bật dành cho bạn.</p></div>
-    <button class="btn secondary" onclick="showTab('menu')">Xem tất cả →</button>
+ <div class="grid md:grid-cols-2 gap-4 mt-5">
+  <div class="glass card">
+   <h3 class="font-extrabold text-lg">Về JUMJUM</h3>
+   <p class="muted text-sm mt-2">Một điểm hẹn cho những món uống tươi ngon và những phút giây thư giãn.</p>
+   <div class="mt-4 stack">
+    <a href="https://maps.app.goo.gl/9zAXofUzKNd6XVtP7" target="_blank" rel="noopener" class="btn-soft"><i class="fa-solid fa-location-dot"></i> Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</a>
+    <a href="https://www.facebook.com/nhzt.wiie" target="_blank" rel="noopener" class="btn-soft"><img src="images/facebook.png" width="19" class="inline mr-2" alt="">Facebook JUMJUM</a>
+    <a href="https://zalo.me/0398476794" target="_blank" rel="noopener" class="btn-soft"><img src="images/zalo.png" width="19" class="inline mr-2" alt="">Liên hệ Zalo</a>
    </div>
-   <div class="grid" id="featuredProducts"></div>
-  </section>
-
-  <div class="promo">
-   <div><h3>Sweet moments, better days.</h3><p>Khám phá ưu đãi và lưu voucher cho lần mua tiếp theo.</p></div>
-   <button class="btn primary" onclick="showTab('voucher')">Nhận ưu đãi</button>
   </div>
-
-  <section class="section">
-   <div class="section-head"><div><span class="eyebrow">Find us</span><h2>Ghé thăm JUMJUM</h2></div></div>
-   <div class="info-grid">
-    <div class="info-card"><h3>⌖ Địa chỉ</h3><p>Nhấn để xem vị trí cửa hàng trên bản đồ.</p><a class="btn secondary" target="_blank" rel="noopener" href="https://maps.app.goo.gl/9zAXofUzKNd6XVtP7">Chỉ đường ↗</a></div>
-    <div class="info-card"><h3>☎ Kết nối</h3><p>Liên hệ với JUMJUM qua các kênh trực tuyến.</p><div class="social"><a href="https://www.facebook.com/nhzt.wiie" target="_blank"><img src="images/facebook.png" alt="">Facebook</a><a href="https://zalo.me/0398476794" target="_blank"><img src="images/zalo.png" alt="">Zalo</a></div></div>
-    <div class="info-card"><h3>♡ Theo dõi cửa hàng</h3><p>Cập nhật sản phẩm mới và các chương trình ưu đãi.</p><button class="btn primary" onclick="toggleFollow()">Theo dõi JUMJUM</button><p id="followerText">0 người theo dõi</p></div>
+  <div class="glass card">
+   <div class="row">
+    <h3 class="font-extrabold text-lg">Theo dõi JUMJUM</h3>
+    <span class="badge" id="followerCount">0 người theo dõi</span>
    </div>
-  </section>
- </section>
+   <p class="muted text-sm mt-2">Đăng nhập để theo dõi cửa hàng và nhận thông tin ưu đãi.</p>
+   <button class="btn mt-4" onclick="followShop()"><i class="fa-regular fa-heart"></i> Theo dõi cửa hàng</button>
+   <div id="broadcastBanner" class="hidden mt-4 p-3 rounded-xl bg-sky-100 text-sky-900 text-sm"></div>
+  </div>
+ </div>
 
- <section id="tab-menu" class="container hidden">
-  <section class="section">
-   <div class="section-head"><div><span class="eyebrow">Our menu</span><h2>Thực đơn JUMJUM</h2><p>Chọn món yêu thích và thêm vào giỏ hàng.</p></div></div>
-   <div class="field"><input id="productSearch" placeholder="Tìm kiếm món..." oninput="renderProducts()"></div>
-   <div class="filters" id="categoryFilters"></div>
-   <div class="grid" id="productGrid"></div>
-  </section>
- </section>
+ <div class="row mt-7 mb-3">
+  <h2 class="text-xl font-extrabold">Món được yêu thích</h2>
+  <button class="btn-soft" onclick="go('menu')">Xem tất cả <i class="fa-solid fa-arrow-right"></i></button>
+ </div>
+ <div id="featuredProducts" class="grid-products"></div>
+</section>
 
- <section id="tab-service" class="container hidden">
-  <section class="section">
-   <div class="section-head"><div><span class="eyebrow">At your table</span><h2>Nhận món & gọi phục vụ</h2><p>Gửi yêu cầu trực tiếp đến quầy JUMJUM.</p></div></div>
-   <div class="card" style="padding:24px;max-width:650px">
-    <div class="form-grid">
-     <div class="field"><label>Mã số bàn (3 chữ số)</label><input id="tableCode" maxlength="3" inputmode="numeric" placeholder="Ví dụ: 008"></div>
-     <div class="field"><label>Tên khách hàng</label><input id="tableCustomer" placeholder="Tên của bạn"></div>
-     <div class="field full"><label>Nội dung yêu cầu</label><select id="tableRequest"><option>Gọi nhân viên phục vụ</option><option>Gọi món tại bàn</option><option>Xin thêm dụng cụ</option><option>Yêu cầu thanh toán</option><option>Yêu cầu khác</option></select></div>
-     <div class="field full"><label>Ghi chú</label><textarea id="tableNote" placeholder="Nội dung bổ sung (nếu có)"></textarea></div>
-    </div>
-    <button class="btn primary" style="margin-top:17px" onclick="sendTableRequest()">Gửi yêu cầu</button>
-   </div>
-   <div class="panel-card" style="margin-top:20px"><h3>Yêu cầu gần đây</h3><div id="myTableRequests" class="muted small">Chưa có yêu cầu.</div></div>
-  </section>
- </section>
+<!-- THỰC ĐƠN -->
+<section id="menu" class="section">
+ <div class="row flex-wrap mb-4">
+  <div><span class="badge">JUMJUM MENU</span><h2 class="text-3xl font-extrabold mt-2">Thực đơn</h2></div>
+  <button class="btn" onclick="openCart()"><i class="fa-solid fa-basket-shopping"></i> Giỏ hàng <span id="cartCount">0</span></button>
+ </div>
+ <div class="toolbar mb-4">
+  <input id="searchProduct" class="field" placeholder="Tìm món..." oninput="renderProducts()">
+  <select id="categoryFilter" class="field" onchange="renderProducts()"><option value="">Tất cả danh mục</option></select>
+ </div>
+ <div id="productList" class="grid-products"></div>
+</section>
 
- <section id="tab-voucher" class="container hidden">
-  <section class="section">
-   <div class="section-head"><div><span class="eyebrow">Special offers</span><h2>Kho ưu đãi của bạn</h2><p>Nhận và lưu voucher để sử dụng khi thanh toán.</p></div></div>
-   <div class="card" style="padding:22px;margin-bottom:18px">
-    <h3>Voucher dành cho bạn</h3>
-    <p class="muted small">Mỗi voucher có thời hạn sử dụng ngẫu nhiên từ 24 đến 72 giờ kể từ lúc nhận.</p>
-    <button class="btn primary" onclick="claimVoucher()">＋ Nhận voucher</button>
-   </div>
-   <div id="voucherList" class="grid"></div>
-   <h3 style="margin-top:30px">Voucher đã lưu</h3>
-   <div id="savedVoucherList" class="grid"></div>
-  </section>
- </section>
+<!-- VOUCHER -->
+<section id="voucher" class="section">
+ <span class="badge">SPECIAL OFFERS</span>
+ <h2 class="text-3xl font-extrabold mt-2 mb-4">Voucher ưu đãi</h2>
+ <p class="muted text-sm mb-4">Nhận voucher và lưu vào tài khoản. Thời hạn sử dụng được tính từ thời điểm nhận.</p>
+ <div id="voucherList" class="grid md:grid-cols-2 gap-4"></div>
+ <div class="glass card mt-5">
+  <h3 class="font-extrabold">Voucher của tôi</h3>
+  <div id="myVouchers" class="mt-3 stack"></div>
+ </div>
+</section>
 
- <section id="tab-review" class="container hidden">
-  <section class="section">
-   <div class="section-head"><div><span class="eyebrow">Your feedback</span><h2>Đánh giá trải nghiệm</h2><p>Chia sẻ cảm nhận để JUMJUM phục vụ tốt hơn.</p></div></div>
-   <div class="card" style="padding:22px;max-width:700px">
-    <div class="form-grid">
-     <div class="field"><label>Tên hiển thị</label><input id="reviewName" placeholder="Tên của bạn"></div>
-     <div class="field"><label>Mức đánh giá</label><select id="reviewRating"><option value="5">5 sao</option><option value="4.5">4.5 sao</option><option value="4">4 sao</option><option value="3.5">3.5 sao</option><option value="3">3 sao</option><option value="2.5">2.5 sao</option><option value="2">2 sao</option><option value="1.5">1.5 sao</option><option value="1">1 sao</option></select></div>
-     <div class="field full"><label>Nội dung đánh giá</label><textarea id="reviewComment" placeholder="Chia sẻ cảm nhận của bạn..."></textarea></div>
-     <div class="field full"><label>Ảnh sản phẩm (nếu có)</label><input type="file" id="reviewImage" accept="image/*" capture="environment"></div>
-    </div>
-    <button class="btn primary" style="margin-top:15px" onclick="submitReview()">Gửi đánh giá</button>
-   </div>
-   <div id="reviewList" style="margin-top:22px"></div>
-  </section>
- </section>
+<!-- GỌI PHỤC VỤ -->
+<section id="service" class="section">
+ <span class="badge">TABLE SERVICE</span>
+ <h2 class="text-3xl font-extrabold mt-2">Nhận món & gọi phục vụ</h2>
+ <div class="glass card mt-5 max-w-xl">
+  <label class="font-bold text-sm">Mã số bàn (3 chữ số)</label>
+  <input id="tableCode" class="field text-center tracking-widest text-2xl font-extrabold" maxlength="3" inputmode="numeric" placeholder="001">
+  <label class="font-bold text-sm block mt-4">Nội dung yêu cầu</label>
+  <select id="serviceType" class="field">
+   <option>Gọi nhân viên phục vụ</option><option>Yêu cầu thanh toán</option>
+   <option>Gọi thêm món tại bàn</option><option>Yêu cầu thêm dụng cụ</option>
+  </select>
+  <textarea id="serviceNote" class="field" rows="3" placeholder="Nội dung chi tiết..."></textarea>
+  <button class="btn w-full mt-4" onclick="sendTableCall()">Gửi yêu cầu</button>
+ </div>
+ <div class="glass card mt-4">
+  <h3 class="font-extrabold">Yêu cầu gần đây</h3>
+  <div id="myTableCalls" class="mt-3 stack"></div>
+ </div>
+</section>
 
- <section id="tab-notification" class="container hidden">
-  <section class="section"><div class="section-head"><div><span class="eyebrow">Updates</span><h2>Thông báo</h2></div></div><div id="userNotifications" class="panel-card">Chưa có thông báo.</div></section>
- </section>
-</main>
+<!-- ĐÁNH GIÁ -->
+<section id="review" class="section">
+ <span class="badge">CUSTOMER REVIEWS</span>
+ <h2 class="text-3xl font-extrabold mt-2">Đánh giá trải nghiệm</h2>
+ <div class="glass card mt-5 max-w-2xl">
+  <label class="font-bold text-sm">Mức độ hài lòng</label>
+  <div id="ratingStars" class="text-3xl mt-2">
+   <i class="fa-solid fa-star star" data-rating="1"></i>
+   <i class="fa-solid fa-star star" data-rating="2"></i>
+   <i class="fa-solid fa-star star" data-rating="3"></i>
+   <i class="fa-solid fa-star star" data-rating="4"></i>
+   <i class="fa-solid fa-star star" data-rating="5"></i>
+  </div>
+  <p class="small muted mt-1">Chọn từ 1 đến 5 sao. Có thể chọn nửa sao bằng cách nhấn lại vào nửa bên trái/phải của sao.</p>
+  <input id="reviewName" class="field" placeholder="Tên hiển thị">
+  <textarea id="reviewComment" class="field" rows="4" placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
+  <label class="block text-sm font-bold mt-3">Ảnh sản phẩm (không bắt buộc)</label>
+  <input id="reviewImage" type="file" accept="image/*" class="field">
+  <button class="btn mt-4" onclick="submitReview()">Gửi đánh giá</button>
+ </div>
+ <div class="mt-6">
+  <h3 class="font-extrabold text-xl mb-3">Cảm nhận khách hàng</h3>
+  <div id="reviewList" class="grid md:grid-cols-2 gap-3"></div>
+ </div>
+</section>
 
-<section id="adminView" class="container hidden">
- <div class="admin-layout">
-  <aside class="admin-side">
-   <div style="display:flex;align-items:center;gap:10px;padding:8px 5px 15px">
-    <img class="avatar" src="images/jumjumshop.png" id="adminAvatar" alt="JUMJUM">
-    <div><b id="adminDisplayName">JUMJUM ADMIN</b><div class="small muted">Management</div></div>
-   </div>
-   <button class="active" onclick="switchAdminTab('dashboard',this)">▦ Tổng quan</button>
-   <button onclick="switchAdminTab('orders',this)">▤ Đơn hàng & gọi phục vụ</button>
-   <button onclick="switchAdminTab('pos',this)">▣ Bán hàng tại quầy</button>
-   <button onclick="switchAdminTab('menu',this)">☷ Quản lý thực đơn</button>
-   <button onclick="switchAdminTab('followers',this)">♡ Người theo dõi</button>
-   <button onclick="switchAdminTab('customers',this)">♙ Khách hàng</button>
-   <button onclick="switchAdminTab('admins',this)">♧ Quản lý admin</button>
-   <button onclick="switchAdminTab('reviews',this)">☆ Đánh giá & thông báo</button>
-   <button onclick="switchAdminTab('settings',this)">⚙ Cài đặt</button>
-   <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
-   <button onclick="exitAdmin()">← Trở về cửa hàng</button>
+<!-- HỒ SƠ -->
+<section id="profile" class="section">
+ <span class="badge">MY ACCOUNT</span>
+ <h2 class="text-3xl font-extrabold mt-2">Hồ sơ cá nhân</h2>
+ <div class="glass card mt-5 max-w-xl">
+  <div class="text-center">
+   <img id="profileAvatar" src="images/account.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'" class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-sky-300">
+   <input type="file" id="profileImage" accept="image/*" class="field mt-3" onchange="previewAvatar(event)">
+  </div>
+  <label class="text-sm font-bold">Tên hiển thị</label><input id="profileName" class="field">
+  <label class="text-sm font-bold block mt-3">Số điện thoại</label><input id="profilePhone" class="field">
+  <label class="text-sm font-bold block mt-3">Email</label><input id="profileEmail" type="email" class="field">
+  <label class="text-sm font-bold block mt-3">Địa chỉ</label><textarea id="profileAddress" class="field"></textarea>
+  <label class="text-sm font-bold block mt-3">Phương thức thanh toán ưa thích</label>
+  <select id="profilePayment" class="field"><option>COD</option><option>Chuyển khoản ngân hàng</option><option>Ví điện tử</option></select>
+  <button class="btn w-full mt-4" onclick="saveProfile()">Lưu hồ sơ</button>
+  <button class="btn-soft w-full mt-2" onclick="logout()">Đăng xuất</button>
+ </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="section">
+ <div class="row flex-wrap">
+  <div><span class="badge">JUMJUM MANAGEMENT</span><h2 class="text-3xl font-extrabold mt-2">Quản trị cửa hàng</h2></div>
+  <button class="btn-soft" onclick="logout()">Đăng xuất</button>
+ </div>
+ <div class="stat-grid mt-5">
+  <div class="glass stat"><span class="muted small">Tổng đơn hàng</span><strong id="statOrders">0</strong></div>
+  <div class="glass stat"><span class="muted small">Doanh thu</span><strong id="statRevenue">0đ</strong></div>
+  <div class="glass stat"><span class="muted small">Khách hàng</span><strong id="statCustomers">0</strong></div>
+  <div class="glass stat"><span class="muted small">Người theo dõi</span><strong id="statFollowers">0</strong></div>
+ </div>
+
+ <div class="admin-layout mt-5">
+  <aside class="admin-menu">
+   <button class="btn-soft" onclick="adminTab('orders')"><i class="fa-solid fa-receipt"></i> Đơn hàng & phục vụ</button>
+   <button class="btn-soft" onclick="adminTab('pos')"><i class="fa-solid fa-cash-register"></i> Bán hàng tại quầy</button>
+   <button class="btn-soft" onclick="adminTab('products')"><i class="fa-solid fa-utensils"></i> Quản lý thực đơn</button>
+   <button class="btn-soft" onclick="adminTab('followers')"><i class="fa-solid fa-heart"></i> Người theo dõi</button>
+   <button class="btn-soft" onclick="adminTab('customers')"><i class="fa-solid fa-users"></i> Khách hàng</button>
+   <button class="btn-soft" onclick="adminTab('admins')"><i class="fa-solid fa-user-shield"></i> Quản lý admin</button>
+   <button class="btn-soft" onclick="adminTab('reviews')"><i class="fa-solid fa-star"></i> Đánh giá</button>
+   <button class="btn-soft" onclick="adminTab('settings')"><i class="fa-solid fa-gear"></i> Cài đặt & EmailJS</button>
   </aside>
 
-  <div class="admin-content">
-   <div id="admin-dashboard" class="admin-panel active">
-    <div class="section-head"><div><span class="eyebrow">Dashboard</span><h2>Tổng quan cửa hàng</h2><p id="adminClock"></p></div></div>
-    <div class="stats">
-     <div class="stat"><small>Tổng đơn hàng</small><strong id="statOrders">0</strong></div>
-     <div class="stat"><small>Tổng doanh thu</small><strong id="statRevenue">0đ</strong></div>
-     <div class="stat"><small>Khách hàng</small><strong id="statCustomers">0</strong></div>
-     <div class="stat"><small>Người theo dõi</small><strong id="statFollowers">0</strong></div>
-    </div>
-    <div class="panel-card"><h3>Đơn hàng gần đây</h3><div id="recentOrders"></div></div>
-    <div class="panel-card"><h3>Thống kê món bán hôm nay</h3><div id="dailyStats"></div></div>
+  <div class="admin-panel glass card">
+   <div id="admin-orders" class="admin-section">
+    <h3 class="font-extrabold text-xl mb-3">Đơn hàng & gọi phục vụ</h3>
+    <h4 class="font-bold mb-2">Yêu cầu tại bàn</h4><div id="adminCalls" class="stack mb-5"></div>
+    <h4 class="font-bold mb-2">Danh sách đơn hàng</h4><div id="adminOrders" class="stack"></div>
    </div>
 
-   <div id="admin-orders" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Orders</span><h2>Đơn hàng & gọi phục vụ</h2></div></div>
-    <div class="panel-card"><h3>Yêu cầu tại bàn</h3><div id="adminTableRequests"></div></div>
-    <div class="panel-card"><h3>Danh sách đơn hàng</h3><div class="table-wrap"><table><thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Sản phẩm</th><th>Tổng tiền</th><th>Thanh toán</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="adminOrders"></tbody></table></div></div>
+   <div id="admin-pos" class="admin-section hidden">
+    <h3 class="font-extrabold text-xl mb-3">Bán hàng tại quầy</h3>
+    <div id="posProducts" class="grid sm:grid-cols-2 gap-2"></div>
+    <div class="glass card mt-4">
+     <h4 class="font-bold">Giỏ hàng tại quầy</h4><div id="posCart" class="mt-2"></div>
+     <div class="row mt-3"><span>Tổng thanh toán</span><strong id="posTotal">0đ</strong></div>
+     <label class="block mt-3 text-sm font-bold">Khách đưa</label><input id="posCash" type="number" class="field" oninput="calculateChange()">
+     <div class="row mt-2"><span>Tiền thối</span><strong id="posChange">0đ</strong></div>
+     <select id="posPayment" class="field"><option>COD</option><option>Chuyển khoản ngân hàng</option><option>Ví điện tử</option></select>
+     <button class="btn w-full mt-3" onclick="completePos()">Hoàn tất hóa đơn</button>
+    </div>
+    <p class="muted small mt-3" id="dailySold"></p>
    </div>
 
-   <div id="admin-pos" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Point of sale</span><h2>Bán hàng tại quầy</h2></div></div>
-    <div class="panel-card"><h3>Chọn món</h3><div class="grid" id="posProducts"></div></div>
-    <div class="panel-card">
-     <h3>Hóa đơn tại quầy</h3><div id="posCart"></div>
-     <div class="total-line"><span>Tổng cộng</span><span id="posTotal">0đ</span></div>
-     <div class="form-grid">
-      <div class="field"><label>Phương thức thanh toán</label><select id="posPayment"><option>Tiền mặt (COD)</option><option>Chuyển khoản ngân hàng</option><option>Ví điện tử</option></select></div>
-      <div class="field"><label>Khách đưa</label><input type="number" id="posCash" oninput="updatePosChange()" placeholder="0"></div>
-     </div>
-     <p id="posChange" class="muted small">Tiền thừa: 0đ</p>
-     <button class="btn primary" onclick="completePosOrder()">Hoàn tất hóa đơn</button>
+   <div id="admin-products" class="admin-section hidden">
+    <h3 class="font-extrabold text-xl mb-3">Quản lý thực đơn</h3>
+    <div class="glass card">
+     <h4 class="font-bold">Thêm món mới</h4>
+     <input id="newProductName" class="field" placeholder="Tên món">
+     <input id="newProductPrice" type="number" class="field" placeholder="Giá (VND)">
+     <input id="newProductCategory" class="field" placeholder="Danh mục">
+     <input id="newProductImage" class="field" placeholder="URL ảnh">
+     <textarea id="newProductDesc" class="field" placeholder="Mô tả món"></textarea>
+     <button class="btn mt-3" onclick="addProduct()">Thêm vào thực đơn</button>
     </div>
+    <div id="manageProducts" class="stack mt-4"></div>
    </div>
 
-   <div id="admin-menu" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Menu management</span><h2>Quản lý thực đơn</h2></div></div>
-    <div class="panel-card">
-     <h3>Thêm món mới</h3>
-     <div class="form-grid">
-      <div class="field"><label>Tên món</label><input id="newProductName" placeholder="Tên sản phẩm"></div>
-      <div class="field"><label>Giá (VND)</label><input id="newProductPrice" type="number" placeholder="35000"></div>
-      <div class="field"><label>Danh mục</label><input id="newProductCategory" placeholder="Trà trái cây"></div>
-      <div class="field"><label>URL ảnh</label><input id="newProductImage" placeholder="https://..."></div>
-      <div class="field full"><label>Mô tả</label><textarea id="newProductDesc"></textarea></div>
-     </div>
-     <button class="btn primary" style="margin-top:14px" onclick="addProduct()">Thêm vào thực đơn</button>
-    </div>
-    <div class="panel-card"><h3>Danh sách món đang phục vụ</h3><div id="adminProductList"></div></div>
+   <div id="admin-followers" class="admin-section hidden">
+    <h3 class="font-extrabold text-xl mb-3">Người theo dõi</h3><div id="adminFollowers" class="stack"></div>
    </div>
 
-   <div id="admin-followers" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Community</span><h2>Người theo dõi</h2></div></div>
-    <div class="panel-card" id="adminFollowers"></div>
+   <div id="admin-customers" class="admin-section hidden">
+    <h3 class="font-extrabold text-xl mb-3">Khách hàng & lịch sử đặt hàng</h3><div id="adminCustomers" class="stack"></div>
    </div>
 
-   <div id="admin-customers" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Customers</span><h2>Danh sách khách hàng</h2></div></div>
-    <div class="panel-card"><div class="table-wrap"><table><thead><tr><th>Khách hàng</th><th>Email</th><th>Số điện thoại</th><th>Địa chỉ</th><th>Số đơn</th></tr></thead><tbody id="customerList"></tbody></table></div></div>
+   <div id="admin-admins" class="admin-section hidden">
+    <h3 class="font-extrabold text-xl mb-3">Tài khoản quản trị</h3>
+    <p class="muted small mb-3">Quản trị viên chính: jumjumshop@gmail.com</p>
+    <input id="newAdminEmail" type="email" class="field" placeholder="Email admin mới">
+    <input id="newAdminPassword" type="password" class="field" placeholder="Mật khẩu mới">
+    <button class="btn mt-3" onclick="addAdmin()">Thêm quản trị viên</button>
+    <div id="adminAccounts" class="stack mt-4"></div>
    </div>
 
-   <div id="admin-admins" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Team</span><h2>Quản lý quản trị viên</h2></div></div>
-    <div class="panel-card">
-     <h3>Thêm quản trị viên</h3>
-     <div class="form-grid"><div class="field"><label>Email admin mới</label><input id="newAdminEmail" type="email"></div><div class="field"><label>Tên hiển thị</label><input id="newAdminName"></div></div>
-     <button class="btn primary" style="margin-top:13px" onclick="addAdmin()">Thêm tài khoản</button>
-     <p class="small muted">Quản lý tài khoản thực tế cần được triển khai bằng hệ thống xác thực phía máy chủ.</p>
-    </div>
-    <div class="panel-card"><h3>Tài khoản quản trị</h3><div id="adminAccountList"></div></div>
+   <div id="admin-reviews" class="admin-section hidden">
+    <h3 class="font-extrabold text-xl mb-3">Đánh giá khách hàng</h3><div id="adminReviewList" class="stack"></div>
    </div>
 
-   <div id="admin-reviews" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Feedback</span><h2>Đánh giá & thông báo</h2></div></div>
-    <div class="panel-card"><h3>Đánh giá khách hàng</h3><div id="adminReviewList"></div></div>
-    <div class="panel-card">
-     <h3>Gửi thông báo đến khách hàng</h3>
-     <div class="field"><label>Nội dung thông báo</label><textarea id="broadcastMessage" placeholder="Nội dung cần gửi..."></textarea></div>
-     <button class="btn primary" style="margin-top:12px" onclick="sendBroadcast()">Gửi thông báo</button>
+   <div id="admin-settings" class="admin-section hidden">
+    <h3 class="font-extrabold text-xl mb-3">Cài đặt hệ thống</h3>
+    <label class="text-sm font-bold">EmailJS Public Key</label><input id="emailPublic" class="field">
+    <label class="text-sm font-bold block mt-3">Service ID</label><input id="emailService" class="field">
+    <label class="text-sm font-bold block mt-3">Template ID</label><input id="emailTemplate" class="field">
+    <label class="text-sm font-bold block mt-3">Email nhận thông báo</label><input id="emailReceiver" type="email" class="field">
+    <button class="btn mt-3" onclick="saveEmailSettings()">Lưu cấu hình EmailJS</button>
+    <hr class="my-5 opacity-20">
+    <h4 class="font-bold">Thông báo đến khách hàng</h4>
+    <textarea id="broadcastInput" class="field" placeholder="Nội dung thông báo..."></textarea>
+    <button class="btn mt-3" onclick="broadcast()">Gửi thông báo</button>
+    <hr class="my-5 opacity-20">
+    <h4 class="font-bold">Mã QR cửa hàng</h4>
+    <div id="qrcode" class="mt-3"></div>
+    <div class="toolbar mt-3">
+     <button class="btn-soft" onclick="copyLink()"><i class="fa-regular fa-copy"></i> Sao chép link</button>
+     <button class="btn-soft" onclick="downloadQR()"><i class="fa-solid fa-download"></i> Tải QR</button>
     </div>
-   </div>
-
-   <div id="admin-settings" class="admin-panel">
-    <div class="section-head"><div><span class="eyebrow">Configuration</span><h2>Cài đặt hệ thống</h2></div></div>
-    <div class="panel-card">
-     <h3>Hồ sơ quản trị viên</h3>
-     <div class="form-grid">
-      <div class="field"><label>Tên hiển thị</label><input id="adminProfileName"></div>
-      <div class="field"><label>Số điện thoại</label><input id="adminProfilePhone"></div>
-      <div class="field"><label>Email</label><input id="adminProfileEmail"></div>
-      <div class="field"><label>Địa chỉ</label><input id="adminProfileAddress"></div>
-      <div class="field full"><label>Ảnh đại diện</label><input type="file" id="adminProfileImage" accept="image/*"></div>
-     </div>
-     <button class="btn primary" style="margin-top:13px" onclick="saveAdminProfile()">Lưu hồ sơ</button>
-    </div>
-    <div class="panel-card">
-     <h3>Cấu hình EmailJS</h3>
-     <div class="form-grid">
-      <div class="field"><label>Public key</label><input id="emailPublicKey"></div>
-      <div class="field"><label>Service ID</label><input id="emailServiceId"></div>
-      <div class="field"><label>Template ID</label><input id="emailTemplateId"></div>
-      <div class="field"><label>Email nhận thông báo</label><input id="emailReceiver"></div>
-     </div>
-     <button class="btn primary" style="margin-top:13px" onclick="saveEmailSettings()">Lưu cấu hình</button>
-     <p class="small muted">Không đặt khóa bí mật hoặc thông tin nhạy cảm trong mã nguồn công khai.</p>
-    </div>
-    <div class="panel-card">
-     <h3>Mã QR cửa hàng</h3>
-     <div class="qr-box"><img id="shopQr" alt="QR cửa hàng"><div><button class="btn secondary" onclick="copyShopLink()">▣ Sao chép liên kết</button><button class="btn secondary" onclick="downloadQR()">↓ Tải QR</button></div></div>
-    </div>
+    <button class="btn-soft mt-4" onclick="exportData()">Xuất dữ liệu JSON</button>
    </div>
   </div>
  </div>
 </section>
+</main>
 
-<footer class="footer">
- <div class="container footer-inner">
-  <div><b>JUMJUM</b><p>© <span id="year"></span> JUMJUM. All rights reserved.</p></div>
-  <div class="social">
-   <a href="https://www.facebook.com/nhzt.wiie" target="_blank"><img src="images/facebook.png" alt="">Facebook</a>
-   <a href="https://zalo.me/0398476794" target="_blank"><img src="images/zalo.png" alt="">Zalo</a>
-   <a href="https://maps.app.goo.gl/9zAXofUzKNd6XVtP7" target="_blank">⌖ Địa chỉ</a>
-  </div>
- </div>
-</footer>
-
-<nav class="bottom-nav">
- <button onclick="showTab('home')"><span>⌂</span>Trang chủ</button>
- <button onclick="showTab('menu')"><span>☷</span>Thực đơn</button>
- <button onclick="showTab('service')"><span>♧</span>Phục vụ</button>
- <button onclick="showTab('voucher')"><span>♢</span>Voucher</button>
- <button onclick="showTab('notification')"><span>♧</span>Thông báo</button>
+<nav class="bottom-nav glass">
+ <button onclick="go('home')" data-page="home" class="active" title="Trang chủ"><i class="fa-solid fa-house"></i></button>
+ <button onclick="go('menu')" data-page="menu" title="Thực đơn"><i class="fa-solid fa-mug-hot"></i></button>
+ <button onclick="openCart()" title="Giỏ hàng"><i class="fa-solid fa-basket-shopping"></i></button>
+ <button onclick="go('voucher')" data-page="voucher" title="Voucher"><i class="fa-solid fa-ticket"></i></button>
+ <button onclick="go('service')" data-page="service" title="Gọi phục vụ"><i class="fa-solid fa-bell-concierge"></i></button>
+ <button onclick="go('review')" data-page="review" title="Đánh giá"><i class="fa-solid fa-star"></i></button>
 </nav>
 
-<button class="floating-cart" onclick="openCart()">Giỏ hàng <span id="cartCount">0</span></button>
+<footer>
+ <p class="font-extrabold text-base">JUMJUM</p>
+ <p>Taste the Fresh, Feel the Joy</p>
+ <p id="clock" class="mt-2"></p>
+ <p class="mt-2">© <span id="year"></span> JUMJUM. All rights reserved.</p>
+</footer>
 
-<!-- AUTH MODAL -->
-<div class="overlay" id="authModal">
- <div class="modal">
-  <div class="modal-head"><h2>Đăng nhập JUMJUM</h2><button class="close" onclick="closeModal('authModal')">✕</button></div>
-  <div class="form-grid">
-   <div class="field full"><label>Email</label><input id="authEmail" type="email" placeholder="Nhập email của bạn"></div>
-   <div class="field full"><label>Mật khẩu</label><input id="authPassword" type="password" placeholder="Nhập mật khẩu"></div>
+<!-- MODAL ĐĂNG NHẬP -->
+<div id="authModal" class="modal">
+ <div class="modal-box glass">
+  <div class="row"><h3 class="text-xl font-extrabold">Đăng nhập JUMJUM</h3><button onclick="closeModal('authModal')" class="btn-soft">✕</button></div>
+  <div class="tabs mt-4">
+   <button class="btn-soft" onclick="authMode='customer'">Khách hàng</button>
+   <button class="btn-soft" onclick="authMode='admin'">Quản trị viên</button>
   </div>
-  <p class="small muted">Đăng nhập khách hàng hoặc tài khoản quản trị viên.</p>
-  <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:15px">
-   <button class="btn primary" onclick="loginCustomer()">Đăng nhập khách</button>
-   <button class="btn secondary" onclick="loginAdmin()">Đăng nhập quản trị</button>
-   <button class="btn outline" onclick="registerCustomer()">Tạo tài khoản</button>
-  </div>
+  <input id="authName" class="field" placeholder="Tên hiển thị (khách hàng)">
+  <input id="authEmail" type="email" class="field" placeholder="Email">
+  <input id="authPassword" type="password" class="field" placeholder="Mật khẩu">
+  <button class="btn w-full mt-4" onclick="login()">Đăng nhập</button>
+  <p class="muted small mt-3">Không có tài khoản? Đăng nhập bằng email để tạo hồ sơ khách hàng mới.</p>
  </div>
 </div>
 
-<!-- PROFILE MODAL -->
-<div class="overlay" id="profileModal">
- <div class="modal">
-  <div class="modal-head"><h2>Hồ sơ của bạn</h2><button class="close" onclick="closeModal('profileModal')">✕</button></div>
-  <div class="form-grid">
-   <div class="field"><label>Tên hiển thị</label><input id="profileName"></div>
-   <div class="field"><label>Số điện thoại</label><input id="profilePhone"></div>
-   <div class="field full"><label>Email</label><input id="profileEmail" type="email"></div>
-   <div class="field full"><label>Địa chỉ</label><input id="profileAddress"></div>
-   <div class="field"><label>Phương thức thanh toán</label><select id="profilePayment"><option>COD</option><option>Chuyển khoản ngân hàng</option><option>Ví điện tử</option></select></div>
-   <div class="field"><label>Ảnh đại diện</label><input id="profileAvatar" type="file" accept="image/*"></div>
-  </div>
-  <div style="display:flex;gap:8px;margin-top:15px"><button class="btn primary" onclick="saveProfile()">Lưu hồ sơ</button><button class="btn outline" onclick="logout()">Đăng xuất</button></div>
+<!-- MODAL GIỎ HÀNG -->
+<div id="cartModal" class="modal">
+ <div class="modal-box glass">
+  <div class="row"><h3 class="text-xl font-extrabold">Giỏ hàng</h3><button onclick="closeModal('cartModal')" class="btn-soft">✕</button></div>
+  <div id="cartItems" class="stack mt-3"></div>
+  <div class="row mt-4"><span class="font-bold">Tạm tính</span><strong id="cartTotal">0đ</strong></div>
+  <hr class="my-4 opacity-20">
+  <h4 class="font-bold">Thông tin nhận hàng</h4>
+  <input id="orderName" class="field" placeholder="Họ và tên">
+  <input id="orderPhone" class="field" placeholder="Số điện thoại">
+  <input id="orderEmail" type="email" class="field" placeholder="Email">
+  <input id="orderAddress" class="field" placeholder="Địa chỉ nhận hàng">
+  <textarea id="orderNote" class="field" placeholder="Yêu cầu thêm"></textarea>
+  <select id="orderVoucher" class="field"><option value="">Không sử dụng voucher</option></select>
+  <select id="orderPayment" class="field">
+   <option>COD</option><option>Chuyển khoản ngân hàng</option><option>Ví điện tử</option>
+  </select>
+  <div id="paymentExtra" class="muted small mt-2">Chọn phương thức thanh toán phù hợp.</div>
+  <button class="btn w-full mt-4" onclick="placeOrder()">Xác nhận đặt hàng</button>
  </div>
 </div>
 
-<!-- CART MODAL -->
-<div class="overlay" id="cartModal">
- <div class="modal">
-  <div class="modal-head"><h2>Giỏ hàng của bạn</h2><button class="close" onclick="closeModal('cartModal')">✕</button></div>
-  <div id="cartItems"></div>
-  <div class="total-line"><span>Tạm tính</span><span id="cartSubtotal">0đ</span></div>
-  <button class="btn primary" style="width:100%" onclick="openCheckout()">Tiến hành đặt hàng</button>
+<div id="invoiceModal" class="modal">
+ <div class="modal-box glass">
+  <div class="row"><h3 class="font-extrabold text-xl">Hóa đơn JUMJUM</h3><button class="btn-soft" onclick="closeModal('invoiceModal')">✕</button></div>
+  <div id="invoiceContent" class="mt-4 text-sm"></div>
+  <button class="btn w-full mt-4" onclick="window.print()">In hóa đơn</button>
  </div>
 </div>
 
-<!-- CHECKOUT MODAL -->
-<div class="overlay" id="checkoutModal">
- <div class="modal">
-  <div class="modal-head"><h2>Thông tin đặt hàng</h2><button class="close" onclick="closeModal('checkoutModal')">✕</button></div>
-  <div class="form-grid">
-   <div class="field"><label>Họ và tên</label><input id="checkoutName"></div>
-   <div class="field"><label>Số điện thoại</label><input id="checkoutPhone" type="tel"></div>
-   <div class="field full"><label>Email</label><input id="checkoutEmail" type="email"></div>
-   <div class="field full"><label>Địa chỉ nhận hàng</label><input id="checkoutAddress"></div>
-   <div class="field"><label>Voucher</label><input id="checkoutVoucher" placeholder="Mã voucher"></div>
-   <div class="field"><label>Phương thức thanh toán</label><select id="checkoutPayment"><option>COD</option><option>Chuyển khoản ngân hàng</option><option>Ví điện tử - MoMo</option><option>Ví điện tử - ZaloPay</option></select></div>
-   <div class="field full"><label>Yêu cầu thêm</label><textarea id="checkoutNote"></textarea></div>
-  </div>
-  <div class="total-line"><span>Thành tiền</span><span id="checkoutTotal">0đ</span></div>
-  <button class="btn primary" style="width:100%" onclick="placeOrder()">Xác nhận đặt hàng</button>
- </div>
-</div>
-
-<!-- INVOICE MODAL -->
-<div class="overlay" id="invoiceModal">
- <div class="modal">
-  <div class="modal-head"><h2>Hóa đơn điện tử</h2><button class="close" onclick="closeModal('invoiceModal')">✕</button></div>
-  <div id="invoiceContent"></div>
-  <button class="btn primary" onclick="window.print()">In / Lưu hóa đơn</button>
- </div>
-</div>
-
-<div class="toast" id="toast"></div>
-<audio id="backgroundMusic" src="audio/jumjumshop music.mp3" loop preload="none"></audio>
+<div id="toast" class="toast"></div>
+<audio id="bgMusic" src="audio/jumjumshop music.mp3" loop></audio>
 
 <script>
-"use strict";
-
 /* =========================================================
-   JUMJUM - FRONTEND DEMO
-   Dữ liệu hiện được lưu trên trình duyệt bằng localStorage.
-   Muốn đồng bộ nhiều thiết bị cần kết nối backend.
-========================================================= */
+   JUMJUM — CẤU HÌNH
+   ========================================================= */
 
-const STORAGE_KEY="jumjum_store_v1";
-const ADMIN_EMAIL="jumjumshop@gmail.com";
-const ADMIN_DEMO_PASSWORD="SET_YOUR_DEMO_PASSWORD";
-const money=n=>new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND",maximumFractionDigits:0}).format(Number(n)||0);
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const today=()=>new Date().toLocaleDateString("vi-VN");
-const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-const defaultProducts=[
- {id:"p1",name:"Trà đào cam sả",price:35000,category:"Trà trái cây",desc:"Vị trà thanh mát kết hợp đào, cam và hương sả.",image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800",tag:"Bán chạy"},
- {id:"p2",name:"Trà vải hoa hồng",price:39000,category:"Trà trái cây",desc:"Hương vải dịu nhẹ cùng sắc hoa hồng tinh tế.",image:"https://images.unsplash.com/photo-1544145945-f90425340c7e?w=800",tag:"Đề xuất"},
- {id:"p3",name:"Matcha latte",price:42000,category:"Sữa & Matcha",desc:"Matcha thơm dịu hòa quyện cùng sữa tươi.",image:"https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=800",tag:""},
- {id:"p4",name:"Sữa chua trái cây",price:45000,category:"Sữa chua",desc:"Sữa chua mềm mịn cùng trái cây tươi.",image:"https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800",tag:"Mới"},
- {id:"p5",name:"Trà chanh nhiệt đới",price:29000,category:"Trà trái cây",desc:"Chua ngọt cân bằng, thích hợp cho ngày nắng.",image:"https://images.unsplash.com/photo-1513558161293-c632136d5a4b?w=800",tag:""},
- {id:"p6",name:"Cacao sữa",price:35000,category:"Sữa & Matcha",desc:"Cacao đậm vị, hậu vị ngọt dịu.",image:"https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800",tag:""}
-];
-
-const defaultState={
- products:defaultProducts,orders:[],tableRequests:[],reviews:[],vouchers:[],
- followers:[],customers:[],notifications:[],admins:[{email:ADMIN_EMAIL,name:"Quản trị viên chính"}],
- cart:[],posCart:[],user:null,adminProfile:{name:"JUMJUM ADMIN",avatar:"images/jumjumshop.png"},
- emailSettings:{},theme:"light"
+// Chỉ dùng để thử nghiệm giao diện.
+// Không đặt mật khẩu thật trong JavaScript khi triển khai công khai.
+const CONFIG = {
+ adminEmail: "jumjumshop@gmail.com",
+ adminPassword: "THAY_BANG_MAT_KHAU_DEMO_RIENG",
+ shopName: "JUMJUM",
+ address: "Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long",
+ hotline: "0876.935.873",
+ facebook: "https://www.facebook.com/nhzt.wiie",
+ zalo: "https://zalo.me/0398476794",
+ map: "https://maps.app.goo.gl/9zAXofUzKNd6XVtP7"
 };
 
-function loadState(){
- try{
-  const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-  return saved?{...structuredClone(defaultState),...saved}:structuredClone(defaultState);
- }catch(e){return structuredClone(defaultState)}
+const DEFAULT_PRODUCTS = [
+ {id:"p1",name:"Trà Sữa Trân Châu Đường Đen",category:"Trà Sữa",price:25000,desc:"Sữa tươi béo nhẹ, trân châu đường đen dẻo thơm.",image:"https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=700&q=80"},
+ {id:"p2",name:"Trà Đào Cam Sả",category:"Trà Trái Cây",price:28000,desc:"Trà thanh mát kết hợp đào, cam và sả.",image:"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=700&q=80"},
+ {id:"p3",name:"Trà Mãng Cầu Tươi",category:"Trà Trái Cây",price:30000,desc:"Mãng cầu tươi chua ngọt hài hòa.",image:"https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=700&q=80"},
+ {id:"p4",name:"Mẹt Ăn Vặt Thập Cẩm",category:"Ăn Vặt",price:45000,desc:"Nhiều món ăn vặt hấp dẫn dùng kèm nước chấm.",image:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80"}
+];
+const DEFAULT_VOUCHERS = [
+ {code:"JUMJUM10",discount:10,label:"Giảm 10% cho đơn hàng"},
+ {code:"VINHLONG20",discount:20,label:"Ưu đãi đặc biệt giảm 20%"}
+];
+
+const $ = id => document.getElementById(id);
+const read = (key, fallback) => {
+ try {const v=localStorage.getItem("jumjum_"+key);return v===null?fallback:JSON.parse(v)}
+ catch(e){return fallback}
+};
+const save = (key,value) => localStorage.setItem("jumjum_"+key,JSON.stringify(value));
+const money = n => Number(n||0).toLocaleString("vi-VN")+" ₫";
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const escapeHTML = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let products=read("products",DEFAULT_PRODUCTS);
+let vouchers=read("vouchers",DEFAULT_VOUCHERS);
+let orders=read("orders",[]);
+let calls=read("calls",[]);
+let reviews=read("reviews",[]);
+let followers=read("followers",[]);
+let users=read("users",[]);
+let admins=read("admins",[{email:CONFIG.adminEmail,name:"Quản trị viên chính"}]);
+let currentUser=read("session",null);
+let cart=[];
+let posCart=[];
+let selectedRating=5;
+let authMode="customer";
+let currentAvatar="";
+let emailSettings=read("emailSettings",{publicKey:"",serviceId:"",templateId:"",receiver:""});
+
+function persist(){
+ save("products",products);save("orders",orders);save("calls",calls);
+ save("reviews",reviews);save("followers",followers);save("users",users);
+ save("admins",admins);save("session",currentUser);save("vouchers",vouchers);
 }
-let state=loadState();
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function toast(message){
- const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");
- clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove("show"),2600);
+ $("toast").textContent=message;$("toast").classList.add("show");
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2800);
 }
-function openModal(id){document.getElementById(id).classList.add("show")}
-function closeModal(id){document.getElementById(id).classList.remove("show")}
-function showTab(tab){
- document.getElementById("adminView").classList.add("hidden");
- document.getElementById("customerView").classList.remove("hidden");
- document.querySelectorAll("#customerView>section").forEach(s=>s.classList.add("hidden"));
- const target=document.getElementById("tab-"+tab);if(target)target.classList.remove("hidden");
- document.querySelectorAll(".navlinks button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
- if(tab==="menu")renderProducts();
- if(tab==="review")renderReviews();
- if(tab==="voucher")renderVouchers();
- if(tab==="notification")renderNotifications();
+function go(id){
+ if(id==="profile"&&!currentUser){openAuth();return}
+ if(id==="admin"&&currentUser?.role!=="admin"){openAuth("admin");return}
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ $(id)?.classList.add("active");
+ document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
  window.scrollTo({top:0,behavior:"smooth"});
+ if(id==="profile")loadProfile();
+ if(id==="admin")renderAdmin();
 }
 function toggleTheme(){
- document.body.classList.toggle("dark");
- state.theme=document.body.classList.contains("dark")?"dark":"light";saveState();
+ document.documentElement.classList.toggle("dark");
+ localStorage.setItem("jumjum_theme",document.documentElement.classList.contains("dark")?"dark":"light");
 }
-if(state.theme==="dark")document.body.classList.add("dark");
-
-function renderProducts(){
- const categories=["Tất cả",...new Set(state.products.map(p=>p.category))];
- const filter=document.getElementById("categoryFilters");
- if(filter)filter.innerHTML=categories.map(c=>`<button class="chip ${currentCategory===c?"active":""}" onclick="setCategory('${escapeHTML(c)}')">${escapeHTML(c)}</button>`).join("");
- const keyword=(document.getElementById("productSearch")?.value||"").toLowerCase();
- const items=state.products.filter(p=>(currentCategory==="Tất cả"||p.category===currentCategory)&&(p.name.toLowerCase().includes(keyword)||p.desc.toLowerCase().includes(keyword)));
- const html=items.map(p=>productCard(p)).join("")||"<p class='muted'>Không tìm thấy sản phẩm.</p>";
- document.getElementById("productGrid").innerHTML=html;
-}
-let currentCategory="Tất cả";
-function setCategory(c){currentCategory=c;renderProducts()}
-function productCard(p){
- return `<article class="card product">
- <div class="product-image"><img loading="lazy" src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" onerror="this.src='images/jumjumshop.png'">${p.tag?`<span class="product-tag">${escapeHTML(p.tag)}</span>`:""}</div>
- <div class="product-content"><h3>${escapeHTML(p.name)}</h3><p>${escapeHTML(p.desc)}</p>
- <div class="product-bottom"><span class="price">${money(p.price)}</span><button class="add-btn" onclick="addToCart('${p.id}')" aria-label="Thêm vào giỏ">＋</button></div></div></article>`;
-}
-function renderFeatured(){
- document.getElementById("featuredProducts").innerHTML=state.products.slice(0,4).map(productCard).join("");
-}
-function addToCart(id){
- const p=state.products.find(x=>x.id===id);if(!p)return;
- const item=state.cart.find(x=>x.id===id);
- if(item)item.qty++;else state.cart.push({id:p.id,name:p.name,price:p.price,qty:1});
- saveState();updateCart();toast("Đã thêm "+p.name+" vào giỏ hàng.");
-}
-function updateCart(){
- const count=state.cart.reduce((a,x)=>a+x.qty,0);
- document.getElementById("cartCount").textContent=count;
- document.getElementById("cartItems").innerHTML=state.cart.length?state.cart.map(x=>`
- <div class="cart-line"><div><b>${escapeHTML(x.name)}</b><div class="small muted">${money(x.price)}</div></div>
- <div class="qty"><button onclick="changeQty('${x.id}',-1)">−</button>${x.qty}<button onclick="changeQty('${x.id}',1)">＋</button></div>
- <b>${money(x.price*x.qty)}</b></div>`).join(""):"<p class='muted'>Giỏ hàng đang trống.</p>";
- document.getElementById("cartSubtotal").textContent=money(cartTotal());
-}
-function cartTotal(){return state.cart.reduce((a,x)=>a+x.price*x.qty,0)}
-function changeQty(id,delta){
- const x=state.cart.find(i=>i.id===id);if(!x)return;
- x.qty+=delta;if(x.qty<=0)state.cart=state.cart.filter(i=>i.id!==id);
- saveState();updateCart();
-}
-function openCart(){updateCart();openModal("cartModal")}
-function openCheckout(){
- if(!state.cart.length)return toast("Giỏ hàng đang trống.");
- if(state.user){
-  document.getElementById("checkoutName").value=state.user.name||"";
-  document.getElementById("checkoutPhone").value=state.user.phone||"";
-  document.getElementById("checkoutEmail").value=state.user.email||"";
-  document.getElementById("checkoutAddress").value=state.user.address||"";
- }
- document.getElementById("checkoutTotal").textContent=money(cartTotal());
- closeModal("cartModal");openModal("checkoutModal");
-}
-function placeOrder(){
- const name=document.getElementById("checkoutName").value.trim();
- const phone=document.getElementById("checkoutPhone").value.trim();
- const email=document.getElementById("checkoutEmail").value.trim();
- const address=document.getElementById("checkoutAddress").value.trim();
- if(!name||!phone||!address)return toast("Vui lòng nhập tên, số điện thoại và địa chỉ.");
- let total=cartTotal(),voucherCode=document.getElementById("checkoutVoucher").value.trim().toUpperCase();
- const voucher=state.vouchers.find(v=>v.code===voucherCode&&!v.used&&v.expires>Date.now());
- if(voucher){total=Math.round(total*(1-voucher.discount/100));voucher.used=true;}
- const order={
-  id:"JJ"+Date.now().toString().slice(-8),date:new Date().toISOString(),customer:name,phone,email,address,
-  note:document.getElementById("checkoutNote").value,
-  payment:document.getElementById("checkoutPayment").value,
-  items:state.cart.map(x=>({...x})),total,status:"Chờ xác nhận",source:"Online"
- };
- state.orders.unshift(order);
- if(!state.customers.some(c=>c.email===email&&email))state.customers.push({name,phone,email,address});
- state.cart=[];saveState();updateCart();closeModal("checkoutModal");
- addNotification("Đặt hàng thành công","Đơn hàng "+order.id+" đã được gửi đến JUMJUM.");
- sendOrderEmail(order);toast("Đặt hàng thành công! Mã đơn: "+order.id);renderAdmin();
-}
-function addNotification(title,message){
- state.notifications.unshift({id:uid(),title,message,date:new Date().toISOString()});saveState();
-}
-function renderNotifications(){
- const el=document.getElementById("userNotifications");
- el.innerHTML=state.notifications.length?state.notifications.map(n=>`<div class="data-row"><div><b>${escapeHTML(n.title)}</b><p class="muted">${escapeHTML(n.message)}</p><small>${new Date(n.date).toLocaleString("vi-VN")}</small></div></div>`).join(""):"Chưa có thông báo.";
-}
-
-function sendTableRequest(){
- const code=document.getElementById("tableCode").value.trim();
- if(!/^\d{3}$/.test(code))return toast("Mã bàn phải gồm đúng 3 chữ số.");
- const request={id:uid(),code,name:document.getElementById("tableCustomer").value||"Khách tại bàn",type:document.getElementById("tableRequest").value,note:document.getElementById("tableNote").value,date:new Date().toISOString(),status:"Chưa xử lý"};
- state.tableRequests.unshift(request);saveState();renderTableRequests();
- addNotification("Yêu cầu tại bàn","Yêu cầu của bàn "+code+" đã được tiếp nhận.");
- toast("Đã gửi yêu cầu đến quầy JUMJUM.");
-}
-function renderTableRequests(){
- const mine=document.getElementById("myTableRequests");
- if(mine)mine.innerHTML=state.tableRequests.slice(0,5).map(r=>`<div class="data-row"><div><b>Bàn ${r.code}</b><p>${escapeHTML(r.type)}</p><small class="muted">${new Date(r.date).toLocaleString("vi-VN")}</small></div><span class="status">${escapeHTML(r.status)}</span></div>`).join("")||"Chưa có yêu cầu.";
- const admin=document.getElementById("adminTableRequests");
- if(admin)admin.innerHTML=state.tableRequests.map(r=>`<div class="data-row"><div><b>Bàn ${r.code} · ${escapeHTML(r.type)}</b><p class="muted">${escapeHTML(r.name)} — ${escapeHTML(r.note)}</p><small>${new Date(r.date).toLocaleString("vi-VN")}</small></div><div class="inline-actions"><span class="status">${escapeHTML(r.status)}</span><button onclick="completeTableRequest('${r.id}')">Hoàn tất</button></div></div>`).join("")||"Không có yêu cầu.";
-}
-function completeTableRequest(id){
- const r=state.tableRequests.find(x=>x.id===id);if(!r)return;r.status="Đã xử lý";saveState();renderTableRequests();toast("Đã cập nhật yêu cầu.");
-}
-
-function claimVoucher(){
- const code="JUM"+Math.random().toString(36).slice(2,7).toUpperCase();
- const hours=24+Math.floor(Math.random()*49);
- state.vouchers.push({id:uid(),code,discount:10,expires:Date.now()+hours*3600000,used:false,created:Date.now()});
- saveState();renderVouchers();toast("Đã nhận voucher "+code+" · hạn "+hours+" giờ.");
-}
-function renderVouchers(){
- const active=state.vouchers.filter(v=>v.expires>Date.now());
- document.getElementById("voucherList").innerHTML=active.filter(v=>!v.used).map(v=>`<div class="card" style="padding:18px"><span class="badge">Ưu đãi 10%</span><h3>${v.code}</h3><p class="small muted">Hạn dùng: ${new Date(v.expires).toLocaleString("vi-VN")}</p><button class="btn secondary" onclick="copyText('${v.code}')">Sao chép mã</button></div>`).join("")||"<p class='muted'>Chưa có voucher khả dụng.</p>";
- document.getElementById("savedVoucherList").innerHTML=state.vouchers.map(v=>`<div class="card" style="padding:15px"><b>${v.code}</b><p class="small muted">${v.used?"Đã sử dụng":v.expires<Date.now()?"Đã hết hạn":"Còn hiệu lực"}</p></div>`).join("");
-}
-function copyText(text){
- if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast("Đã sao chép."));
- else toast("Trình duyệt không hỗ trợ sao chép tự động.");
-}
-
-function submitReview(){
- const name=document.getElementById("reviewName").value.trim()||state.user?.name||"Khách hàng";
- const comment=document.getElementById("reviewComment").value.trim();
- const rating=Number(document.getElementById("reviewRating").value);
- const file=document.getElementById("reviewImage").files[0];
- if(!comment)return toast("Vui lòng nhập nội dung đánh giá.");
- const saveReview=image=>{
-  state.reviews.unshift({id:uid(),name,comment,rating,image:image||"",date:new Date().toISOString()});
-  saveState();renderReviews();document.getElementById("reviewComment").value="";document.getElementById("reviewImage").value="";
-  toast("Cảm ơn bạn đã đánh giá JUMJUM.");
- };
- if(file){
-  const reader=new FileReader();reader.onload=()=>saveReview(reader.result);reader.readAsDataURL(file);
- }else saveReview("");
-}
-function renderReviews(){
- const html=state.reviews.map(r=>`<div class="panel-card"><div style="display:flex;justify-content:space-between;gap:12px"><b>${escapeHTML(r.name)}</b><span class="star">${"★".repeat(Math.floor(r.rating))}${r.rating%1?"½":""}</span></div><p>${escapeHTML(r.comment)}</p>${r.image?`<img src="${r.image}" alt="Ảnh đánh giá" style="width:150px;border-radius:12px">`:""}<p class="small muted">${new Date(r.date).toLocaleString("vi-VN")}</p></div>`).join("");
- document.getElementById("reviewList").innerHTML=html||"<p class='muted'>Chưa có đánh giá.</p>";
- const admin=document.getElementById("adminReviewList");if(admin)admin.innerHTML=html||"Chưa có đánh giá.";
-}
-
-function toggleFollow(){
- const email=state.user?.email||"guest-"+(localStorage.getItem("jumjum_guest_id")||(localStorage.setItem("jumjum_guest_id",uid()),localStorage.getItem("jumjum_guest_id")));
- const exists=state.followers.some(x=>x.id===email);
- if(exists)state.followers=state.followers.filter(x=>x.id!==email);
- else state.followers.push({id:email,name:state.user?.name||"Khách ghé thăm",date:new Date().toISOString()});
- saveState();renderFollowerCount();toast(exists?"Đã bỏ theo dõi.":"Đã theo dõi JUMJUM.");
-}
-function renderFollowerCount(){
- document.getElementById("followerText").textContent=state.followers.length+" người theo dõi";
- const el=document.getElementById("adminFollowers");
- if(el)el.innerHTML=state.followers.map(f=>`<div class="data-row"><div><b>${escapeHTML(f.name)}</b><p class="small muted">${escapeHTML(f.id)}</p></div><button class="btn secondary" onclick="removeFollower('${encodeURIComponent(f.id)}')">Xóa</button></div>`).join("")||"Chưa có người theo dõi.";
-}
-function removeFollower(id){
- const key=decodeURIComponent(id);state.followers=state.followers.filter(f=>f.id!==key);saveState();renderFollowerCount();
-}
-
-function openAuth(){openModal("authModal")}
-function registerCustomer(){
- const email=document.getElementById("authEmail").value.trim().toLowerCase();
- const password=document.getElementById("authPassword").value;
- if(!email||password.length<6)return toast("Nhập email và mật khẩu tối thiểu 6 ký tự.");
- const user={email,name:email.split("@")[0],phone:"",address:"",payment:"COD",avatar:""};
- state.user=user;saveState();closeModal("authModal");updateHeader();toast("Đã tạo hồ sơ trên thiết bị này.");
-}
-function loginCustomer(){
- const email=document.getElementById("authEmail").value.trim().toLowerCase();
- const password=document.getElementById("authPassword").value;
- if(!email||!password)return toast("Vui lòng nhập email và mật khẩu.");
- if(email===ADMIN_EMAIL.toLowerCase())return toast("Tài khoản này dành cho quản trị viên.");
- state.user={...(state.user||{}),email,name:state.user?.name||email.split("@")[0],phone:state.user?.phone||"",address:state.user?.address||"",avatar:state.user?.avatar||""};
- saveState();closeModal("authModal");updateHeader();toast("Đăng nhập thành công trên thiết bị này.");
-}
-function loginAdmin(){
- const email=document.getElementById("authEmail").value.trim().toLowerCase();
- const password=document.getElementById("authPassword").value;
- if(email!==ADMIN_EMAIL.toLowerCase()||password!==ADMIN_DEMO_PASSWORD)return toast("Thông tin quản trị không hợp lệ. Hãy cấu hình xác thực trước khi sử dụng.");
- closeModal("authModal");document.getElementById("customerView").classList.add("hidden");
- document.getElementById("adminView").classList.remove("hidden");renderAdmin();toast("Đã mở giao diện quản trị.");
-}
-function updateHeader(){
- document.getElementById("headerUserName").textContent=state.user?.name||"Tài khoản";
-}
-function openProfile(){
- if(!state.user){openAuth();return}
- document.getElementById("profileName").value=state.user.name||"";
- document.getElementById("profilePhone").value=state.user.phone||"";
- document.getElementById("profileEmail").value=state.user.email||"";
- document.getElementById("profileAddress").value=state.user.address||"";
- document.getElementById("profilePayment").value=state.user.payment||"COD";
- openModal("profileModal");
-}
-function saveProfile(){
- if(!state.user)return;
- Object.assign(state.user,{
-  name:document.getElementById("profileName").value.trim(),
-  phone:document.getElementById("profilePhone").value.trim(),
-  email:document.getElementById("profileEmail").value.trim(),
-  address:document.getElementById("profileAddress").value.trim(),
-  payment:document.getElementById("profilePayment").value
- });
- const file=document.getElementById("profileAvatar").files[0];
- const done=()=>{saveState();updateHeader();closeModal("profileModal");toast("Đã lưu hồ sơ.");};
- if(file){const reader=new FileReader();reader.onload=()=>{state.user.avatar=reader.result;done()};reader.readAsDataURL(file)}else done();
+if(localStorage.getItem("jumjum_theme")==="dark")document.documentElement.classList.add("dark");
+function openModal(id){$(id).classList.add("show")}
+function closeModal(id){$(id).classList.remove("show")}
+function openAuth(mode){
+ authMode=mode||"customer";$("authEmail").value="";$("authPassword").value="";$("authName").value="";
+ openModal("authModal");
 }
 function logout(){
- state.user=null;saveState();updateHeader();closeModal("profileModal");toast("Đã đăng xuất.");
+ currentUser=null;save("session",null);toast("Đã đăng xuất.");
+ go("home");
+}
+function login(){
+ const email=$("authEmail").value.trim().toLowerCase();
+ const password=$("authPassword").value;
+ const name=$("authName").value.trim();
+ if(!email||!password)return toast("Vui lòng nhập email và mật khẩu.");
+ if(authMode==="admin"){
+  if(email!==CONFIG.adminEmail||password!==CONFIG.adminPassword){
+   return toast("Thông tin quản trị không chính xác. Hãy kiểm tra cấu hình.");
+  }
+  currentUser={role:"admin",email,name:"Quản trị viên chính",avatar:"images/jumjumshop.png"};
+ }else{
+  let user=users.find(u=>u.email===email);
+  if(!user){
+   user={id:uid(),email,name:name||email.split("@")[0],phone:"",address:"",payment:"COD",avatar:""};
+   users.push(user);
+  }
+  currentUser={...user,role:"customer"};
+  save("users",users);
+ }
+ save("session",currentUser);closeModal("authModal");toast("Đăng nhập thành công!");
+ if(currentUser.role==="admin")go("admin");else go("profile");
+}
+function requireCustomer(){
+ if(!currentUser||currentUser.role!=="customer"){openAuth();toast("Vui lòng đăng nhập tài khoản khách hàng.");return false}
+ return true;
+}
+function followShop(){
+ if(!requireCustomer())return;
+ const index=followers.findIndex(f=>f.email===currentUser.email);
+ if(index>=0){followers.splice(index,1);toast("Đã bỏ theo dõi JUMJUM.");}
+ else{followers.push({email:currentUser.email,name:currentUser.name,date:new Date().toISOString()});toast("Cảm ơn bạn đã theo dõi JUMJUM!");}
+ persist();renderHome();
 }
 
-function switchAdminTab(tab,button){
- document.querySelectorAll(".admin-panel").forEach(p=>p.classList.remove("active"));
- document.getElementById("admin-"+tab).classList.add("active");
- document.querySelectorAll(".admin-side button").forEach(b=>b.classList.remove("active"));
- if(button)button.classList.add("active");
- renderAdmin();
+/* ======================= THỰC ĐƠN ======================= */
+function renderProducts(){
+ const query=($("searchProduct")?.value||"").toLowerCase();
+ const category=$("categoryFilter")?.value||"";
+ const list=products.filter(p=>(p.name+" "+p.desc).toLowerCase().includes(query)&&(!category||p.category===category));
+ $("productList").innerHTML=list.map(productCard).join("")||'<p class="muted">Không tìm thấy món phù hợp.</p>';
 }
-function exitAdmin(){
- document.getElementById("adminView").classList.add("hidden");
- document.getElementById("customerView").classList.remove("hidden");showTab("home");
+function productCard(p){
+ return `<article class="glass product">
+ <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" loading="lazy" onerror="this.src='images/jumjumshop.png'">
+ <div class="product-body">
+  <span class="badge">${escapeHTML(p.category)}</span>
+  <h3 class="font-extrabold mt-2">${escapeHTML(p.name)}</h3>
+  <p class="muted text-xs mt-2">${escapeHTML(p.desc||"")}</p>
+  <div class="row mt-4"><span class="price">${money(p.price)}</span>
+  <button class="btn" onclick="addCart('${p.id}')"><i class="fa-solid fa-plus"></i> Thêm</button></div>
+ </div></article>`;
 }
-function renderAdmin(){
- const revenue=state.orders.filter(o=>o.status==="Hoàn thành").reduce((a,o)=>a+o.total,0);
- document.getElementById("statOrders").textContent=state.orders.length;
- document.getElementById("statRevenue").textContent=money(revenue);
- document.getElementById("statCustomers").textContent=state.customers.length;
- document.getElementById("statFollowers").textContent=state.followers.length;
- document.getElementById("recentOrders").innerHTML=state.orders.slice(0,5).map(o=>`<div class="data-row"><div><b>${o.id}</b><p class="small muted">${escapeHTML(o.customer)} · ${new Date(o.date).toLocaleString("vi-VN")}</p></div><b>${money(o.total)}</b></div>`).join("")||"Chưa có đơn hàng.";
- document.getElementById("adminOrders").innerHTML=state.orders.map(o=>`<tr><td>${o.id}</td><td>${escapeHTML(o.customer)}<br><small>${escapeHTML(o.phone)}</small></td><td>${o.items.map(i=>escapeHTML(i.name)+" × "+i.qty).join("<br>")}</td><td>${money(o.total)}</td><td>${escapeHTML(o.payment)}</td><td><span class="status ${o.status==="Hoàn thành"?"done":"pending"}">${o.status}</span></td><td><div class="inline-actions"><button onclick="markOrderDone('${o.id}')">Hoàn tất</button><button onclick="showInvoice('${o.id}')">Hóa đơn</button></div></td></tr>`).join("");
- document.getElementById("customerList").innerHTML=state.customers.map(c=>`<tr><td>${escapeHTML(c.name)}</td><td>${escapeHTML(c.email)}</td><td>${escapeHTML(c.phone)}</td><td>${escapeHTML(c.address)}</td><td>${state.orders.filter(o=>o.email===c.email).length}</td></tr>`).join("");
- document.getElementById("adminProductList").innerHTML=state.products.map(p=>`<div class="data-row"><div><b>${escapeHTML(p.name)}</b><p class="small muted">${money(p.price)} · ${escapeHTML(p.category)}</p></div><div class="inline-actions"><button onclick="editProduct('${p.id}')">Sửa</button><button onclick="deleteProduct('${p.id}')">Xóa</button></div></div>`).join("");
- document.getElementById("posProducts").innerHTML=state.products.map(p=>`<div class="card" style="padding:10px"><b>${escapeHTML(p.name)}</b><p class="price">${money(p.price)}</p><button class="btn secondary" onclick="addPos('${p.id}')">＋ Chọn món</button></div>`).join("");
- document.getElementById("adminAccountList").innerHTML=state.admins.map(a=>`<div class="data-row"><div><b>${escapeHTML(a.name)}</b><p class="small muted">${escapeHTML(a.email)}</p></div></div>`).join("");
- renderTableRequests();renderFollowerCount();renderReviews();renderPosCart();renderDailyStats();
+function addCart(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ const found=cart.find(x=>x.id===id);
+ if(found)found.qty++;else cart.push({...p,qty:1});
+ updateCart();toast("Đã thêm món vào giỏ hàng.");
 }
-function markOrderDone(id){
- const o=state.orders.find(x=>x.id===id);if(!o)return;o.status="Hoàn thành";saveState();renderAdmin();toast("Đã hoàn thành đơn hàng.");
+function updateCart(){
+ $("cartCount").textContent=cart.reduce((a,b)=>a+b.qty,0);
 }
-function showInvoice(id){
- const o=state.orders.find(x=>x.id===id);if(!o)return;
- document.getElementById("invoiceContent").innerHTML=`<div style="text-align:center"><img src="images/jumjumshop.png" width="65" style="border-radius:50%"><h2>JUMJUM</h2><p>HÓA ĐƠN THANH TOÁN</p></div><hr>
- <p><b>Mã đơn:</b> ${o.id}</p><p><b>Thời gian:</b> ${new Date(o.date).toLocaleString("vi-VN")}</p>
- <p><b>Khách hàng:</b> ${escapeHTML(o.customer)}</p><p><b>SĐT:</b> ${escapeHTML(o.phone)}</p><p><b>Địa chỉ:</b> ${escapeHTML(o.address)}</p><p><b>Email:</b> ${escapeHTML(o.email)}</p>
- <p><b>Thanh toán:</b> ${escapeHTML(o.payment)}</p><hr>
- ${o.items.map(i=>`<div class="data-row"><span>${escapeHTML(i.name)} × ${i.qty}</span><b>${money(i.price*i.qty)}</b></div>`).join("")}
- <div class="total-line"><span>Tổng thanh toán</span><span>${money(o.total)}</span></div><p class="small muted">Cảm ơn quý khách đã lựa chọn JUMJUM.</p>`;
+function openCart(){
+ renderCart();openModal("cartModal");
+}
+function renderCart(){
+ $("cartItems").innerHTML=cart.map((p,i)=>`
+ <div class="item-row">
+  <img src="${escapeHTML(p.image)}" alt="">
+  <div class="flex-1 min-w-0"><b>${escapeHTML(p.name)}</b><p class="price">${money(p.price)}</p></div>
+  <div class="toolbar">
+   <button class="btn-soft" onclick="changeQty(${i},-1)">−</button><b>${p.qty}</b>
+   <button class="btn-soft" onclick="changeQty(${i},1)">+</button>
+  </div>
+ </div>`).join("")||'<p class="muted">Giỏ hàng đang trống.</p>';
+ $("cartTotal").textContent=money(cart.reduce((s,p)=>s+p.price*p.qty,0));
+ const voucherList=currentUser?.vouchers||[];
+ $("orderVoucher").innerHTML='<option value="">Không sử dụng voucher</option>'+voucherList.map(v=>`<option value="${escapeHTML(v.code)}">${escapeHTML(v.code)} — ${v.discount}%</option>`).join("");
+ if(currentUser){
+  $("orderName").value=currentUser.name||"";
+  $("orderPhone").value=currentUser.phone||"";
+  $("orderEmail").value=currentUser.email||"";
+  $("orderAddress").value=currentUser.address||"";
+ }
+}
+function changeQty(i,n){
+ if(!cart[i])return;cart[i].qty+=n;if(cart[i].qty<=0)cart.splice(i,1);
+ renderCart();updateCart();
+}
+$("orderPayment").addEventListener("change",()=>{
+ const p=$("orderPayment").value;
+ $("paymentExtra").textContent=p==="COD"?"Thanh toán khi nhận hàng.":p==="Chuyển khoản ngân hàng"?"Quét QR hoặc chuyển khoản theo thông tin cửa hàng cung cấp.":"Thanh toán qua ví điện tử được cửa hàng hỗ trợ.";
+});
+function placeOrder(){
+ if(!cart.length)return toast("Giỏ hàng đang trống.");
+ const name=$("orderName").value.trim(),phone=$("orderPhone").value.trim();
+ const address=$("orderAddress").value.trim(),email=$("orderEmail").value.trim();
+ if(!name||!phone||!address)return toast("Vui lòng điền tên, số điện thoại và địa chỉ.");
+ let subtotal=cart.reduce((s,p)=>s+p.price*p.qty,0);
+ const voucherCode=$("orderVoucher").value;
+ const voucher=currentUser?.vouchers?.find(v=>v.code===voucherCode);
+ const discount=voucher&&new Date(voucher.expires)>new Date()?Math.round(subtotal*voucher.discount/100):0;
+ const order={
+  id:"JJ"+Date.now(),date:new Date().toISOString(),name,phone,email,address,
+  note:$("orderNote").value,payMethod:$("orderPayment").value,
+  voucher:voucherCode||"Không áp dụng",items:cart.map(p=>({...p})),
+  subtotal,discount,total:subtotal-discount,status:"Chờ xác nhận",
+  customerEmail:currentUser?.email||email
+ };
+ orders.unshift(order);persist();cart=[];updateCart();
+ closeModal("cartModal");renderMyCalls();sendOrderEmail(order);
+ showInvoice(order);toast("Đặt hàng thành công!");
+}
+function showInvoice(o){
+ $("invoiceContent").innerHTML=`
+ <div class="text-center"><img src="images/jumjumshop.png" class="w-16 h-16 rounded-full mx-auto"><h3 class="font-extrabold text-xl">JUMJUM</h3><p class="muted">HÓA ĐƠN ĐẶT HÀNG</p></div>
+ <p class="mt-4">Mã đơn: <b>${escapeHTML(o.id)}</b></p>
+ <p>Thời gian: ${new Date(o.date).toLocaleString("vi-VN")}</p>
+ <p>Khách hàng: ${escapeHTML(o.name)}</p><p>SĐT: ${escapeHTML(o.phone)}</p>
+ <p>Địa chỉ: ${escapeHTML(o.address)}</p><hr class="my-3">
+ ${o.items.map(p=>`<div class="row"><span>${escapeHTML(p.name)} × ${p.qty}</span><b>${money(p.price*p.qty)}</b></div>`).join("")}
+ <hr class="my-3"><div class="row"><span>Tạm tính</span><b>${money(o.subtotal)}</b></div>
+ <div class="row"><span>Giảm giá</span><b>-${money(o.discount)}</b></div>
+ <div class="row text-lg mt-2"><b>Tổng cộng</b><b class="price">${money(o.total)}</b></div>
+ <p class="mt-3">Thanh toán: ${escapeHTML(o.payMethod)}</p><p>Trạng thái: ${escapeHTML(o.status)}</p>`;
  openModal("invoiceModal");
 }
-function addProduct(){
- const name=document.getElementById("newProductName").value.trim();
- const price=Number(document.getElementById("newProductPrice").value);
- const category=document.getElementById("newProductCategory").value.trim()||"Khác";
- const image=document.getElementById("newProductImage").value.trim()||"images/jumjumshop.png";
- const desc=document.getElementById("newProductDesc").value.trim();
- if(!name||price<=0)return toast("Vui lòng nhập tên món và giá hợp lệ.");
- state.products.push({id:uid(),name,price,category,image,desc,tag:"Mới"});
- saveState();renderAdmin();renderProducts();toast("Đã thêm món mới.");
+
+/* ======================= VOUCHER ======================= */
+function renderVouchers(){
+ $("voucherList").innerHTML=vouchers.map(v=>`
+ <div class="glass card">
+  <div class="row"><span class="badge">JUMJUM SPECIAL</span><b class="text-2xl price">${v.discount}% OFF</b></div>
+  <h3 class="font-extrabold text-xl mt-3">${escapeHTML(v.code)}</h3>
+  <p class="muted text-sm mt-1">${escapeHTML(v.label||"Ưu đãi dành cho khách hàng JUMJUM")}</p>
+  <button class="btn mt-4" onclick="claimVoucher('${v.code}')">Nhận voucher</button>
+ </div>`).join("");
+ renderMyVouchers();
 }
-function deleteProduct(id){
- if(!confirm("Bạn muốn xóa món này khỏi thực đơn?"))return;
- state.products=state.products.filter(p=>p.id!==id);saveState();renderAdmin();renderProducts();
+function claimVoucher(code){
+ if(!requireCustomer())return;
+ currentUser.vouchers=currentUser.vouchers||[];
+ if(currentUser.vouchers.some(v=>v.code===code))return toast("Bạn đã nhận voucher này.");
+ const v=vouchers.find(x=>x.code===code);if(!v)return;
+ const hours=24+Math.floor(Math.random()*49);
+ const expires=new Date(Date.now()+hours*3600000).toISOString();
+ currentUser.vouchers.push({...v,expires});
+ updateCurrentUser();persist();renderMyVouchers();toast("Đã lưu voucher vào tài khoản!");
 }
-function editProduct(id){
- const p=state.products.find(x=>x.id===id);if(!p)return;
- const name=prompt("Tên món:",p.name);if(name===null)return;
- const price=Number(prompt("Giá bán:",p.price));if(!price)return;
- const image=prompt("URL ảnh:",p.image);if(image===null)return;
- p.name=name;p.price=price;p.image=image;saveState();renderAdmin();renderProducts();toast("Đã cập nhật món.");
-}
-function addAdmin(){
- const email=document.getElementById("newAdminEmail").value.trim().toLowerCase();
- const name=document.getElementById("newAdminName").value.trim()||"Quản trị viên";
- if(!email||!email.includes("@"))return toast("Email không hợp lệ.");
- if(state.admins.some(a=>a.email===email))return toast("Email đã tồn tại.");
- state.admins.push({email,name});saveState();renderAdmin();toast("Đã thêm vào danh sách quản trị.");
-}
-function sendBroadcast(){
- const message=document.getElementById("broadcastMessage").value.trim();
- if(!message)return toast("Vui lòng nhập nội dung thông báo.");
- addNotification("Thông báo từ JUMJUM",message);
- toast("Đã lưu thông báo trên thiết bị này.");
- document.getElementById("broadcastMessage").value="";
-}
-function saveAdminProfile(){
- state.adminProfile.name=document.getElementById("adminProfileName").value||"JUMJUM ADMIN";
- state.adminProfile.phone=document.getElementById("adminProfilePhone").value;
- state.adminProfile.email=document.getElementById("adminProfileEmail").value;
- state.adminProfile.address=document.getElementById("adminProfileAddress").value;
- const file=document.getElementById("adminProfileImage").files[0];
- const done=()=>{saveState();document.getElementById("adminDisplayName").textContent=state.adminProfile.name;document.getElementById("adminAvatar").src=state.adminProfile.avatar;toast("Đã lưu hồ sơ quản trị.");};
- if(file){const reader=new FileReader();reader.onload=()=>{state.adminProfile.avatar=reader.result;done()};reader.readAsDataURL(file)}else done();
-}
-function addPos(id){
- const p=state.products.find(x=>x.id===id);if(!p)return;
- const item=state.posCart.find(x=>x.id===id);
- if(item)item.qty++;else state.posCart.push({id:p.id,name:p.name,price:p.price,qty:1});
- saveState();renderPosCart();
-}
-function renderPosCart(){
- const el=document.getElementById("posCart");if(!el)return;
- el.innerHTML=state.posCart.map(x=>`<div class="cart-line"><span>${escapeHTML(x.name)} × ${x.qty}</span><b>${money(x.price*x.qty)}</b><button class="close" onclick="removePos('${x.id}')">×</button></div>`).join("")||"Chưa chọn món.";
- document.getElementById("posTotal").textContent=money(state.posCart.reduce((a,x)=>a+x.price*x.qty,0));
-}
-function removePos(id){state.posCart=state.posCart.filter(x=>x.id!==id);saveState();renderPosCart()}
-function updatePosChange(){
- const total=state.posCart.reduce((a,x)=>a+x.price*x.qty,0);
- const cash=Number(document.getElementById("posCash").value)||0;
- document.getElementById("posChange").textContent="Tiền thừa: "+money(Math.max(0,cash-total));
-}
-function completePosOrder(){
- if(!state.posCart.length)return toast("Chưa có sản phẩm trong hóa đơn.");
- const total=state.posCart.reduce((a,x)=>a+x.price*x.qty,0);
- const order={id:"POS"+Date.now().toString().slice(-7),date:new Date().toISOString(),customer:"Khách mua tại quầy",phone:"",email:"",address:"Tại cửa hàng",items:state.posCart.map(x=>({...x})),total,payment:document.getElementById("posPayment").value,status:"Hoàn thành",source:"POS"};
- state.orders.unshift(order);state.posCart=[];saveState();renderAdmin();toast("Đã hoàn tất hóa đơn tại quầy.");showInvoice(order.id);
-}
-function renderDailyStats(){
- const todayOrders=state.orders.filter(o=>new Date(o.date).toDateString()===new Date().toDateString());
- const counts={};todayOrders.forEach(o=>o.items.forEach(i=>counts[i.name]=(counts[i.name]||0)+i.qty));
- document.getElementById("dailyStats").innerHTML=Object.keys(counts).map(k=>`<div class="data-row"><span>${escapeHTML(k)}</span><b>${counts[k]} món</b></div>`).join("")||"Chưa có dữ liệu hôm nay.";
+function renderMyVouchers(){
+ const list=currentUser?.vouchers||[];
+ $("myVouchers").innerHTML=list.map(v=>`
+ <div class="item-row"><div class="flex-1"><b>${escapeHTML(v.code)}</b><p class="muted small">${v.discount}% giảm giá</p></div>
+ <span class="badge">${new Date(v.expires)>new Date()?"Còn hạn":"Hết hạn"}</span>
+ <span class="small muted">${new Date(v.expires).toLocaleString("vi-VN")}</span></div>`).join("")||'<p class="muted small">Bạn chưa nhận voucher nào.</p>';
 }
 
-function saveEmailSettings(){
- state.emailSettings={
-  publicKey:document.getElementById("emailPublicKey").value.trim(),
-  serviceId:document.getElementById("emailServiceId").value.trim(),
-  templateId:document.getElementById("emailTemplateId").value.trim(),
-  receiver:document.getElementById("emailReceiver").value.trim()
+/* ======================= GỌI PHỤC VỤ ======================= */
+function sendTableCall(){
+ const code=$("tableCode").value.trim();
+ if(!/^\d{3}$/.test(code))return toast("Mã bàn phải gồm đúng 3 chữ số.");
+ const call={id:uid(),tableCode:code,type:$("serviceType").value,note:$("serviceNote").value,
+  customer:currentUser?.name||"Khách tại bàn",email:currentUser?.email||"",date:new Date().toISOString(),done:false};
+ calls.unshift(call);save("calls",calls);
+ $("serviceNote").value="";renderMyCalls();toast("Yêu cầu đã được gửi đến hệ thống.");
+}
+function renderMyCalls(){
+ $("myTableCalls").innerHTML=calls.slice(0,8).map(c=>`
+ <div class="item-row"><div class="flex-1"><b>Bàn ${escapeHTML(c.tableCode)} — ${escapeHTML(c.type)}</b><p class="muted small">${escapeHTML(c.note||"Không có ghi chú")}</p></div>
+ <span class="badge">${c.done?"Đã xử lý":"Đang chờ"}</span></div>`).join("")||'<p class="muted">Chưa có yêu cầu.</p>';
+}
+
+/* ======================= ĐÁNH GIÁ ======================= */
+$("ratingStars").addEventListener("click",e=>{
+ const star=e.target.closest("[data-rating]");if(!star)return;
+ const rect=star.getBoundingClientRect(),half=e.clientX<rect.left+rect.width/2;
+ selectedRating=Number(star.dataset.rating)-(half?.5:0);
+ selectedRating=Math.max(.5,selectedRating);renderRating();
+});
+function renderRating(){
+ document.querySelectorAll("#ratingStars .star").forEach(s=>{
+  const n=Number(s.dataset.rating);
+  s.className=n<=selectedRating?"fa-solid fa-star star":"fa-regular fa-star star";
+ });
+}
+function renderReviews(){
+ const html=reviews.map(r=>`
+ <article class="glass card">
+  <div class="row"><b>${escapeHTML(r.name)}</b><span class="small muted">${new Date(r.date).toLocaleDateString("vi-VN")}</span></div>
+  <div class="text-amber-400 mt-2">${"★".repeat(Math.floor(r.rating))}${r.rating%1?"½":""}</div>
+  <p class="text-sm mt-2">${escapeHTML(r.comment)}</p>
+  ${r.image?`<img src="${r.image}" class="mt-3 rounded-xl max-h-56 object-cover" alt="Ảnh đánh giá">`:""}
+ </article>`).join("");
+ $("reviewList").innerHTML=html||'<p class="muted">Chưa có đánh giá.</p>';
+}
+function submitReview(){
+ const name=$("reviewName").value.trim()||currentUser?.name||"Khách hàng";
+ const comment=$("reviewComment").value.trim();
+ if(!comment)return toast("Vui lòng nhập nội dung đánh giá.");
+ const file=$("reviewImage").files[0];
+ const finish=image=>{
+  reviews.unshift({id:uid(),name,rating:selectedRating,comment,image,date:new Date().toISOString()});
+  save("reviews",reviews);renderReviews();$("reviewComment").value="";$("reviewImage").value="";
+  toast("Cảm ơn bạn đã đánh giá JUMJUM!");
  };
- saveState();toast("Đã lưu cấu hình EmailJS.");
-}
-function sendOrderEmail(order){
- const s=state.emailSettings;
- if(!s.publicKey||!s.serviceId||!s.templateId||!s.receiver||!window.emailjs)return;
- try{
-  emailjs.init(s.publicKey);
-  emailjs.send(s.serviceId,s.templateId,{
-   to_email:s.receiver,order_id:order.id,customer_name:order.customer,
-   customer_phone:order.phone,customer_email:order.email,
-   order_total:money(order.total),payment_method:order.payment,
-   order_items:order.items.map(i=>i.name+" x "+i.qty).join(", ")
-  });
- }catch(e){console.warn("EmailJS:",e)}
-}
-function copyShopLink(){
- const link=location.href;
- if(navigator.clipboard)navigator.clipboard.writeText(link).then(()=>toast("Đã sao chép liên kết cửa hàng."));
- else toast("Hãy sao chép liên kết trên thanh địa chỉ.");
-}
-function makeQR(){
- const url=encodeURIComponent(location.href);
- document.getElementById("shopQr").src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="+url;
-}
-function downloadQR(){
- const src=document.getElementById("shopQr").src;
- const a=document.createElement("a");a.href=src;a.download="JUMJUM-QR.png";a.target="_blank";a.click();
-}
-function toggleMusic(){
- const audio=document.getElementById("backgroundMusic");
- if(audio.paused)audio.play().then(()=>toast("Đã bật nhạc nền.")).catch(()=>toast("Trình duyệt yêu cầu thao tác phát nhạc."));
- else{audio.pause();toast("Đã tắt nhạc nền.")}
+ if(file){
+  if(file.size>2*1024*1024)return toast("Ảnh đánh giá nên nhỏ hơn 2 MB.");
+  const reader=new FileReader();reader.onload=()=>finish(reader.result);reader.readAsDataURL(file);
+ }else finish("");
 }
 
-function renderInit(){
- document.getElementById("year").textContent=new Date().getFullYear();
- document.getElementById("adminClock").textContent=new Date().toLocaleString("vi-VN");
- renderProducts();renderFeatured();renderReviews();renderVouchers();renderNotifications();
- updateCart();updateHeader();renderTableRequests();renderFollowerCount();makeQR();
- document.getElementById("adminProfileName").value=state.adminProfile.name||"";
- document.getElementById("adminProfilePhone").value=state.adminProfile.phone||"";
- document.getElementById("adminProfileEmail").value=state.adminProfile.email||"";
- document.getElementById("adminProfileAddress").value=state.adminProfile.address||"";
- document.getElementById("adminDisplayName").textContent=state.adminProfile.name||"JUMJUM ADMIN";
- document.getElementById("adminAvatar").src=state.adminProfile.avatar||"images/jumjumshop.png";
- document.getElementById("emailPublicKey").value=state.emailSettings.publicKey||"";
- document.getElementById("emailServiceId").value=state.emailSettings.serviceId||"";
- document.getElementById("emailTemplateId").value=state.emailSettings.templateId||"";
- document.getElementById("emailReceiver").value=state.emailSettings.receiver||"";
+/* ======================= HỒ SƠ KHÁCH HÀNG ======================= */
+function loadProfile(){
+ if(!currentUser)return;
+ $("profileAvatar").src=currentUser.avatar||"images/account.png";
+ $("profileName").value=currentUser.name||"";
+ $("profilePhone").value=currentUser.phone||"";
+ $("profileEmail").value=currentUser.email||"";
+ $("profileAddress").value=currentUser.address||"";
+ $("profilePayment").value=currentUser.payment||"COD";
+}
+function previewAvatar(e){
+ const file=e.target.files[0];if(!file)return;
+ if(file.size>2*1024*1024)return toast("Ảnh đại diện tối đa 2 MB.");
+ const reader=new FileReader();reader.onload=()=>{currentAvatar=reader.result;$("profileAvatar").src=currentAvatar};reader.readAsDataURL(file);
+}
+function saveProfile(){
+ if(!requireCustomer())return;
+ currentUser.name=$("profileName").value.trim();
+ currentUser.phone=$("profilePhone").value.trim();
+ currentUser.email=$("profileEmail").value.trim();
+ currentUser.address=$("profileAddress").value.trim();
+ currentUser.payment=$("profilePayment").value;
+ if(currentAvatar)currentUser.avatar=currentAvatar;
+ updateCurrentUser();persist();toast("Đã lưu hồ sơ.");
+}
+function updateCurrentUser(){
+ if(!currentUser)return;
+ const i=users.findIndex(u=>u.email===currentUser.email);
+ if(i>=0)users[i]={...users[i],...currentUser};
+ else users.push({...currentUser});
+ save("users",users);save("session",currentUser);
+}
+
+/* ======================= QUẢN TRỊ ======================= */
+function adminTab(tab){
+ document.querySelectorAll(".admin-section").forEach(s=>s.classList.add("hidden"));
+ $("admin-"+tab).classList.remove("hidden");
  renderAdmin();
 }
-renderInit();
+function renderAdmin(){
+ if(currentUser?.role!=="admin")return;
+ $("statOrders").textContent=orders.length;
+ $("statRevenue").textContent=money(orders.filter(o=>o.status==="Hoàn thành").reduce((s,o)=>s+o.total,0));
+ $("statCustomers").textContent=users.length;
+ $("statFollowers").textContent=followers.length;
 
-document.querySelectorAll(".ripple").forEach(el=>el.addEventListener("click",e=>{
- const circle=document.createElement("span");circle.className="ripple-effect";
- const rect=el.getBoundingClientRect(),size=Math.max(rect.width,rect.height);
- circle.style.width=circle.style.height=size+"px";
- circle.style.left=e.clientX-rect.left-size/2+"px";
- circle.style.top=e.clientY-rect.top-size/2+"px";
- el.appendChild(circle);setTimeout(()=>circle.remove(),700);
-}));
-setInterval(()=>{const clock=document.getElementById("adminClock");if(clock)clock.textContent=new Date().toLocaleString("vi-VN")},1000);
+ $("adminCalls").innerHTML=calls.map(c=>`
+ <div class="item-row"><div class="flex-1"><b>Bàn ${escapeHTML(c.tableCode)} — ${escapeHTML(c.type)}</b>
+ <p class="muted small">${escapeHTML(c.note||"")} · ${new Date(c.date).toLocaleString("vi-VN")}</p></div>
+ <button class="btn-soft" onclick="finishCall('${c.id}')">${c.done?"Đã xử lý":"Hoàn tất"}</button></div>`).join("")||'<p class="muted">Chưa có yêu cầu phục vụ.</p>';
 
-window.addEventListener("storage",e=>{
- if(e.key===STORAGE_KEY){state=loadState();renderInit();toast("Dữ liệu trên thiết bị vừa được cập nhật.");}
-});
+ $("adminOrders").innerHTML=orders.map(o=>`
+ <div class="glass card">
+  <div class="row"><b>${escapeHTML(o.id)}</b><span class="badge">${escapeHTML(o.status)}</span></div>
+  <p class="text-sm mt-2">${escapeHTML(o.name)} · ${escapeHTML(o.phone)}</p>
+  <p class="muted small">${new Date(o.date).toLocaleString("vi-VN")} · ${escapeHTML(o.payMethod)}</p>
+  <div class="row mt-2"><b class="price">${money(o.total)}</b>
+   <div class="toolbar"><button class="btn-soft" onclick="showInvoiceById('${o.id}')">Hóa đơn</button>
+   <button class="btn" onclick="completeOrder('${o.id}')">Hoàn thành</button></div>
+  </div>
+ </div>`).join("")||'<p class="muted">Chưa có đơn hàng.</p>';
+
+ $("adminFollowers").innerHTML=followers.map((f,i)=>`
+ <div class="item-row"><div class="flex-1"><b>${escapeHTML(f.name)}</b><p class="muted small">${escapeHTML(f.email)}</p></div>
+ <button class="btn-soft" onclick="removeFollower(${i})">Xóa</button></div>`).join("")||'<p class="muted">Chưa có người theo dõi.</p>';
+
+ $("adminCustomers").innerHTML=users.map(u=>`
+ <div class="item-row"><div class="flex-1"><b>${escapeHTML(u.name)}</b><p class="muted small">${escapeHTML(u.email)} · ${escapeHTML(u.phone)}</p></div>
+ <span class="badge">${orders.filter(o=>o.customerEmail===u.email).length} đơn</span></div>`).join("")||'<p class="muted">Chưa có khách hàng.</p>';
+
+ $("adminReviewList").innerHTML=reviews.map(r=>`
+ <div class="item-row"><div class="flex-1"><b>${escapeHTML(r.name)} — ${r.rating}★</b><p class="muted small">${escapeHTML(r.comment)}</p></div>
+ <button class="btn-soft" onclick="deleteReview('${r.id}')">Xóa</button></div>`).join("")||'<p class="muted">Chưa có đánh giá.</p>';
+
+ $("adminAccounts").innerHTML=admins.map(a=>`
+ <div class="item-row"><div class="flex-1"><b>${escapeHTML(a.email)}</b><p class="muted small">${escapeHTML(a.name||"Quản trị viên")}</p></div>
+ <span class="badge">Được cấp quyền</span></div>`).join("");
+
+ renderManageProducts();renderPosProducts();
+}
+function finishCall(id){
+ const c=calls.find(x=>x.id===id);if(c)c.done=true;
+ save("calls",calls);renderAdmin();toast("Đã cập nhật yêu cầu.");
+}
+function completeOrder(id){
+ const o=orders.find(x=>x.id===id);if(!o)return;
+ o.status="Hoàn thành";persist();renderAdmin();toast("Đã hoàn tất đơn hàng.");
+}
+function showInvoiceById(id){
+ const o=orders.find(x=>x.id===id);if(o)showInvoice(o);
+}
+function removeFollower(i){followers.splice(i,1);save("followers",followers);renderAdmin()}
+function deleteReview(id){reviews=reviews.filter(r=>r.id!==id);save("reviews",reviews);renderAdmin()}
+function addAdmin(){
+ const email=$("newAdminEmail").value.trim().toLowerCase();
+ const password=$("newAdminPassword").value;
+ if(!email||!password)return toast("Nhập email và mật khẩu.");
+ if(admins.some(a=>a.email===email))return toast("Email đã tồn tại.");
+ // Bản chạy cục bộ chỉ lưu danh sách minh họa, không cấp quyền bảo mật thật.
+ admins.push({email,name:"Quản trị viên mới"});
+ save("admins",admins);renderAdmin();
+ $("newAdminEmail").value="";$("newAdminPassword").value="";
+ toast("Đã thêm vào danh sách quản trị.");
+}
+
+/* ======================= QUẢN LÝ MÓN ======================= */
+function renderManageProducts(){
+ $("manageProducts").innerHTML=products.map(p=>`
+ <div class="item-row">
+  <img src="${escapeHTML(p.image)}" alt="">
+  <div class="flex-1 min-w-0"><b>${escapeHTML(p.name)}</b><p class="muted small">${money(p.price)} · ${escapeHTML(p.category)}</p></div>
+  <button class="btn-soft" onclick="editProduct('${p.id}')">Sửa</button>
+  <button class="btn-soft" onclick="deleteProduct('${p.id}')">Xóa</button>
+ </div>`).join("");
+}
+function addProduct(){
+ const name=$("newProductName").value.trim();
+ const price=Number($("newProductPrice").value);
+ if(!name||price<=0)return toast("Vui lòng nhập tên món và giá hợp lệ.");
+ products.push({id:uid(),name,price,category:$("newProductCategory").value.trim()||"Khác",
+  image:$("newProductImage").value.trim()||"images/jumjumshop.png",desc:$("newProductDesc").value.trim()});
+ save("products",products);renderAll();renderAdmin();toast("Đã thêm món.");
+ ["newProductName","newProductPrice","newProductCategory","newProductImage","newProductDesc"].forEach(id=>$(id).value="");
+}
+function editProduct(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ const name=prompt("Tên món:",p.name);if(name===null)return;
+ const price=Number(prompt("Giá món:",p.price));if(!price)return;
+ p.name=name;p.price=price;save("products",products);renderAll();renderAdmin();
+}
+function deleteProduct(id){
+ if(!confirm("Bạn có chắc muốn xóa món này?"))return;
+ products=products.filter(p=>p.id!==id);save("products",products);renderAll();renderAdmin();
+}
+
+/* ======================= POS / MÁY TÍNH TIỀN ======================= */
+function renderPosProducts(){
+ $("posProducts").innerHTML=products.map(p=>`
+ <button class="btn-soft text-left" onclick="addPos('${p.id}')">
+  <b>${escapeHTML(p.name)}</b><span class="block price">${money(p.price)}</span>
+ </button>`).join("");
+ $("posCart").innerHTML=posCart.map(p=>`
+ <div class="row py-2"><span>${escapeHTML(p.name)} × ${p.qty}</span><b>${money(p.price*p.qty)}</b></div>`).join("")||'<p class="muted small">Chưa chọn món.</p>';
+ const total=posCart.reduce((s,p)=>s+p.price*p.qty,0);
+ $("posTotal").textContent=money(total);calculateChange();
+ $("dailySold").textContent="Số món bán hôm nay: "+orders.filter(o=>new Date(o.date).toDateString()===new Date().toDateString()).reduce((s,o)=>s+o.items.reduce((a,p)=>a+p.qty,0),0);
+}
+function addPos(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ const f=posCart.find(x=>x.id===id);if(f)f.qty++;else posCart.push({...p,qty:1});
+ renderPosProducts();
+}
+function calculateChange(){
+ const total=posCart.reduce((s,p)=>s+p.price*p.qty,0);
+ const cash=Number($("posCash").value||0);
+ $("posChange").textContent=money(Math.max(0,cash-total));
+}
+function completePos(){
+ if(!posCart.length)return toast("Chưa chọn món.");
+ const total=posCart.reduce((s,p)=>s+p.price*p.qty,0);
+ const order={id:"POS"+Date.now(),date:new Date().toISOString(),name:"Khách mua tại quầy",
+  phone:"",email:"",address:"Tại quầy",payMethod:$("posPayment").value,
+  voucher:"Không",items:posCart.map(p=>({...p})),subtotal:total,discount:0,total,
+  status:"Hoàn thành",customerEmail:""};
+ orders.unshift(order);persist();posCart=[];$("posCash").value="";
+ renderPosProducts();renderAdmin();showInvoice(order);toast("Đã tạo hóa đơn tại quầy.");
+}
+
+/* ======================= EMAILJS & THÔNG BÁO ======================= */
+function saveEmailSettings(){
+ emailSettings={publicKey:$("emailPublic").value.trim(),serviceId:$("emailService").value.trim(),
+  templateId:$("emailTemplate").value.trim(),receiver:$("emailReceiver").value.trim()};
+ save("emailSettings",emailSettings);toast("Đã lưu cấu hình EmailJS trên trình duyệt.");
+}
+function sendOrderEmail(order){
+ if(!emailSettings.publicKey||!emailSettings.serviceId||!emailSettings.templateId)return;
+ if(!window.emailjs)return;
+ try{
+  emailjs.init({publicKey:emailSettings.publicKey});
+  emailjs.send(emailSettings.serviceId,emailSettings.templateId,{
+   to_email:emailSettings.receiver,order_id:order.id,customer_name:order.name,
+   customer_phone:order.phone,customer_address:order.address,
+   payment_method:order.payMethod,total:money(order.total),
+   order_items:order.items.map(p=>p.name+" × "+p.qty).join(", ")
+  }).catch(e=>console.warn("EmailJS error:",e));
+ }catch(e){console.warn(e)}
+}
+function broadcast(){
+ const message=$("broadcastInput").value.trim();if(!message)return toast("Nhập nội dung thông báo.");
+ save("broadcast",message);renderHome();toast("Đã cập nhật thông báo trên trang chủ.");
+}
+
+/* ======================= QR, LINK, DỮ LIỆU ======================= */
+function makeQR(){
+ $("qrcode").innerHTML="";
+ if(window.QRCode)new QRCode($("qrcode"),{text:location.href,width:180,height:180,correctLevel:QRCode.CorrectLevel.H});
+}
+function copyLink(){
+ if(navigator.clipboard)navigator.clipboard.writeText(location.href).then(()=>toast("Đã sao chép liên kết."));
+ else toast("Trình duyệt không hỗ trợ sao chép tự động.");
+}
+function downloadQR(){
+ const canvas=$("qrcode").querySelector("canvas");
+ const img=$("qrcode").querySelector("img");
+ const url=canvas?.toDataURL("image/png")||img?.src;
+ if(!url)return toast("Chưa tạo được QR.");
+ const a=document.createElement("a");a.href=url;a.download="JUMJUM-QR.png";a.click();
+}
+function exportData(){
+ const data={products,orders,calls,reviews,followers,users,admins};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="jumjum-backup.json";a.click();URL.revokeObjectURL(url);
+}
+
+/* ======================= GIAO DIỆN / KHỞI TẠO ======================= */
+function renderHome(){
+ $("featuredProducts").innerHTML=products.slice(0,4).map(productCard).join("");
+ $("followerCount").textContent=followers.length+" người theo dõi";
+ const message=read("broadcast","");
+ $("broadcastBanner").textContent=message;
+ $("broadcastBanner").classList.toggle("hidden",!message);
+}
+function renderAll(){
+ const categories=[...new Set(products.map(p=>p.category))];
+ $("categoryFilter").innerHTML='<option value="">Tất cả danh mục</option>'+categories.map(c=>`<option>${escapeHTML(c)}</option>`).join("");
+ renderProducts();renderHome();renderVouchers();renderReviews();renderMyCalls();updateCart();
+}
+function init(){
+ $("year").textContent=new Date().getFullYear();
+ function clock(){$("clock").textContent=new Date().toLocaleString("vi-VN",{dateStyle:"full",timeStyle:"medium"})}
+ clock();setInterval(clock,1000);
+ renderAll();makeQR();
+ if(currentUser?.role==="admin")renderAdmin();
+ if(currentUser?.role==="customer")loadProfile();
+
+ // Đồng bộ giữa các tab trên cùng trình duyệt.
+ window.addEventListener("storage",e=>{
+  if(e.key?.startsWith("jumjum_"))location.reload();
+ });
+}
+init();
 </script>
 </body>
 </html>
