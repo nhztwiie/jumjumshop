@@ -1129,8 +1129,8 @@
         </div>
     </div>
 
-    <!-- Nhạc nền: audio/jumjumshop music.mp3 -->
-    <audio id="bgAudio" src="audio/jumjumshop music.mp3" loop></audio>
+    <!-- Nhạc nền: audio/jumjum shop.mp3 -->
+    <audio id="bgAudio" src="audio/jumjum shop.mp3" loop></audio>
 
     <!-- Thông báo nổi -->
     <div id="toastBox" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-3 max-w-[92vw]">
@@ -1149,7 +1149,7 @@
                 address: "Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long",
                 hotline: "0876.935.873",
                 avatar: "images/jumjumshop.png",
-                bgMusic: "audio/jumjumshop music.mp3",
+                bgMusic: "audio/jumjum shop.mp3",
                 musicTitle: "JUMJUM MUSIC",
                 zaloUrl: "https://zalo.me/0398476794",
                 facebookUrl: "https://www.facebook.com/nhzt.wiie",
@@ -1183,6 +1183,7 @@
                 { id: "V15", code: "FRESH15", discount: 15, label: "Giảm 15% đơn từ 2 ly bất kỳ" }
             ],
             initialReviews: [
+                { id: 0, user: "Nam Em", rating: 5, comment: "Đồ uống tươi mát, hương vị rất ngon và dễ chịu, ghé JUMJUM là nạp lại năng lượng liền!", date: "19/11/2026", photo: "" },
                 { id: 1, user: "Anh Ba Ngọc Sơn", rating: 5, comment: "Trà mãng cầu tươi ngon xuất sắc, không gian phục vụ tuyệt vời!", date: "17/11/2026", photo: "" },
                 { id: 2, user: "Christina Nguyễn Phương Hằng", rating: 5, comment: "Đồ uống rất hợp khẩu vị, nhân viên nhanh nhẹn và lịch sự.", date: "16/11/2026", photo: "" },
                 { id: 3, user: "Trường Giang", rating: 4.5, comment: "Quán có view đẹp, trà sữa trân châu đường đen béo ngậy vừa miệng.", date: "15/11/2026", photo: "" }
@@ -2994,7 +2995,7 @@
                 iconWrap.classList.remove('spinning');
                 statusText.textContent = "Nhạc nền";
             } else {
-                audio.play().catch(() => showToast("Chưa tìm thấy tệp audio/jumjumshop music.mp3 hoặc trình duyệt đang chặn tự phát!"));
+                audio.play().catch(() => showToast("Chưa tìm thấy tệp audio/jumjum shop.mp3 hoặc trình duyệt đang chặn tự phát!"));
                 iconWrap.classList.add('spinning');
                 statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
             }
