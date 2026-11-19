@@ -6,7 +6,7 @@ const DEFAULT_SHOP_DATA = {
         address: "Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long",
         hotline: "0876.935.873",
         avatar: "images/jumjumshop.png",
-        bgMusic: "audio/jumjumshop music.mp3",
+        bgMusic: "audio/jumjum music.mp3",
         musicTitle: "JUMJUM MUSIC",
         zaloUrl: "https://zalo.me/0398476794",
         facebookUrl: "https://www.facebook.com/nhzt.wiie",
@@ -48,17 +48,6 @@ const DEFAULT_SHOP_DATA = {
 
 // ==================== NHẬN DIỆN THIẾT BỊ DI ĐỘNG ====================
 const IS_MOBILE_DEVICE = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
-
-// ==================== TIỆN ÍCH AN TOÀN ====================
-function escapeHtml(str) {
-    if (str === null || str === undefined) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
 
 // ==================== LOCALSTORAGE AN TOÀN ====================
 function safeGetStorage(key, fallback) {
@@ -106,7 +95,6 @@ let html5QrCode = null;
 let pendingProductForTopping = null;
 let newUploadedProductImgBase64 = "";
 let lastSyncSnapshot = "";
-let toastTimer = null;
 
 // ==================== KHỞI TẠO HỆ THỐNG ====================
 window.addEventListener('DOMContentLoaded', () => {
@@ -277,7 +265,7 @@ function updateFollowButtonUI() {
     if (followerDisplay) followerDisplay.textContent = `${followers.length} người đang theo dõi`;
     if (countEl) countEl.textContent = followers.length;
 
-    if (currentUser && currentUser.role !== 'shop' && btn && icon && text) {
+    if (currentUser && currentUser.role !== 'shop') {
         const isFollowing = followers.some(f => (f.email && f.email === currentUser.email) || f.name === currentUser.name);
         if (isFollowing) {
             btn.className = "tactile-btn px-5 py-2.5 rounded-full bg-rose-500 text-white text-xs font-bold shadow-md flex items-center gap-2 whitespace-nowrap";
@@ -293,18 +281,16 @@ function updateFollowButtonUI() {
 
 // ==================== VOUCHER (HẠN NGẪU NHIÊN 24H - 72H) ====================
 function renderVouchers() {
-    const el = document.getElementById('voucherList');
-    if (!el) return;
-    el.innerHTML = DEFAULT_SHOP_DATA.vouchers.map(v => `
+    document.getElementById('voucherList').innerHTML = DEFAULT_SHOP_DATA.vouchers.map(v => `
         <div class="tactile-card p-4 rounded-2xl bg-white/75 dark:bg-slate-800/80 border border-white dark:border-slate-700 shadow-sm flex items-center justify-between gap-3">
             <div class="min-w-0">
                 <div class="flex items-center gap-2">
-                    <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400 whitespace-nowrap">${escapeHtml(v.code)}</span>
+                    <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400 whitespace-nowrap">${v.code}</span>
                     <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-[9px] font-bold whitespace-nowrap">Hạn: 24h - 72h</span>
                 </div>
-                <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">${escapeHtml(v.label)}</div>
+                <div class="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">${v.label}</div>
             </div>
-            <button onclick="playClickSound(); saveVoucherToAccount('${escapeHtml(v.code)}')" class="tactile-btn px-3.5 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold shadow-sm whitespace-nowrap shrink-0">Nhận voucher</button>
+            <button onclick="playClickSound(); saveVoucherToAccount('${v.code}')" class="tactile-btn px-3.5 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold shadow-sm whitespace-nowrap shrink-0">Nhận voucher</button>
         </div>
     `).join('');
 }
@@ -324,8 +310,6 @@ function saveVoucherToAccount(code) {
     }
 
     const voucherInfo = DEFAULT_SHOP_DATA.vouchers.find(v => v.code === code);
-    if (!voucherInfo) return;
-
     const randomHours = Math.floor(Math.random() * (72 - 24 + 1)) + 24;
     const expireDateObj = new Date(nowMs + randomHours * 3600 * 1000);
     const expireFormatted = expireDateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' ' + expireDateObj.toLocaleDateString('vi-VN');
@@ -348,13 +332,9 @@ function renderSavedUserVouchers() {
     const container = document.getElementById('userSavedVouchersList');
     const selectEl = document.getElementById('voucherSelect');
 
-    if (currentUser && Array.isArray(currentUser.savedVouchers)) {
+    if (currentUser && currentUser.savedVouchers) {
         const nowMs = Date.now();
-        const beforeLen = currentUser.savedVouchers.length;
         currentUser.savedVouchers = currentUser.savedVouchers.filter(v => !v.expiresAtMs || v.expiresAtMs > nowMs);
-        if (currentUser.savedVouchers.length !== beforeLen) {
-            safeSetStorage('jumjum_user', currentUser);
-        }
     }
 
     if (!currentUser || currentUser.role === 'shop' || !currentUser.savedVouchers || currentUser.savedVouchers.length === 0) {
@@ -367,17 +347,17 @@ function renderSavedUserVouchers() {
         container.innerHTML = currentUser.savedVouchers.map(v => `
             <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
                 <div>
-                    <span class="font-bold text-sky-700 dark:text-sky-300">${escapeHtml(v.code)}</span> (${escapeHtml(v.label)})
-                    <div class="text-[10px] text-rose-500 font-semibold mt-0.5">Hiệu lực ${escapeHtml(v.validHours)}h • Hết hạn lúc: ${escapeHtml(v.expireDate)}</div>
+                    <span class="font-bold text-sky-700 dark:text-sky-300">${v.code}</span> (${v.label})
+                    <div class="text-[10px] text-rose-500 font-semibold mt-0.5">Hiệu lực ${v.validHours}h • Hết hạn lúc: ${v.expireDate}</div>
                 </div>
-                <button onclick="playClickSound(); selectSavedVoucher('${escapeHtml(v.code)}')" class="tactile-btn px-3 py-1 rounded-lg bg-sky-600 text-white font-bold whitespace-nowrap">Áp dụng</button>
+                <button onclick="playClickSound(); selectSavedVoucher('${v.code}')" class="tactile-btn px-3 py-1 rounded-lg bg-sky-600 text-white font-bold whitespace-nowrap">Áp dụng</button>
             </div>
         `).join('');
     }
 
     if (selectEl) {
         selectEl.innerHTML = `<option value="">-- Chọn mã Voucher đã lưu trong tài khoản --</option>` + currentUser.savedVouchers.map(v => `
-            <option value="${escapeHtml(v.code)}">${escapeHtml(v.label)} (${escapeHtml(v.code)} - Hạn: ${escapeHtml(v.expireDate)})</option>
+            <option value="${v.code}">${v.label} (${v.code} - Hạn: ${v.expireDate})</option>
         `).join('');
     }
 }
@@ -507,7 +487,6 @@ function initLiquidWaveCanvas() {
 
 function initRealtimeClock() {
     const clockEl = document.getElementById('realtimeClock');
-    if (!clockEl) return;
     const update = () => {
         if (document.hidden) return;
         const now = new Date();
@@ -521,14 +500,12 @@ function initAutoThemeByTime() {
     const hour = new Date().getHours();
     const isDarkTime = hour < 6 || hour >= 18;
     document.documentElement.classList.toggle('dark', isDarkTime);
-    const icon = document.getElementById('themeIcon');
-    if (icon) icon.className = isDarkTime ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    document.getElementById('themeIcon').className = isDarkTime ? "fa-solid fa-sun" : "fa-solid fa-moon";
 }
 
 function toggleThemeManual() {
     const isDark = document.documentElement.classList.toggle('dark');
-    const icon = document.getElementById('themeIcon');
-    if (icon) icon.className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    document.getElementById('themeIcon').className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
 }
 
 function initInteractiveEffects() {
@@ -572,8 +549,7 @@ function initInteractiveEffects() {
 
 function switchTab(tabName) {
     document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
-    const targetSec = document.getElementById(`tab-${tabName}`);
-    if (targetSec) targetSec.classList.remove('hidden');
+    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
     document.querySelectorAll('.dock-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.tab === tabName);
     });
@@ -585,34 +561,28 @@ function switchTab(tabName) {
 }
 
 function renderSpaceGallery() {
-    const el = document.getElementById('spaceGallery');
-    if (!el) return;
-    el.innerHTML = spaceImages.map(img => `
+    document.getElementById('spaceGallery').innerHTML = spaceImages.map(img => `
         <div class="tactile-card rounded-2xl overflow-hidden h-24 sm:h-28 border border-white/85 dark:border-slate-700 shadow-sm group">
-            <img src="${escapeHtml(img)}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <img src="${img}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
         </div>
     `).join('');
 }
 
 function renderBroadcastBanner() {
     const banner = document.getElementById('customerBroadcastBanner');
-    const textEl = document.getElementById('broadcastText');
-    if (!banner || !textEl) return;
     if (broadcastMsg) {
         banner.classList.remove('hidden');
-        textEl.textContent = broadcastMsg;
+        document.getElementById('broadcastText').textContent = broadcastMsg;
     } else {
         banner.classList.add('hidden');
     }
 }
 
 function renderCategories() {
-    const el = document.getElementById('categoryFilter');
-    if (!el) return;
     const cats = ['Tất cả', ...new Set([...foodTags, ...products.map(p => p.category)])];
-    el.innerHTML = cats.map(c => `
-        <button onclick="playClickSound(); filterCategory('${escapeHtml(c)}')" class="tactile-btn px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm ${selectedCategory === c ? 'bg-sky-600 text-white' : 'bg-white/75 dark:bg-slate-800 dark:text-slate-200 text-slate-700'}">
-            ${escapeHtml(c)}
+    document.getElementById('categoryFilter').innerHTML = cats.map(c => `
+        <button onclick="playClickSound(); filterCategory('${c}')" class="tactile-btn px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-sm ${selectedCategory === c ? 'bg-sky-600 text-white' : 'bg-white/75 dark:bg-slate-800 dark:text-slate-200 text-slate-700'}">
+            ${c}
         </button>
     `).join('');
 }
@@ -624,8 +594,6 @@ function filterCategory(cat) {
 }
 
 function renderProducts() {
-    const grid = document.getElementById('productGrid');
-    if (!grid) return;
     const searchKeyword = (document.getElementById('productSearchInput')?.value || '').trim().toLowerCase();
     const filtered = products.filter(p => {
         const matchCat = selectedCategory === 'Tất cả' || p.category === selectedCategory;
@@ -634,30 +602,30 @@ function renderProducts() {
     });
 
     if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-10 text-slate-500 dark:text-slate-400 text-sm">Không tìm thấy món ăn phù hợp với từ khóa của bạn.</div>`;
+        document.getElementById('productGrid').innerHTML = `<div class="col-span-full text-center py-10 text-slate-500 dark:text-slate-400 text-sm">Không tìm thấy món ăn phù hợp với từ khóa của bạn.</div>`;
         return;
     }
 
-    grid.innerHTML = filtered.map(p => `
+    document.getElementById('productGrid').innerHTML = filtered.map(p => `
         <div class="liquid-glass tactile-card spotlight-card p-4 flex flex-col justify-between group">
             <div class="relative z-10">
                 <div class="relative h-40 rounded-2xl overflow-hidden mb-3 shadow-sm bg-slate-100 dark:bg-slate-800">
-                    <img src="${escapeHtml(p.image)}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=400'" alt="${escapeHtml(p.name)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <img src="${p.image}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=400'" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <span class="absolute top-2 left-2 px-2.5 py-1 rounded-full bg-white/85 dark:bg-slate-900/85 text-[10px] font-extrabold text-sky-800 dark:text-sky-300 shadow-sm whitespace-nowrap">
-                        ${escapeHtml(p.category)}
+                        ${p.category}
                     </span>
                 </div>
-                <h3 class="font-bold text-slate-800 dark:text-white text-base whitespace-nowrap truncate">${escapeHtml(p.name)}</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">${escapeHtml(p.desc)}</p>
+                <h3 class="font-bold text-slate-800 dark:text-white text-base whitespace-nowrap truncate">${p.name}</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">${p.desc}</p>
             </div>
 
             <div class="relative z-10 mt-4 pt-3 border-t border-white/70 dark:border-slate-700 flex items-center justify-between gap-2">
-                <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${Number(p.price).toLocaleString('vi-VN')} VND</span>
+                <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${p.price.toLocaleString('vi-VN')} VND</span>
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <button onclick="playClickSound(); initiateAddToCart('${escapeHtml(p.id)}', false)" class="tactile-btn w-9 h-9 rounded-full bg-white/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-sky-600 dark:text-sky-300 flex items-center justify-center shadow-sm" title="Thêm giỏ hàng">
+                    <button onclick="playClickSound(); initiateAddToCart('${p.id}', false)" class="tactile-btn w-9 h-9 rounded-full bg-white/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-sky-600 dark:text-sky-300 flex items-center justify-center shadow-sm" title="Thêm giỏ hàng">
                         <i class="fa-solid fa-cart-plus text-xs"></i>
                     </button>
-                    <button onclick="playClickSound(); initiateAddToCart('${escapeHtml(p.id)}', true)" class="tactile-btn px-3.5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-xs font-bold flex items-center gap-1 shadow whitespace-nowrap">
+                    <button onclick="playClickSound(); initiateAddToCart('${p.id}', true)" class="tactile-btn px-3.5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-xs font-bold flex items-center gap-1 shadow whitespace-nowrap">
                         Đặt mua ngay
                     </button>
                 </div>
@@ -679,10 +647,10 @@ function initiateAddToCart(productId, openCartImmediately = false) {
         document.getElementById('toppingOptionsList').innerHTML = DEFAULT_SHOP_DATA.toppings.map(t => `
             <label class="tactile-btn flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer">
                 <span class="flex items-center gap-2 font-semibold dark:text-white whitespace-nowrap">
-                    <input type="checkbox" class="topping-checkbox" data-name="${escapeHtml(t.name)}" data-price="${t.price}" onchange="playClickSound(); updateToppingPricePreview()">
-                    ${escapeHtml(t.name)}
+                    <input type="checkbox" class="topping-checkbox" data-name="${t.name}" data-price="${t.price}" onchange="playClickSound(); updateToppingPricePreview()">
+                    ${t.name}
                 </span>
-                <span class="font-bold text-sky-600 dark:text-sky-400 whitespace-nowrap">+${Number(t.price).toLocaleString('vi-VN')} VND</span>
+                <span class="font-bold text-sky-600 dark:text-sky-400 whitespace-nowrap">+${t.price.toLocaleString('vi-VN')} VND</span>
             </label>
         `).join('');
         updateToppingPricePreview();
@@ -697,7 +665,7 @@ function updateToppingPricePreview() {
     if (!pendingProductForTopping) return;
     let total = pendingProductForTopping.price;
     document.querySelectorAll('.topping-checkbox:checked').forEach(cb => {
-        total += parseInt(cb.dataset.price, 10) || 0;
+        total += parseInt(cb.dataset.price);
     });
     document.getElementById('toppingCalculatedPrice').textContent = total.toLocaleString('vi-VN') + ' VND';
 }
@@ -708,7 +676,7 @@ function confirmAddProductWithToppings(openCartImmediately = isDirectOrderAfterT
     let unitPrice = pendingProductForTopping.price;
     document.querySelectorAll('.topping-checkbox:checked').forEach(cb => {
         selectedToppings.push(cb.dataset.name);
-        unitPrice += parseInt(cb.dataset.price, 10) || 0;
+        unitPrice += parseInt(cb.dataset.price);
     });
     addItemToCart(pendingProductForTopping, selectedToppings, unitPrice);
     closeModal('toppingModal');
@@ -716,7 +684,7 @@ function confirmAddProductWithToppings(openCartImmediately = isDirectOrderAfterT
 }
 
 function addItemToCart(product, toppings, unitPrice) {
-    const toppingKey = [...toppings].sort().join(', ');
+    const toppingKey = toppings.sort().join(', ');
     const cartItemId = product.id + '_' + toppingKey;
     const existing = cart.find(i => i.cartItemId === cartItemId);
 
@@ -765,19 +733,16 @@ function clearCustomerCart() {
 
 function updateCartUI() {
     const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
-    const subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-    const discountAmount = appliedVoucher ? (subTotal * appliedVoucher.discount) / 100 : 0;
+    let subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    let discountAmount = appliedVoucher ? (subTotal * appliedVoucher.discount) / 100 : 0;
     const finalTotal = Math.max(0, subTotal - discountAmount);
 
-    const badge = document.getElementById('cartBadge');
-    if (badge) badge.textContent = totalQty;
+    document.getElementById('cartBadge').textContent = totalQty;
     const modalCountEl = document.getElementById('cartModalCount');
     if (modalCountEl) modalCountEl.textContent = totalQty;
-    const totalEl = document.getElementById('cartTotalPrice');
-    if (totalEl) totalEl.textContent = `${finalTotal.toLocaleString('vi-VN')} VND`;
+    document.getElementById('cartTotalPrice').textContent = `${finalTotal.toLocaleString('vi-VN')} VND`;
 
     const container = document.getElementById('cartItemsContainer');
-    if (!container) return;
     if (cart.length === 0) {
         container.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm"><i class="fa-solid fa-mug-hot text-3xl mb-2 block text-sky-300"></i>Giỏ hàng của bạn đang trống.<br><span class="text-xs">Hãy chọn thêm thức uống yêu thích nhé!</span></div>`;
         return;
@@ -787,20 +752,20 @@ function updateCartUI() {
         <div class="flex items-center justify-between gap-3 bg-white/90 dark:bg-slate-800/90 p-3 rounded-2xl border border-sky-100 dark:border-slate-700 shadow-sm">
             <div class="flex items-center gap-2.5 min-w-0 flex-1">
                 <span class="w-5 h-5 rounded-full bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 text-[10px] font-extrabold flex items-center justify-center shrink-0">${index + 1}</span>
-                <img src="${escapeHtml(item.image)}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700">
+                <img src="${item.image}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700">
                 <div class="min-w-0 flex-1">
-                    <div class="text-xs font-bold text-slate-800 dark:text-white truncate">${escapeHtml(item.name)}</div>
-                    ${item.toppings ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate">+ ${escapeHtml(item.toppings)}</div>` : '<div class="text-[10px] text-slate-400">Tiêu chuẩn</div>'}
-                    <div class="text-[11px] text-sky-600 dark:text-sky-400 font-extrabold mt-0.5">${Number(item.price).toLocaleString('vi-VN')} đ × ${item.qty} = ${(item.price * item.qty).toLocaleString('vi-VN')} đ</div>
+                    <div class="text-xs font-bold text-slate-800 dark:text-white truncate">${item.name}</div>
+                    ${item.toppings ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate">+ ${item.toppings}</div>` : '<div class="text-[10px] text-slate-400">Tiêu chuẩn</div>'}
+                    <div class="text-[11px] text-sky-600 dark:text-sky-400 font-extrabold mt-0.5">${item.price.toLocaleString('vi-VN')} đ × ${item.qty} = ${(item.price * item.qty).toLocaleString('vi-VN')} đ</div>
                 </div>
             </div>
             <div class="flex flex-col items-end gap-1.5 shrink-0">
                 <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
-                    <button onclick="playClickSound(); updateCartItemQty('${escapeHtml(item.cartItemId)}', -1)" class="tactile-btn w-5 h-5 rounded-full bg-white dark:bg-slate-800 text-[10px] flex items-center justify-center shadow-sm"><i class="fa-solid fa-minus"></i></button>
+                    <button onclick="playClickSound(); updateCartItemQty('${item.cartItemId}', -1)" class="tactile-btn w-5 h-5 rounded-full bg-white dark:bg-slate-800 text-[10px] flex items-center justify-center shadow-sm"><i class="fa-solid fa-minus"></i></button>
                     <span class="text-xs font-extrabold w-4 text-center dark:text-white">${item.qty}</span>
-                    <button onclick="playClickSound(); updateCartItemQty('${escapeHtml(item.cartItemId)}', 1)" class="tactile-btn w-5 h-5 rounded-full bg-sky-600 text-white text-[10px] flex items-center justify-center shadow-sm"><i class="fa-solid fa-plus"></i></button>
+                    <button onclick="playClickSound(); updateCartItemQty('${item.cartItemId}', 1)" class="tactile-btn w-5 h-5 rounded-full bg-sky-600 text-white text-[10px] flex items-center justify-center shadow-sm"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <button onclick="playClickSound(); removeCartItem('${escapeHtml(item.cartItemId)}')" class="text-[10px] text-rose-500 hover:underline font-semibold">Xóa món</button>
+                <button onclick="playClickSound(); removeCartItem('${item.cartItemId}')" class="text-[10px] text-rose-500 hover:underline font-semibold">Xóa món</button>
             </div>
         </div>
     `).join('');
@@ -819,9 +784,7 @@ function openCartModal() {
 }
 
 function toggleAppSelector() {
-    const checked = document.querySelector('input[name="payMethod"]:checked');
-    if (!checked) return;
-    const method = checked.value;
+    const method = document.querySelector('input[name="payMethod"]:checked').value;
     document.getElementById('bankAppSelectBox').classList.toggle('hidden', method !== 'Chuyển khoản ngân hàng');
     document.getElementById('ewalletAppSelectBox').classList.toggle('hidden', method !== 'Ví điện tử');
 }
@@ -852,14 +815,14 @@ function placeOrder() {
     const email = document.getElementById('orderEmail').value.trim();
     const address = document.getElementById('orderAddress').value.trim();
     const note = document.getElementById('orderNote').value.trim();
-    const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'COD';
+    const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
 
     if (!customerName || !phone || !address) {
         return showToast("Vui lòng nhập đầy đủ Tên, SĐT và Địa chỉ / Số bàn!");
     }
 
-    const subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-    const discountAmount = appliedVoucher ? (subTotal * appliedVoucher.discount) / 100 : 0;
+    let subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    let discountAmount = appliedVoucher ? (subTotal * appliedVoucher.discount) / 100 : 0;
     const finalTotal = Math.max(0, subTotal - discountAmount);
 
     const itemsSummary = cart.map(i => `${i.name} (SL: ${i.qty}${i.toppings ? ' | Topping: ' + i.toppings : ''})`).join('; ');
@@ -906,15 +869,13 @@ function placeOrder() {
     safeSetStorage('jumjum_cart', cart);
     updateCartUI();
     closeModal('cartModal');
-    const dot = document.getElementById('shopNotifDot');
-    if (dot) dot.classList.remove('hidden');
+    document.getElementById('shopNotifDot').classList.remove('hidden');
     switchTab('service');
     showToast(`Đặt đơn ${newOrder.id} thành công! Hóa đơn điện tử đã được tạo.`);
 }
 
 function renderUserActiveOrders() {
     const container = document.getElementById('userActiveOrdersList');
-    if (!container) return;
     if (orders.length === 0) {
         container.innerHTML = `<div class="text-xs text-slate-400 italic">Bạn chưa có đơn hàng nào gần đây.</div>`;
         return;
@@ -923,13 +884,13 @@ function renderUserActiveOrders() {
         <div class="p-3.5 rounded-2xl bg-white/85 dark:bg-slate-800/90 border border-white dark:border-slate-700 flex flex-wrap items-center justify-between gap-3 shadow-sm">
             <div class="space-y-1 flex-1 min-w-[200px]">
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400 whitespace-nowrap">${escapeHtml(o.id)} • ${escapeHtml(o.channel)} (${escapeHtml(o.time)})</span>
+                    <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400 whitespace-nowrap">${o.id} • ${o.channel} (${o.time})</span>
                     <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${o.receivedByCustomer ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300' : (o.isNew ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300' : 'bg-sky-500/20 text-sky-700 dark:text-sky-300')}">
-                        ${escapeHtml(o.status || (o.isNew ? 'Chờ xác nhận' : 'Đang pha chế'))}
+                        ${o.status || (o.isNew ? 'Chờ xác nhận' : 'Đang pha chế')}
                     </span>
                 </div>
-                <div class="text-xs text-slate-700 dark:text-slate-200">${escapeHtml(o.itemsText)}</div>
-                <div class="text-[11px] font-bold text-slate-500 whitespace-nowrap">Tổng tiền: ${Number(o.total).toLocaleString('vi-VN')} VND (${escapeHtml(o.payMethod)})</div>
+                <div class="text-xs text-slate-700 dark:text-slate-200">${o.itemsText}</div>
+                <div class="text-[11px] font-bold text-slate-500 whitespace-nowrap">Tổng tiền: ${o.total.toLocaleString('vi-VN')} VND (${o.payMethod})</div>
             </div>
             <div class="flex items-center gap-2">
                 <button onclick="playClickSound(); openInvoiceModal(${idx})" class="tactile-btn px-3 py-2 rounded-xl bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 text-xs font-bold whitespace-nowrap">
@@ -947,7 +908,6 @@ function renderUserActiveOrders() {
 }
 
 function confirmCustomerReceivedOrder(idx) {
-    if (!orders[idx]) return;
     orders[idx].receivedByCustomer = true;
     orders[idx].status = "Khách hàng đã nhận món";
     orders[idx].isNew = false;
@@ -983,8 +943,7 @@ function sendTableServiceRequest() {
     tableCalls.unshift(callObj);
     safeSetStorage('jumjum_table_calls', tableCalls);
     document.getElementById('tableRequestInput').value = '';
-    const dot = document.getElementById('shopNotifDot');
-    if (dot) dot.classList.remove('hidden');
+    document.getElementById('shopNotifDot').classList.remove('hidden');
 
     playAdminNotificationSound();
     showToast(`Đã gửi yêu cầu từ Bàn ${tableCode} đến hệ thống Admin!`);
@@ -1118,7 +1077,7 @@ function checkAuthState() {
     const headerIcon = document.getElementById('headerUserIcon');
     const switchRoleLabel = document.getElementById('quickSwitchRoleLabel');
 
-    if (currentUser && currentUser.avatar && headerAvt && headerIcon) {
+    if (currentUser && currentUser.avatar) {
         headerAvt.src = currentUser.avatar;
         headerAvt.onerror = function() {
             this.classList.add('hidden');
@@ -1126,27 +1085,25 @@ function checkAuthState() {
         };
         headerAvt.classList.remove('hidden');
         headerIcon.classList.add('hidden');
-    } else if (headerAvt && headerIcon) {
+    } else {
         headerAvt.classList.add('hidden');
         headerIcon.classList.remove('hidden');
     }
 
     if (currentUser && currentUser.role === 'shop') {
-        if (customerView) customerView.classList.add('hidden');
-        if (bottomDock) bottomDock.classList.add('hidden');
-        if (floatingCart) floatingCart.classList.add('hidden');
-        if (shopView) shopView.classList.remove('hidden');
+        customerView.classList.add('hidden');
+        bottomDock.classList.add('hidden');
+        floatingCart.classList.add('hidden');
+        shopView.classList.remove('hidden');
         if (switchRoleLabel) switchRoleLabel.textContent = "Khách hàng";
-        const adminAvt = document.getElementById('adminDashAvatar');
-        const adminName = document.getElementById('adminDashName');
-        if (adminAvt) adminAvt.src = currentUser.avatar || DEFAULT_SHOP_DATA.info.avatar;
-        if (adminName) adminName.textContent = currentUser.name || 'Bảng Điều Khiển Quản Trị JUMJUM';
+        document.getElementById('adminDashAvatar').src = currentUser.avatar || DEFAULT_SHOP_DATA.info.avatar;
+        document.getElementById('adminDashName').textContent = currentUser.name || 'Bảng Điều Khiển Quản Trị JUMJUM';
         renderAllAdminData();
     } else {
-        if (shopView) shopView.classList.add('hidden');
-        if (customerView) customerView.classList.remove('hidden');
-        if (bottomDock) bottomDock.classList.remove('hidden');
-        if (floatingCart) floatingCart.classList.remove('hidden');
+        shopView.classList.add('hidden');
+        customerView.classList.remove('hidden');
+        bottomDock.classList.remove('hidden');
+        floatingCart.classList.remove('hidden');
         if (switchRoleLabel) switchRoleLabel.textContent = "Admin";
         updateFollowButtonUI();
     }
@@ -1176,7 +1133,7 @@ function renderAdminAccountsList() {
     container.innerHTML = adminAccounts.map((a, idx) => `
         <div class="p-3 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2 text-xs">
             <div>
-                <span class="font-bold text-slate-800 dark:text-white">${escapeHtml(a.name)}</span> — <span class="text-sky-600">${escapeHtml(a.email)}</span>
+                <span class="font-bold text-slate-800 dark:text-white">${a.name}</span> — <span class="text-sky-600">${a.email}</span>
                 ${a.email === 'jumjumshop@gmail.com' ? '<span class="ml-2 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">Quản trị viên chính</span>' : ''}
             </div>
             ${a.email !== 'jumjumshop@gmail.com' ? `
@@ -1189,7 +1146,6 @@ function renderAdminAccountsList() {
 }
 
 function removeAdminAccount(idx) {
-    if (!adminAccounts[idx]) return;
     if (adminAccounts[idx].email === 'jumjumshop@gmail.com') return showToast("Không thể xóa Quản trị viên chính!");
     adminAccounts.splice(idx, 1);
     safeSetStorage('jumjum_admins', adminAccounts);
@@ -1200,8 +1156,7 @@ function removeAdminAccount(idx) {
 // ==================== QUẢN TRỊ VIÊN JUMJUM ====================
 function switchAdminTab(tabKey) {
     document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
-    const target = document.getElementById(`admin-tab-${tabKey}`);
-    if (target) target.classList.remove('hidden');
+    document.getElementById(`admin-tab-${tabKey}`).classList.remove('hidden');
     document.querySelectorAll('.admin-tab-btn').forEach(btn => {
         const isActive = btn.dataset.admintab === tabKey;
         btn.className = isActive
@@ -1209,8 +1164,7 @@ function switchAdminTab(tabKey) {
             : "admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm";
     });
     if (tabKey === 'orders') {
-        const dot = document.getElementById('shopNotifDot');
-        if (dot) dot.classList.add('hidden');
+        document.getElementById('shopNotifDot').classList.add('hidden');
     }
     if (tabKey === 'pos') renderPosSystem();
     if (tabKey === 'menu') renderAdminMenuAndSpaceManager();
@@ -1221,50 +1175,45 @@ function switchAdminTab(tabKey) {
 
 function renderAllAdminData() {
     const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
-    const totalOrdersEl = document.getElementById('statTotalOrders');
-    const revenueEl = document.getElementById('statRevenue');
-    const followersEl = document.getElementById('statTotalFollowers');
-    if (totalOrdersEl) totalOrdersEl.textContent = orders.length;
-    if (revenueEl) revenueEl.textContent = totalRevenue.toLocaleString('vi-VN') + ' VND';
-    if (followersEl) followersEl.textContent = followers.length;
+    document.getElementById('statTotalOrders').textContent = orders.length;
+    document.getElementById('statRevenue').textContent = totalRevenue.toLocaleString('vi-VN') + ' VND';
+    document.getElementById('statTotalFollowers').textContent = followers.length;
 
     const newCount = orders.filter(o => o.isNew).length + tableCalls.filter(c => !c.done).length;
     const badgeEl = document.getElementById('adminOrderBadge');
-    if (badgeEl) badgeEl.textContent = newCount;
-    const dotEl = document.getElementById('shopNotifDot');
-    if (dotEl) {
-        if (newCount > 0) dotEl.classList.remove('hidden');
-        else dotEl.classList.add('hidden');
+    badgeEl.textContent = newCount;
+    if (newCount > 0) {
+        document.getElementById('shopNotifDot').classList.remove('hidden');
+    } else {
+        document.getElementById('shopNotifDot').classList.add('hidden');
     }
 
     const callsEl = document.getElementById('adminTableCallsList');
-    if (callsEl) {
-        if (tableCalls.length === 0) {
-            callsEl.innerHTML = `<div class="text-xs text-slate-400">Chưa có yêu cầu gọi bàn nào.</div>`;
-        } else {
-            callsEl.innerHTML = tableCalls.map((c, idx) => `
-                <div class="p-3 rounded-2xl bg-white/85 dark:bg-slate-800 border ${!c.done ? 'border-amber-400 ring-2 ring-amber-200' : 'border-slate-200 dark:border-slate-700'} flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                        <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-white font-extrabold text-xs whitespace-nowrap">BÀN ${escapeHtml(c.tableCode)}</span>
-                        <span class="text-xs font-bold text-slate-800 dark:text-white ml-2">${escapeHtml(c.request)}</span>
-                        <span class="text-[10px] text-slate-400 ml-2 whitespace-nowrap">(${escapeHtml(c.time)})</span>
-                    </div>
-                    ${!c.done
-                        ? `<button onclick="playClickSound(); completeTableCall(${idx})" class="tactile-btn px-3 py-1 rounded-xl bg-emerald-600 text-white text-[11px] font-bold whitespace-nowrap">Đã phục vụ</button>`
-                        : `<span class="text-[11px] text-emerald-600 font-bold whitespace-nowrap"><i class="fa-solid fa-check"></i> Hoàn tất</span>`
-                    }
+    if (tableCalls.length === 0) {
+        callsEl.innerHTML = `<div class="text-xs text-slate-400">Chưa có yêu cầu gọi bàn nào.</div>`;
+    } else {
+        callsEl.innerHTML = tableCalls.map((c, idx) => `
+            <div class="p-3 rounded-2xl bg-white/85 dark:bg-slate-800 border ${!c.done ? 'border-amber-400 ring-2 ring-amber-200' : 'border-slate-200 dark:border-slate-700'} flex flex-wrap items-center justify-between gap-2">
+                <div>
+                    <span class="px-2 py-0.5 rounded-lg bg-amber-500 text-white font-extrabold text-xs whitespace-nowrap">BÀN ${c.tableCode}</span>
+                    <span class="text-xs font-bold text-slate-800 dark:text-white ml-2">${c.request}</span>
+                    <span class="text-[10px] text-slate-400 ml-2 whitespace-nowrap">(${c.time})</span>
                 </div>
-            `).join('');
-        }
+                ${!c.done
+                    ? `<button onclick="playClickSound(); completeTableCall(${idx})" class="tactile-btn px-3 py-1 rounded-xl bg-emerald-600 text-white text-[11px] font-bold whitespace-nowrap">Đã phục vụ</button>`
+                    : `<span class="text-[11px] text-emerald-600 font-bold whitespace-nowrap"><i class="fa-solid fa-check"></i> Hoàn tất</span>`
+                }
+            </div>
+        `).join('');
     }
 
     const dailyMap = {};
     orders.forEach(o => {
-        const dKey = o.dateStr || (o.time ? o.time.split(' ')[1] : 'Hôm nay');
+        const dKey = o.dateStr || (o.time.split(' ')[1] || 'Hôm nay');
         if (!dailyMap[dKey]) dailyMap[dKey] = { count: 0, revenue: 0, itemsCount: 0 };
         dailyMap[dKey].count += 1;
         dailyMap[dKey].revenue += o.total;
-        dailyMap[dKey].itemsCount += (o.items || []).reduce((s, i) => s + i.qty, 0);
+        dailyMap[dKey].itemsCount += o.items.reduce((s, i) => s + i.qty, 0);
     });
     const dailyEntries = Object.entries(dailyMap);
     const dailySummaryEl = document.getElementById('dailyOrdersSummaryList');
@@ -1274,7 +1223,7 @@ function renderAllAdminData() {
             : dailyEntries.map(([date, info]) => `
                 <div class="p-3.5 rounded-2xl bg-white/85 dark:bg-slate-800 border border-sky-100 dark:border-slate-700 shadow-sm text-xs space-y-1">
                     <div class="font-extrabold text-sky-700 dark:text-sky-400 flex items-center justify-between">
-                        <span><i class="fa-regular fa-calendar mr-1"></i> ${escapeHtml(date)}</span>
+                        <span><i class="fa-regular fa-calendar mr-1"></i> ${date}</span>
                         <span class="px-2 py-0.5 rounded-full bg-sky-500/15 text-[10px]">${info.count} đơn</span>
                     </div>
                     <div class="text-slate-600 dark:text-slate-300">Tổng số món bán: <b>${info.itemsCount} món</b></div>
@@ -1284,41 +1233,39 @@ function renderAllAdminData() {
     }
 
     const ordersEl = document.getElementById('shopOrdersList');
-    if (ordersEl) {
-        if (orders.length === 0) {
-            ordersEl.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">Chưa có đơn hàng nào.</div>`;
-        } else {
-            ordersEl.innerHTML = orders.map((o, idx) => `
-                <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border ${o.isNew ? 'border-sky-400 ring-2 ring-sky-200' : 'border-white dark:border-slate-700'} flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
-                    <div class="space-y-1">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="font-extrabold text-sky-700 dark:text-sky-400 text-xs whitespace-nowrap">${escapeHtml(o.id)}</span>
-                            <span class="px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-700 text-[10px] font-bold whitespace-nowrap">${escapeHtml(o.channel)}</span>
-                            <span class="text-xs font-bold text-slate-800 dark:text-white">• ${escapeHtml(o.customer)} (${escapeHtml(o.phone)})</span>
-                            ${o.isNew ? '<span class="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-extrabold animate-pulse whitespace-nowrap">ĐƠN MỚI</span>' : ''}
-                            ${o.receivedByCustomer ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold whitespace-nowrap">KHÁCH ĐÃ NHẬN MÓN</span>' : ''}
-                        </div>
-                        <div class="text-xs text-slate-700 dark:text-slate-200"><b>Sản phẩm:</b> ${escapeHtml(o.itemsText)}</div>
-                        <div class="text-[11px] text-slate-500 dark:text-slate-400"><b>Địa chỉ / Bàn:</b> ${escapeHtml(o.address)} | <b>Email:</b> ${escapeHtml(o.email)} | <b>Thanh toán:</b> ${escapeHtml(o.payMethod)} | <b>Voucher:</b> ${escapeHtml(o.voucher)}</div>
-                        ${o.note && o.note !== "Không có" ? `<div class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">Yêu cầu: ${escapeHtml(o.note)}</div>` : ''}
-                        <div class="text-[10px] text-slate-400 whitespace-nowrap"><i class="fa-regular fa-clock"></i> Thời gian chi tiết: ${escapeHtml(o.time)}</div>
+    if (orders.length === 0) {
+        ordersEl.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">Chưa có đơn hàng nào.</div>`;
+    } else {
+        ordersEl.innerHTML = orders.map((o, idx) => `
+            <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border ${o.isNew ? 'border-sky-400 ring-2 ring-sky-200' : 'border-white dark:border-slate-700'} flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+                <div class="space-y-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="font-extrabold text-sky-700 dark:text-sky-400 text-xs whitespace-nowrap">${o.id}</span>
+                        <span class="px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-700 text-[10px] font-bold whitespace-nowrap">${o.channel}</span>
+                        <span class="text-xs font-bold text-slate-800 dark:text-white">• ${o.customer} (${o.phone})</span>
+                        ${o.isNew ? '<span class="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-extrabold animate-pulse whitespace-nowrap">ĐƠN MỚI</span>' : ''}
+                        ${o.receivedByCustomer ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold whitespace-nowrap">KHÁCH ĐÃ NHẬN MÓN</span>' : ''}
                     </div>
-                    <div class="flex sm:flex-col items-end justify-between gap-2 shrink-0">
-                        <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${Number(o.total).toLocaleString('vi-VN')} VND</span>
-                        <div class="flex gap-1.5">
-                            <button onclick="playClickSound(); openInvoiceModal(${idx})" class="tactile-btn px-3 py-1.5 rounded-xl bg-amber-500 text-white text-[11px] font-bold shadow-sm whitespace-nowrap">
-                                <i class="fa-solid fa-file-invoice mr-1"></i> Xuất HĐ điện tử
+                    <div class="text-xs text-slate-700 dark:text-slate-200"><b>Sản phẩm:</b> ${o.itemsText}</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400"><b>Địa chỉ / Bàn:</b> ${o.address} | <b>Email:</b> ${o.email} | <b>Thanh toán:</b> ${o.payMethod} | <b>Voucher:</b> ${o.voucher}</div>
+                    ${o.note !== "Không có" ? `<div class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">Yêu cầu: ${o.note}</div>` : ''}
+                    <div class="text-[10px] text-slate-400 whitespace-nowrap"><i class="fa-regular fa-clock"></i> Thời gian chi tiết: ${o.time}</div>
+                </div>
+                <div class="flex sm:flex-col items-end justify-between gap-2 shrink-0">
+                    <span class="font-extrabold text-sky-700 dark:text-sky-400 text-sm whitespace-nowrap">${o.total.toLocaleString('vi-VN')} VND</span>
+                    <div class="flex gap-1.5">
+                        <button onclick="playClickSound(); openInvoiceModal(${idx})" class="tactile-btn px-3 py-1.5 rounded-xl bg-amber-500 text-white text-[11px] font-bold shadow-sm whitespace-nowrap">
+                            <i class="fa-solid fa-file-invoice mr-1"></i> Xuất HĐ điện tử
+                        </button>
+                        ${o.isNew ? `
+                            <button onclick="playClickSound(); markOrderDone(${idx})" class="tactile-btn px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold shadow-sm whitespace-nowrap">
+                                <i class="fa-solid fa-check"></i> Duyệt đơn
                             </button>
-                            ${o.isNew ? `
-                                <button onclick="playClickSound(); markOrderDone(${idx})" class="tactile-btn px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[11px] font-bold shadow-sm whitespace-nowrap">
-                                    <i class="fa-solid fa-check"></i> Duyệt đơn
-                                </button>
-                            ` : ''}
-                        </div>
+                        ` : ''}
                     </div>
                 </div>
-            `).join('');
-        }
+            </div>
+        `).join('');
     }
 
     const customerMap = {};
@@ -1332,54 +1279,47 @@ function renderAllAdminData() {
     });
 
     const customers = Object.values(customerMap);
-    const totalCustEl = document.getElementById('statTotalCustomers');
-    if (totalCustEl) totalCustEl.textContent = customers.length;
+    document.getElementById('statTotalCustomers').textContent = customers.length;
 
     const custEl = document.getElementById('customerProfilesList');
-    if (custEl) {
-        custEl.innerHTML = customers.length === 0
-            ? `<div class="text-xs text-slate-400">Chưa có dữ liệu khách hàng.</div>`
-            : customers.map(c => `
-                <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 shadow-sm space-y-2">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <div class="flex items-center gap-2">
-                            <span class="font-extrabold text-sm text-slate-800 dark:text-white whitespace-nowrap">${escapeHtml(c.name)}</span>
-                            <span class="text-xs text-slate-500 whitespace-nowrap">(${escapeHtml(c.phone)})</span>
+    custEl.innerHTML = customers.length === 0
+        ? `<div class="text-xs text-slate-400">Chưa có dữ liệu khách hàng.</div>`
+        : customers.map(c => `
+            <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 shadow-sm space-y-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-sm text-slate-800 dark:text-white whitespace-nowrap">${c.name}</span>
+                        <span class="text-xs text-slate-500 whitespace-nowrap">(${c.phone})</span>
+                    </div>
+                    <div class="text-xs font-extrabold text-sky-600 dark:text-sky-400 whitespace-nowrap">${c.history.length} đơn hàng • Tổng chi: ${c.totalSpent.toLocaleString('vi-VN')} VND</div>
+                </div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400">Email: ${c.email} | Địa chỉ: ${c.address}</div>
+                <div class="pt-2 border-t border-slate-200/60 dark:border-slate-700 space-y-1">
+                    <div class="text-[10px] font-bold uppercase text-slate-400">Lịch sử đặt hàng chi tiết:</div>
+                    ${c.history.map(h => `
+                        <div class="text-[11px] flex justify-between text-slate-600 dark:text-slate-300">
+                            <span>• [${h.time}] ${h.itemsText}</span>
+                            <span class="font-bold text-sky-600 shrink-0 ml-2">${h.total.toLocaleString('vi-VN')} VND</span>
                         </div>
-                        <div class="text-xs font-extrabold text-sky-600 dark:text-sky-400 whitespace-nowrap">${c.history.length} đơn hàng • Tổng chi: ${Number(c.totalSpent).toLocaleString('vi-VN')} VND</div>
-                    </div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Email: ${escapeHtml(c.email)} | Địa chỉ: ${escapeHtml(c.address)}</div>
-                    <div class="pt-2 border-t border-slate-200/60 dark:border-slate-700 space-y-1">
-                        <div class="text-[10px] font-bold uppercase text-slate-400">Lịch sử đặt hàng chi tiết:</div>
-                        ${c.history.map(h => `
-                            <div class="text-[11px] flex justify-between text-slate-600 dark:text-slate-300">
-                                <span>• [${escapeHtml(h.time)}] ${escapeHtml(h.itemsText)}</span>
-                                <span class="font-bold text-sky-600 shrink-0 ml-2">${Number(h.total).toLocaleString('vi-VN')} VND</span>
-                            </div>
-                        `).join('')}
-                    </div>
+                    `).join('')}
                 </div>
-            `).join('');
-    }
-
-    const adminRevEl = document.getElementById('adminReviewsList');
-    if (adminRevEl) {
-        adminRevEl.innerHTML = reviews.map(r => `
-            <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 text-xs space-y-1.5">
-                <div class="flex justify-between font-bold whitespace-nowrap">
-                    <span>${escapeHtml(r.user)} <span class="text-amber-400 ml-1">${renderStarsHtml(r.rating)} (${r.rating})</span></span>
-                    <span class="text-slate-400 font-normal">${escapeHtml(r.date)}</span>
-                </div>
-                <p class="text-slate-600 dark:text-slate-300">${escapeHtml(r.comment)}</p>
-                ${r.photo ? `<img src="${escapeHtml(r.photo)}" loading="lazy" class="w-20 h-20 rounded-xl object-cover border border-slate-200 shadow-sm">` : ''}
             </div>
         `).join('');
-    }
+
+    document.getElementById('adminReviewsList').innerHTML = reviews.map(r => `
+        <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 text-xs space-y-1.5">
+            <div class="flex justify-between font-bold whitespace-nowrap">
+                <span>${r.user} <span class="text-amber-400 ml-1">${renderStarsHtml(r.rating)} (${r.rating})</span></span>
+                <span class="text-slate-400 font-normal">${r.date}</span>
+            </div>
+            <p class="text-slate-600 dark:text-slate-300">${r.comment}</p>
+            ${r.photo ? `<img src="${r.photo}" loading="lazy" class="w-20 h-20 rounded-xl object-cover border border-slate-200 shadow-sm">` : ''}
+        </div>
+    `).join('');
 }
 
 function renderAdminFollowersList() {
     const container = document.getElementById('adminFollowersList');
-    if (!container) return;
     if (followers.length === 0) {
         container.innerHTML = `<div class="text-xs text-slate-400 italic">Chưa có khách hàng nào theo dõi JUMJUM.</div>`;
         return;
@@ -1391,8 +1331,8 @@ function renderAdminFollowersList() {
                     <i class="fa-solid fa-heart"></i>
                 </div>
                 <div>
-                    <div class="font-bold text-slate-800 dark:text-white">${escapeHtml(f.name)}</div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Email: ${escapeHtml(f.email)} | Thời gian theo dõi: ${escapeHtml(f.time)}</div>
+                    <div class="font-bold text-slate-800 dark:text-white">${f.name}</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Email: ${f.email} | Thời gian theo dõi: ${f.time}</div>
                 </div>
             </div>
             <button onclick="playClickSound(); removeFollower(${idx})" class="tactile-btn w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center" title="Xóa khỏi danh sách">
@@ -1411,7 +1351,6 @@ function removeFollower(idx) {
 }
 
 function completeTableCall(idx) {
-    if (!tableCalls[idx]) return;
     tableCalls[idx].done = true;
     safeSetStorage('jumjum_table_calls', tableCalls);
     renderAllAdminData();
@@ -1419,7 +1358,6 @@ function completeTableCall(idx) {
 }
 
 function markOrderDone(idx) {
-    if (!orders[idx]) return;
     orders[idx].isNew = false;
     orders[idx].status = "Đang pha chế & Giao hàng";
     safeSetStorage('jumjum_orders', orders);
@@ -1439,27 +1377,27 @@ function openInvoiceModal(idx) {
     const o = orders[idx];
     if (!o) return;
     document.getElementById('invoiceDetailsContent').innerHTML = `
-        <div><b>Mã hóa đơn:</b> ${escapeHtml(o.id)}</div>
-        <div><b>Thời gian chi tiết:</b> ${escapeHtml(o.time)}</div>
-        <div><b>Tên khách hàng:</b> ${escapeHtml(o.customer)}</div>
-        <div><b>Số điện thoại:</b> ${escapeHtml(o.phone)}</div>
-        <div><b>Email:</b> ${escapeHtml(o.email)}</div>
-        <div><b>Địa chỉ:</b> ${escapeHtml(o.address)}</div>
-        <div><b>Phương thức thanh toán:</b> ${escapeHtml(o.payMethod)}</div>
-        <div><b>Voucher áp dụng:</b> ${escapeHtml(o.voucher)}</div>
-        <div><b>Yêu cầu thêm:</b> ${escapeHtml(o.note)}</div>
+        <div><b>Mã hóa đơn:</b> ${o.id}</div>
+        <div><b>Thời gian chi tiết:</b> ${o.time}</div>
+        <div><b>Tên khách hàng:</b> ${o.customer}</div>
+        <div><b>Số điện thoại:</b> ${o.phone}</div>
+        <div><b>Email:</b> ${o.email}</div>
+        <div><b>Địa chỉ:</b> ${o.address}</div>
+        <div><b>Phương thức thanh toán:</b> ${o.payMethod}</div>
+        <div><b>Voucher áp dụng:</b> ${o.voucher}</div>
+        <div><b>Yêu cầu thêm:</b> ${o.note}</div>
         <div class="border-t border-dashed border-slate-300 my-2 pt-2 space-y-1">
             <div class="font-bold">CHI TIẾT SẢN PHẨM VÀ TOPPING:</div>
-            ${(o.items || []).map(i => `
+            ${o.items.map(i => `
                 <div class="flex justify-between">
-                    <span>${escapeHtml(i.name)} (SL: ${i.qty}) ${i.toppings ? `(+${escapeHtml(i.toppings)})` : ''}</span>
+                    <span>${i.name} (SL: ${i.qty}) ${i.toppings ? `(+${i.toppings})` : ''}</span>
                     <span>${(i.price * i.qty).toLocaleString('vi-VN')} VND</span>
                 </div>
             `).join('')}
         </div>
         <div class="border-t border-dashed border-slate-300 pt-2 flex justify-between font-extrabold text-sm">
             <span>TỔNG THANH TOÁN:</span>
-            <span>${Number(o.total).toLocaleString('vi-VN')} VND</span>
+            <span>${o.total.toLocaleString('vi-VN')} VND</span>
         </div>
     `;
     openModal('invoiceModal');
@@ -1467,15 +1405,13 @@ function openInvoiceModal(idx) {
 
 // ==================== BÁN HÀNG TẠI QUẦY (POS) ====================
 function renderPosSystem() {
-    const grid = document.getElementById('posProductGrid');
-    if (!grid) return;
-    grid.innerHTML = products.map(p => `
-        <button onclick="playClickSound(); addToPosCart('${escapeHtml(p.id)}')" class="tactile-btn p-2.5 rounded-2xl bg-white/90 dark:bg-slate-800 border border-sky-100 dark:border-slate-700 text-left shadow-sm flex items-center gap-2.5 group">
-            <img src="${escapeHtml(p.image)}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition">
+    document.getElementById('posProductGrid').innerHTML = products.map(p => `
+        <button onclick="playClickSound(); addToPosCart('${p.id}')" class="tactile-btn p-2.5 rounded-2xl bg-white/90 dark:bg-slate-800 border border-sky-100 dark:border-slate-700 text-left shadow-sm flex items-center gap-2.5 group">
+            <img src="${p.image}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition">
             <div class="min-w-0 flex-1">
-                <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase">${escapeHtml(p.category)}</div>
-                <div class="font-bold text-xs text-slate-800 dark:text-white truncate">${escapeHtml(p.name)}</div>
-                <div class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5 whitespace-nowrap">${Number(p.price).toLocaleString('vi-VN')} VND</div>
+                <div class="text-[10px] font-bold text-sky-600 dark:text-sky-400 uppercase">${p.category}</div>
+                <div class="font-bold text-xs text-slate-800 dark:text-white truncate">${p.name}</div>
+                <div class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5 whitespace-nowrap">${p.price.toLocaleString('vi-VN')} VND</div>
             </div>
         </button>
     `).join('');
@@ -1499,15 +1435,13 @@ function clearPosCart() {
 
 function updatePosCartUI() {
     const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
-    const totalEl = document.getElementById('posTotalDisplay');
-    if (totalEl) totalEl.textContent = total.toLocaleString('vi-VN') + ' VND';
+    document.getElementById('posTotalDisplay').textContent = total.toLocaleString('vi-VN') + ' VND';
     const listEl = document.getElementById('posCartList');
-    if (!listEl) return;
     listEl.innerHTML = posCart.length === 0
         ? `<div class="text-xs text-slate-400 italic">Chưa chọn món tại quầy.</div>`
         : posCart.map((i, idx) => `
             <div class="flex items-center justify-between gap-2 text-xs bg-white/80 dark:bg-slate-800 px-3 py-2 rounded-xl">
-                <span class="font-semibold truncate">${escapeHtml(i.name)} <b>(SL: ${i.qty})</b></span>
+                <span class="font-semibold truncate">${i.name} <b>(SL: ${i.qty})</b></span>
                 <div class="flex items-center gap-2 shrink-0">
                     <span class="font-bold text-sky-600 whitespace-nowrap">${(i.price * i.qty).toLocaleString('vi-VN')} VND</span>
                     <button onclick="playClickSound(); posCart.splice(${idx},1); updatePosCartUI()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
@@ -1558,8 +1492,7 @@ function updatePosChange(cashGiven = null) {
     const total = posCart.reduce((s, i) => s + i.price * i.qty, 0);
     const given = cashGiven !== null ? cashGiven : (parseFloat(calcStr) || 0);
     const change = Math.max(0, given - total);
-    const changeEl = document.getElementById('posChangeText');
-    if (changeEl) changeEl.textContent = `Tiền hồi lại: ${change.toLocaleString('vi-VN')} VND`;
+    document.getElementById('posChangeText').textContent = `Tiền hồi lại: ${change.toLocaleString('vi-VN')} VND`;
 }
 
 function simulateBankQrScanned() {
@@ -1612,24 +1545,22 @@ function savePosOrderToSystem(payMethod) {
 }
 
 function renderDailySoldStats() {
-    const statsEl = document.getElementById('dailySoldItemsStats');
-    if (!statsEl) return;
     const todayStr = new Date().toLocaleDateString('vi-VN');
     const itemCounter = {};
-    orders.filter(o => (o.dateStr === todayStr) || (o.time && o.time.includes(todayStr))).forEach(o => {
-        (o.items || []).forEach(item => {
+    orders.filter(o => o.time.includes(todayStr)).forEach(o => {
+        o.items.forEach(item => {
             if (!itemCounter[item.name]) itemCounter[item.name] = { qty: 0, revenue: 0 };
             itemCounter[item.name].qty += item.qty;
             itemCounter[item.name].revenue += item.price * item.qty;
         });
     });
     const entries = Object.entries(itemCounter);
-    statsEl.innerHTML = entries.length === 0
+    document.getElementById('dailySoldItemsStats').innerHTML = entries.length === 0
         ? `<div class="text-xs text-slate-400">Hôm nay chưa có món nào được bán ra.</div>`
         : entries.map(([name, data]) => `
             <div class="p-3 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 flex items-center justify-between gap-2 text-xs">
                 <div class="min-w-0">
-                    <div class="font-bold text-slate-800 dark:text-white truncate">${escapeHtml(name)}</div>
+                    <div class="font-bold text-slate-800 dark:text-white truncate">${name}</div>
                     <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold whitespace-nowrap">Doanh thu: ${data.revenue.toLocaleString('vi-VN')} VND</div>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 font-extrabold whitespace-nowrap shrink-0">SL: ${data.qty}</span>
@@ -1639,68 +1570,56 @@ function renderDailySoldStats() {
 
 // ==================== QUẢN LÍ THỰC ĐƠN & ẢNH ====================
 function renderAdminMenuAndSpaceManager() {
-    const spacePrev = document.getElementById('adminSpaceGalleryPreview');
-    if (spacePrev) {
-        spacePrev.innerHTML = spaceImages.map((img, idx) => `
-            <div class="relative rounded-2xl overflow-hidden h-24 border border-white dark:border-slate-700 shadow-sm group">
-                <img src="${escapeHtml(img)}" loading="lazy" class="w-full h-full object-cover">
-                <button onclick="playClickSound(); deleteSpaceImage(${idx})" class="tactile-btn absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow" title="Xóa">
+    document.getElementById('adminSpaceGalleryPreview').innerHTML = spaceImages.map((img, idx) => `
+        <div class="relative rounded-2xl overflow-hidden h-24 border border-white dark:border-slate-700 shadow-sm group">
+            <img src="${img}" loading="lazy" class="w-full h-full object-cover">
+            <button onclick="playClickSound(); deleteSpaceImage(${idx})" class="tactile-btn absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow" title="Xóa">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
+    `).join('');
+
+    document.getElementById('adminFoodTagsList').innerHTML = foodTags.map((tag, idx) => `
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-800 dark:text-amber-200 text-xs font-bold whitespace-nowrap">
+            <i class="fa-solid fa-tag text-amber-500"></i> ${tag}
+            <button onclick="playClickSound(); deleteFoodTag(${idx})" class="text-rose-500 hover:text-rose-700 ml-1">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+        </span>
+    `).join('');
+
+    document.getElementById('newProdCategorySelect').innerHTML = foodTags.map(t => `<option value="${t}">${t}</option>`).join('');
+
+    document.getElementById('adminProductEditList').innerHTML = products.map((p, idx) => `
+        <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 space-y-2.5 text-xs shadow-sm">
+            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+                <div class="flex items-center gap-3 flex-1 w-full min-w-0">
+                    <label class="relative cursor-pointer shrink-0 group">
+                        <img src="${p.image}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-16 h-16 rounded-xl object-cover border border-slate-200">
+                        <span class="absolute inset-0 bg-black/55 text-white rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center text-[10px] font-bold transition whitespace-nowrap">Tải ảnh</span>
+                        <input type="file" accept="image/*" onchange="updateExistingProductImage(${idx}, this)" class="hidden">
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1 w-full">
+                        <input type="text" value="${p.name}" onchange="updateExistingProductField(${idx}, 'name', this.value)" placeholder="Tên món" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 font-bold text-slate-800 dark:text-white border border-transparent focus:border-sky-400 focus:outline-none">
+                        <select onchange="updateExistingProductField(${idx}, 'category', this.value)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 font-semibold text-sky-700 dark:text-sky-300 border border-transparent focus:border-sky-400 focus:outline-none">
+                            ${[...new Set([...foodTags, p.category])].map(tag => `<option value="${tag}" ${p.category === tag ? 'selected' : ''}>${tag}</option>`).join('')}
+                        </select>
+                        <input type="number" value="${p.price}" onchange="updateExistingProductField(${idx}, 'price', parseInt(this.value))" placeholder="Giá bán" class="px-2.5 py-1.5 rounded-lg bg-sky-50 dark:bg-slate-900 border border-sky-200 dark:border-slate-700 font-bold text-sky-700 dark:text-sky-400 text-right">
+                    </div>
+                </div>
+                <button onclick="playClickSound(); deleteProduct(${idx})" class="tactile-btn w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 self-end sm:self-center" title="Xóa món">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </div>
-        `).join('');
-    }
-
-    const tagsEl = document.getElementById('adminFoodTagsList');
-    if (tagsEl) {
-        tagsEl.innerHTML = foodTags.map((tag, idx) => `
-            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-800 dark:text-amber-200 text-xs font-bold whitespace-nowrap">
-                <i class="fa-solid fa-tag text-amber-500"></i> ${escapeHtml(tag)}
-                <button onclick="playClickSound(); deleteFoodTag(${idx})" class="text-rose-500 hover:text-rose-700 ml-1">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </button>
-            </span>
-        `).join('');
-    }
-
-    const catSel = document.getElementById('newProdCategorySelect');
-    if (catSel) {
-        catSel.innerHTML = foodTags.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
-    }
-
-    const prodListEl = document.getElementById('adminProductEditList');
-    if (prodListEl) {
-        prodListEl.innerHTML = products.map((p, idx) => `
-            <div class="p-4 rounded-2xl bg-white/85 dark:bg-slate-800 border border-white dark:border-slate-700 space-y-2.5 text-xs shadow-sm">
-                <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-                    <div class="flex items-center gap-3 flex-1 w-full min-w-0">
-                        <label class="relative cursor-pointer shrink-0 group">
-                            <img src="${escapeHtml(p.image)}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=200'" class="w-16 h-16 rounded-xl object-cover border border-slate-200">
-                            <span class="absolute inset-0 bg-black/55 text-white rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center text-[10px] font-bold transition whitespace-nowrap">Tải ảnh</span>
-                            <input type="file" accept="image/*" onchange="updateExistingProductImage(${idx}, this)" class="hidden">
-                        </label>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1 w-full">
-                            <input type="text" value="${escapeHtml(p.name)}" onchange="updateExistingProductField(${idx}, 'name', this.value)" placeholder="Tên món" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 font-bold text-slate-800 dark:text-white border border-transparent focus:border-sky-400 focus:outline-none">
-                            <select onchange="updateExistingProductField(${idx}, 'category', this.value)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 font-semibold text-sky-700 dark:text-sky-300 border border-transparent focus:border-sky-400 focus:outline-none">
-                                ${[...new Set([...foodTags, p.category])].map(tag => `<option value="${escapeHtml(tag)}" ${p.category === tag ? 'selected' : ''}>${escapeHtml(tag)}</option>`).join('')}
-                            </select>
-                            <input type="number" value="${p.price}" onchange="updateExistingProductField(${idx}, 'price', parseInt(this.value, 10) || 0)" placeholder="Giá bán" class="px-2.5 py-1.5 rounded-lg bg-sky-50 dark:bg-slate-900 border border-sky-200 dark:border-slate-700 font-bold text-sky-700 dark:text-sky-400 text-right">
-                        </div>
-                    </div>
-                    <button onclick="playClickSound(); deleteProduct(${idx})" class="tactile-btn w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 self-end sm:self-center" title="Xóa món">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                    <input type="text" value="${p.image.startsWith('data:') ? '' : escapeHtml(p.image)}" onchange="if(this.value.trim()) updateExistingProductField(${idx}, 'image', this.value.trim())" placeholder="Dán URL ảnh mới..." class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-[11px] dark:text-slate-300">
-                    <input type="text" value="${escapeHtml(p.desc)}" onchange="updateExistingProductField(${idx}, 'desc', this.value)" placeholder="Mô tả món..." class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-[11px] dark:text-slate-300">
-                </div>
-                <label class="inline-flex items-center gap-2 text-[11px] font-semibold text-slate-600 dark:text-slate-300 cursor-pointer">
-                    <input type="checkbox" ${p.hasTopping ? 'checked' : ''} onchange="updateExistingProductField(${idx}, 'hasTopping', this.checked)"> Cho phép chọn Topping thêm
-                </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <input type="text" value="${p.image.startsWith('data:') ? '' : p.image}" onchange="if(this.value.trim()) updateExistingProductField(${idx}, 'image', this.value.trim())" placeholder="Dán URL ảnh mới..." class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-[11px] dark:text-slate-300">
+                <input type="text" value="${p.desc}" onchange="updateExistingProductField(${idx}, 'desc', this.value)" placeholder="Mô tả món..." class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-[11px] dark:text-slate-300">
             </div>
-        `).join('');
-    }
+            <label class="inline-flex items-center gap-2 text-[11px] font-semibold text-slate-600 dark:text-slate-300 cursor-pointer">
+                <input type="checkbox" ${p.hasTopping ? 'checked' : ''} onchange="updateExistingProductField(${idx}, 'hasTopping', this.checked)"> Cho phép chọn Topping thêm
+            </label>
+        </div>
+    `).join('');
 }
 
 function compressImageFile(file, maxSize, callback) {
@@ -1801,7 +1720,7 @@ function previewNewProductUrl(url) {
 function addNewProduct() {
     const name = document.getElementById('newProdName').value.trim();
     const category = document.getElementById('newProdCategorySelect').value || foodTags[0] || "Thức Uống";
-    const price = parseInt(document.getElementById('newProdPrice').value, 10);
+    const price = parseInt(document.getElementById('newProdPrice').value);
     const hasTopping = document.getElementById('newProdHasTopping').checked;
     const desc = document.getElementById('newProdDesc').value.trim() || "Hương vị tươi mới đặc trưng từ JUMJUM.";
     const urlImg = document.getElementById('newProdImageUrl').value.trim();
@@ -1836,7 +1755,6 @@ function addNewProduct() {
 }
 
 function updateExistingProductField(idx, field, val) {
-    if (!products[idx]) return;
     if (!val && val !== 0 && typeof val !== 'boolean') return;
     products[idx][field] = val;
     safeSetStorage('jumjum_products', products);
@@ -1848,7 +1766,7 @@ function updateExistingProductField(idx, field, val) {
 
 function updateExistingProductImage(idx, input) {
     const file = input.files[0];
-    if (!file || !products[idx]) return;
+    if (!file) return;
     compressImageFile(file, 500, (compressed) => {
         products[idx].image = compressed;
         if (safeSetStorage('jumjum_products', products)) {
@@ -1888,11 +1806,9 @@ function handleStarClick(event, starIndex) {
 }
 
 function updateStarSelectorUI() {
-    const label = document.getElementById('selectedStarLabel');
-    if (label) label.textContent = `${selectedStar.toFixed(1)} / 5 sao`;
+    document.getElementById('selectedStarLabel').textContent = `${selectedStar.toFixed(1)} / 5 sao`;
     for (let i = 1; i <= 5; i++) {
         const icon = document.getElementById(`star-icon-${i}`);
-        if (!icon) continue;
         if (selectedStar >= i) {
             icon.className = "fa-solid fa-star text-amber-400";
         } else if (selectedStar >= i - 0.5) {
@@ -1952,24 +1868,22 @@ function submitReview() {
 }
 
 function renderReviews() {
-    const listEl = document.getElementById('reviewList');
-    if (!listEl) return;
-    listEl.innerHTML = reviews.map(r => `
+    document.getElementById('reviewList').innerHTML = reviews.map(r => `
         <div class="liquid-glass tactile-card p-4 shadow-sm">
             <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2.5">
                     <div class="w-9 h-9 rounded-full bg-sky-100 text-sky-700 font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
-                        ${escapeHtml(r.user.charAt(0).toUpperCase())}
+                        ${r.user.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                        <div class="text-xs font-bold text-slate-800 dark:text-white whitespace-nowrap">${escapeHtml(r.user)}</div>
+                        <div class="text-xs font-bold text-slate-800 dark:text-white whitespace-nowrap">${r.user}</div>
                         <div class="text-[11px] text-amber-400 whitespace-nowrap">${renderStarsHtml(r.rating)} <span class="text-slate-400 ml-1">(${r.rating})</span></div>
                     </div>
                 </div>
-                <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">${escapeHtml(r.date)}</span>
+                <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">${r.date}</span>
             </div>
-            <p class="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${escapeHtml(r.comment)}</p>
-            ${r.photo ? `<img src="${escapeHtml(r.photo)}" loading="lazy" class="mt-2.5 w-28 h-28 rounded-2xl object-cover border border-white/80 dark:border-slate-700 shadow-sm">` : ''}
+            <p class="mt-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${r.comment}</p>
+            ${r.photo ? `<img src="${r.photo}" loading="lazy" class="mt-2.5 w-28 h-28 rounded-2xl object-cover border border-white/80 dark:border-slate-700 shadow-sm">` : ''}
         </div>
     `).join('');
 }
@@ -1981,21 +1895,51 @@ function toggleMusic() {
     const statusText = document.getElementById('musicStatusText');
     if (!audio) return;
 
-    if (isPlayingMusic) {
+    const musicPath = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjum music.mp3";
+    const encodedPath = encodeURI(musicPath);
+    if (audio.getAttribute('src') !== encodedPath) {
+        audio.src = encodedPath;
+        audio.load();
+    }
+
+    if (!audio.dataset.musicBound) {
+        audio.dataset.musicBound = "1";
+        audio.addEventListener('error', () => {
+            isPlayingMusic = false;
+            if (iconWrap) iconWrap.classList.remove('spinning');
+            if (statusText) statusText.textContent = "Nhạc nền";
+            showToast(`Không tìm thấy hoặc không mở được tệp ${musicPath}!`);
+        });
+        audio.addEventListener('ended', () => {
+            if (!audio.loop) {
+                isPlayingMusic = false;
+                if (iconWrap) iconWrap.classList.remove('spinning');
+                if (statusText) statusText.textContent = "Nhạc nền";
+            }
+        });
+    }
+
+    if (isPlayingMusic || !audio.paused) {
         audio.pause();
+        isPlayingMusic = false;
         if (iconWrap) iconWrap.classList.remove('spinning');
         if (statusText) statusText.textContent = "Nhạc nền";
     } else {
-        audio.play().catch(() => showToast("Chưa tìm thấy tệp audio/jumjumshop music.mp3 hoặc trình duyệt đang chặn tự phát!"));
-        if (iconWrap) iconWrap.classList.add('spinning');
-        if (statusText) statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
+        audio.play().then(() => {
+            isPlayingMusic = true;
+            if (iconWrap) iconWrap.classList.add('spinning');
+            if (statusText) statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
+        }).catch(() => {
+            isPlayingMusic = false;
+            if (iconWrap) iconWrap.classList.remove('spinning');
+            if (statusText) statusText.textContent = "Nhạc nền";
+            showToast(`Chưa phát được ${musicPath}. Kiểm tra tệp MP3 hoặc bấm lại sau khi chạm trang!`);
+        });
     }
-    isPlayingMusic = !isPlayingMusic;
 }
 
 function generateWebQR() {
     const qrContainer = document.getElementById('qrcodeCanvas');
-    if (!qrContainer || !window.QRCode) return;
     qrContainer.innerHTML = '';
     new QRCode(qrContainer, {
         text: window.location.href,
@@ -2014,7 +1958,6 @@ function copyWebLink() {
 
 function downloadAestheticQR() {
     const cardEl = document.getElementById('qrcodeCardBadge');
-    if (!cardEl) return;
     if (!window.html2canvas) {
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
@@ -2038,7 +1981,6 @@ function executeDownloadQR(el) {
 function switchQrMode(mode) {
     const myQrSec = document.getElementById('myQrSection');
     const scanSec = document.getElementById('scanQrSection');
-    if (!myQrSec || !scanSec) return;
     if (mode === 'myqr') {
         myQrSec.classList.remove('hidden');
         scanSec.classList.add('hidden');
@@ -2051,10 +1993,6 @@ function switchQrMode(mode) {
 }
 
 function startQrScanner() {
-    if (!window.Html5Qrcode) {
-        document.getElementById('scanResultText').textContent = "Trình quét QR chưa sẵn sàng.";
-        return;
-    }
     html5QrCode = new Html5Qrcode("qr-reader");
     html5QrCode.start(
         { facingMode: "environment" },
@@ -2082,31 +2020,24 @@ function closeQrModal() {
 function togglePasswordVisibility() {
     const passInput = document.getElementById('shopPassInput');
     const eyeIcon = document.getElementById('eyeIcon');
-    if (!passInput) return;
     if (passInput.type === 'password') {
         passInput.type = 'text';
-        if (eyeIcon) eyeIcon.className = "fa-solid fa-eye-slash";
+        eyeIcon.className = "fa-solid fa-eye-slash";
     } else {
         passInput.type = 'password';
-        if (eyeIcon) eyeIcon.className = "fa-solid fa-eye";
+        eyeIcon.className = "fa-solid fa-eye";
     }
 }
 
-function openModal(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('hidden');
-}
-function closeModal(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('hidden');
-}
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
 function showToast(msg) {
     const box = document.getElementById('toastBox');
-    const msgEl = document.getElementById('toastMsg');
-    if (!box || !msgEl) return;
-    msgEl.textContent = msg;
+    document.getElementById('toastMsg').textContent = msg;
     box.classList.remove('opacity-0', '-translate-y-3');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => box.classList.add('opacity-0', '-translate-y-3'), 2800);
+    setTimeout(() => box.classList.add('opacity-0', '-translate-y-3'), 2800);
 }
+```[cite: 6]
+
+Nếu bạn có sẵn file `index.html` thực tế (có thẻ `<!DOCTYPE html>...`), hãy gửi cho mình để mình cập nhật chính xác đường dẫn `audio/jumjum%20music.mp3` vào đúng file HTML đó nhé.
