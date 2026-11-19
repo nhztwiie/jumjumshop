@@ -2039,5 +2039,3 @@ function showToast(msg) {
     setTimeout(() => box.classList.add('opacity-0', '-translate-y-3'), 2800);
 }
 ```[cite: 6]
-
-Nếu bạn có sẵn file `index.html` thực tế (có thẻ `<!DOCTYPE html>...`), hãy gửi cho mình để mình cập nhật chính xác đường dẫn `audio/jumjum%20music.mp3` vào đúng file HTML đó nhé.
