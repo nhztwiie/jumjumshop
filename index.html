@@ -1130,7 +1130,7 @@
     </div>
 
     <!-- Nhạc nền: audio/jumjum shop.mp3 -->
-    <audio id="bgAudio" src="audio/jumjum shop.mp3" loop></audio>
+    <audio id="bgAudio" src="audio/jumjum-shop.mp3" preload="metadata" loop></audio>
 
     <!-- Thông báo nổi -->
     <div id="toastBox" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-3 max-w-[92vw]">
@@ -1149,7 +1149,7 @@
                 address: "Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long",
                 hotline: "0876.935.873",
                 avatar: "images/jumjumshop.png",
-                bgMusic: "audio/jumjum shop.mp3",
+                bgMusic: "audio/jumjum-shop.mp3",
                 musicTitle: "JUMJUM MUSIC",
                 zaloUrl: "https://zalo.me/0398476794",
                 facebookUrl: "https://www.facebook.com/nhzt.wiie",
@@ -2985,21 +2985,52 @@
         }
 
         // ==================== NHẠC NỀN & QR CODE ====================
-        function toggleMusic() {
+        const bgAudioEl = document.getElementById('bgAudio');
+        if (bgAudioEl) {
+            bgAudioEl.src = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjum-shop.mp3";
+            bgAudioEl.addEventListener('error', () => {
+                isPlayingMusic = false;
+                document.getElementById('musicIconWrap')?.classList.remove('spinning');
+                document.getElementById('musicStatusText').textContent = "Nhạc nền";
+            });
+        }
+
+        async function toggleMusic() {
             const audio = document.getElementById('bgAudio');
             const iconWrap = document.getElementById('musicIconWrap');
             const statusText = document.getElementById('musicStatusText');
+            if (!audio) return;
 
-            if (isPlayingMusic) {
+            if (!audio.paused) {
                 audio.pause();
+                isPlayingMusic = false;
                 iconWrap.classList.remove('spinning');
                 statusText.textContent = "Nhạc nền";
-            } else {
-                audio.play().catch(() => showToast("Chưa tìm thấy tệp audio/jumjum shop.mp3 hoặc trình duyệt đang chặn tự phát!"));
+                return;
+            }
+
+            try {
+                await audio.play();
+                isPlayingMusic = true;
                 iconWrap.classList.add('spinning');
                 statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
+            } catch (err) {
+                const fallbackSrc = "audio/jumjum%20shop.mp3";
+                if (!audio.src.endsWith(fallbackSrc)) {
+                    audio.src = fallbackSrc;
+                    try {
+                        await audio.play();
+                        isPlayingMusic = true;
+                        iconWrap.classList.add('spinning');
+                        statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
+                        return;
+                    } catch (_) {}
+                }
+                isPlayingMusic = false;
+                iconWrap.classList.remove('spinning');
+                statusText.textContent = "Nhạc nền";
+                showToast("Không phát được nhạc nền: kiểm tra lại file trong thư mục audio/!");
             }
-            isPlayingMusic = !isPlayingMusic;
         }
 
         function generateWebQR() {
