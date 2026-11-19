@@ -6,7 +6,7 @@ const DEFAULT_SHOP_DATA = {
         address: "Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long",
         hotline: "0876.935.873",
         avatar: "images/jumjumshop.png",
-        bgMusic: "audio/jumjum music.mp3",
+        bgMusic: "audio/jumjumshop-music.mp3",
         musicTitle: "JUMJUM MUSIC",
         zaloUrl: "https://zalo.me/0398476794",
         facebookUrl: "https://www.facebook.com/nhzt.wiie",
@@ -120,7 +120,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Giảm tần suất kiểm tra trên điện thoại để tiết kiệm pin và tránh giật lag
     const syncIntervalMs = IS_MOBILE_DEVICE ? 6000 : 3500;
     setInterval(() => {
         if (!document.hidden) {
@@ -442,7 +441,6 @@ function initLiquidWaveCanvas() {
     let phase = 0;
     let lastFrameTime = 0;
 
-    // Trên mobile giới hạn ~30fps và bước vẽ thưa hơn để giảm tải CPU/GPU
     const frameInterval = IS_MOBILE_DEVICE ? 33 : 16;
     const stepX = IS_MOBILE_DEVICE ? 48 : 24;
 
@@ -487,8 +485,8 @@ function initLiquidWaveCanvas() {
 
 function initRealtimeClock() {
     const clockEl = document.getElementById('realtimeClock');
+    if (!clockEl) return;
     const update = () => {
-        if (document.hidden) return;
         const now = new Date();
         clockEl.textContent = now.toLocaleTimeString('vi-VN') + ' • ' + now.toLocaleDateString('vi-VN');
     };
@@ -509,7 +507,6 @@ function toggleThemeManual() {
 }
 
 function initInteractiveEffects() {
-    // Chỉ bật hiệu ứng đèn rọi theo con trỏ trên thiết bị dùng chuột
     if (!IS_MOBILE_DEVICE) {
         let rafPending = false;
         document.addEventListener('mousemove', (e) => {
@@ -526,7 +523,6 @@ function initInteractiveEffects() {
         }, { passive: true });
     }
 
-    // Gộp xử lý gợn sóng bằng pointerdown để không bắn trùng 2 lần (touchstart + click)
     let activeRipples = 0;
     const maxRipples = IS_MOBILE_DEVICE ? 2 : 5;
 
@@ -1895,9 +1891,9 @@ function toggleMusic() {
     const statusText = document.getElementById('musicStatusText');
     if (!audio) return;
 
-    const musicPath = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjum music.mp3";
+    const musicPath = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjumshop-music.mp3";
     const encodedPath = encodeURI(musicPath);
-    if (audio.getAttribute('src') !== encodedPath) {
+    if (!audio.getAttribute('src') || audio.getAttribute('src') !== encodedPath) {
         audio.src = encodedPath;
         audio.load();
     }
@@ -1910,32 +1906,26 @@ function toggleMusic() {
             if (statusText) statusText.textContent = "Nhạc nền";
             showToast(`Không tìm thấy hoặc không mở được tệp ${musicPath}!`);
         });
-        audio.addEventListener('ended', () => {
-            if (!audio.loop) {
-                isPlayingMusic = false;
-                if (iconWrap) iconWrap.classList.remove('spinning');
-                if (statusText) statusText.textContent = "Nhạc nền";
-            }
-        });
     }
 
-    if (isPlayingMusic || !audio.paused) {
+    if (!audio.paused) {
         audio.pause();
         isPlayingMusic = false;
         if (iconWrap) iconWrap.classList.remove('spinning');
         if (statusText) statusText.textContent = "Nhạc nền";
-    } else {
-        audio.play().then(() => {
-            isPlayingMusic = true;
-            if (iconWrap) iconWrap.classList.add('spinning');
-            if (statusText) statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
-        }).catch(() => {
-            isPlayingMusic = false;
-            if (iconWrap) iconWrap.classList.remove('spinning');
-            if (statusText) statusText.textContent = "Nhạc nền";
-            showToast(`Chưa phát được ${musicPath}. Kiểm tra tệp MP3 hoặc bấm lại sau khi chạm trang!`);
-        });
+        return;
     }
+
+    audio.play().then(() => {
+        isPlayingMusic = true;
+        if (iconWrap) iconWrap.classList.add('spinning');
+        if (statusText) statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
+    }).catch(() => {
+        isPlayingMusic = false;
+        if (iconWrap) iconWrap.classList.remove('spinning');
+        if (statusText) statusText.textContent = "Nhạc nền";
+        showToast(`Chưa phát được ${musicPath}. Kiểm tra tệp MP3 trên GitHub nhé!`);
+    });
 }
 
 function generateWebQR() {
@@ -2038,4 +2028,3 @@ function showToast(msg) {
     box.classList.remove('opacity-0', '-translate-y-3');
     setTimeout(() => box.classList.add('opacity-0', '-translate-y-3'), 2800);
 }
-```[cite: 6]
