@@ -180,7 +180,6 @@ body {
         --glass-shadow: 0 8px 20px -4px rgba(7, 13, 25, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     }
 
-    /* Giảm tải GPU filter blur lớn trên mobile */
     .liquid-orb {
         filter: blur(42px);
         animation-duration: 24s;
@@ -190,7 +189,6 @@ body {
     .orb-2 { width: 260px; height: 260px; }
     .orb-3 { display: none; }
 
-    /* Tắt hiệu ứng đèn rọi theo chuột trên màn hình cảm ứng */
     .spotlight-card::before {
         display: none !important;
     }
