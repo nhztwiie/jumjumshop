@@ -1885,15 +1885,16 @@ function renderReviews() {
 }
 
 // ==================== NHẠC NỀN & QR CODE ====================
+// ==================== NHẠC NỀN & QR CODE ====================
 function toggleMusic() {
     const audio = document.getElementById('bgAudio');
     const iconWrap = document.getElementById('musicIconWrap');
     const statusText = document.getElementById('musicStatusText');
     if (!audio) return;
 
-    const musicPath = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjumshop-music.mp3";
-    const encodedPath = encodeURI(musicPath);
-    if (!audio.getAttribute('src') || audio.getAttribute('src') !== encodedPath) {
+    const rawPath = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjumshop-music.mp3";
+    const encodedPath = encodeURI(rawPath);
+    if (audio.getAttribute('src') !== encodedPath) {
         audio.src = encodedPath;
         audio.load();
     }
@@ -1904,7 +1905,7 @@ function toggleMusic() {
             isPlayingMusic = false;
             if (iconWrap) iconWrap.classList.remove('spinning');
             if (statusText) statusText.textContent = "Nhạc nền";
-            showToast(`Không tìm thấy hoặc không mở được tệp ${musicPath}!`);
+            showToast(`Không tìm thấy tệp "${rawPath}" trên GitHub!`);
         });
     }
 
@@ -1924,7 +1925,7 @@ function toggleMusic() {
         isPlayingMusic = false;
         if (iconWrap) iconWrap.classList.remove('spinning');
         if (statusText) statusText.textContent = "Nhạc nền";
-        showToast(`Chưa phát được ${musicPath}. Kiểm tra tệp MP3 trên GitHub nhé!`);
+        showToast(`Chưa phát được "${rawPath}". Kiểm tra tên file trên GitHub nhé!`);
     });
 }
 
@@ -2005,26 +2006,4 @@ function stopQrScanner() {
 function closeQrModal() {
     stopQrScanner();
     closeModal('qrModal');
-}
-
-function togglePasswordVisibility() {
-    const passInput = document.getElementById('shopPassInput');
-    const eyeIcon = document.getElementById('eyeIcon');
-    if (passInput.type === 'password') {
-        passInput.type = 'text';
-        eyeIcon.className = "fa-solid fa-eye-slash";
-    } else {
-        passInput.type = 'password';
-        eyeIcon.className = "fa-solid fa-eye";
-    }
-}
-
-function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-function showToast(msg) {
-    const box = document.getElementById('toastBox');
-    document.getElementById('toastMsg').textContent = msg;
-    box.classList.remove('opacity-0', '-translate-y-3');
-    setTimeout(() => box.classList.add('opacity-0', '-translate-y-3'), 2800);
 }
