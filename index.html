@@ -326,9 +326,12 @@
 
                         <!-- Không gian JUMJUM -->
                         <div class="mt-6 w-full max-w-2xl text-left">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-1.5 whitespace-nowrap">
-                                <i class="fa-solid fa-camera-retro text-sky-500"></i> Không gian JUMJUM
-                            </h3>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5 whitespace-nowrap">
+                                    <i class="fa-solid fa-camera-retro text-sky-500"></i> Không gian JUMJUM
+                                </h3>
+                                <span class="text-[10px] font-bold text-sky-700 dark:text-sky-300 bg-sky-500/10 px-2.5 py-0.5 rounded-full whitespace-nowrap">Chill • Gen Z • Check-in</span>
+                            </div>
                             <div id="spaceGallery" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
                         </div>
                     </div>
@@ -575,7 +578,7 @@
                             <div id="posProductGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1"></div>
                         </div>
 
-                        <!-- Máy tính tiền (Không ghi dòng chữ cộng trừ nhân chia theo yêu cầu) -->
+                        <!-- Máy tính tiền -->
                         <div class="liquid-glass p-5">
                             <div class="flex items-center justify-between gap-2 mb-2">
                                 <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">Máy tính tiền</span>
@@ -628,7 +631,6 @@
                                     <span id="posTotalDisplay" class="text-sky-600 dark:text-sky-400">0 VND</span>
                                 </div>
 
-                                <!-- QR Ngân hàng & Ví điện tử khớp chính xác thông tin VietQR MB 0398476794 LE NHAT HUY -->
                                 <div class="p-3 rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-sky-200 dark:border-slate-700 text-center space-y-2">
                                     <div class="text-[11px] font-extrabold text-sky-800 dark:text-sky-300 uppercase whitespace-nowrap">THANH TOÁN BANK / VÍ ĐIỆN TỬ</div>
                                     <div class="text-[10px] font-bold text-slate-600 dark:text-slate-300">MB Bank • LE NHAT HUY • 0398476794</div>
@@ -1129,8 +1131,8 @@
         </div>
     </div>
 
-    <!-- Nhạc nền: audio/jumjum shop.mp3 -->
-    <audio id="bgAudio" src="audio/jumjum-shop.mp3" preload="metadata" loop></audio>
+    <!-- Nhạc nền: audio/jumjum music.mp3 -->
+    <audio id="bgAudio" src="audio/jumjum music.mp3" preload="metadata" loop></audio>
 
     <!-- Thông báo nổi -->
     <div id="toastBox" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-3 max-w-[92vw]">
@@ -1149,7 +1151,7 @@
                 address: "Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long",
                 hotline: "0876.935.873",
                 avatar: "images/jumjumshop.png",
-                bgMusic: "audio/jumjum-shop.mp3",
+                bgMusic: "audio/jumjum music.mp3",
                 musicTitle: "JUMJUM MUSIC",
                 zaloUrl: "https://zalo.me/0398476794",
                 facebookUrl: "https://www.facebook.com/nhzt.wiie",
@@ -1159,11 +1161,33 @@
                 { email: "jumjumshop@gmail.com", pwd: "jumjumshop@161126", name: "Quản Trị Viên Chính" }
             ],
             spaceImages: [
-                "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600",
-                "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=600",
-                "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600"
+                {
+                    url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=900",
+                    tag: "☀️ Góc Đón Nắng",
+                    caption: "Ánh sáng tự nhiên cực chill"
+                },
+                {
+                    url: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&q=80&w=800",
+                    tag: "✨ Hội Bạn Gen Z",
+                    caption: "Tụ tập tám chuyện hết nấc"
+                },
+                {
+                    url: "https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?auto=format&fit=crop&q=80&w=800",
+                    tag: "🎧 Vibe Cực Cuốn",
+                    caption: "Góc check-in & học bài"
+                },
+                {
+                    url: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=800",
+                    tag: "🌿 Không Gian Xanh",
+                    caption: "Thoáng mát, gần gũi"
+                },
+                {
+                    url: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=800",
+                    tag: "📸 Tọa Độ Sống Ảo",
+                    caption: "Lên hình nào cũng xinh"
+                }
             ],
-            foodTags: ["Trà Sữa", "Trà Trái Cây", "Ăn Vặt"],
+            foodTags: ["Sữa Chua & Granola", "Bánh Ngọt", "Matcha", "Trà & Nước Trái Cây", "Sinh Tố", "Trà Sữa", "Ăn Vặt"],
             toppings: [
                 { id: "t1", name: "Trân châu đường đen", price: 5000 },
                 { id: "t2", name: "Kem phô mai Macchiato", price: 7000 },
@@ -1172,10 +1196,25 @@
                 { id: "t5", name: "Hạt thủy tinh củ năng", price: 6000 }
             ],
             products: [
-                { id: "p1", name: "Trà Sữa Trân Châu Đường Đen", category: "Trà Sữa", price: 25000, desc: "Sữa tươi thanh trùng kết hợp trân châu đường đen dẻo mềm nấu mới mỗi ngày.", image: "https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&q=80&w=600", hasTopping: true },
-                { id: "p2", name: "Trà Đào Cam Sả", category: "Trà Trái Cây", price: 28000, desc: "Hương vị thanh mát từ trà đen ủ lạnh, đào miếng giòn ngọt và sả tươi.", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=600", hasTopping: true },
-                { id: "p3", name: "Trà Mãng Cầu Tươi", category: "Trà Trái Cây", price: 30000, desc: "Mãng cầu xiêm dầm tươi chua ngọt hài hòa, giải nhiệt tức thì.", image: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&q=80&w=600", hasTopping: true },
-                { id: "p4", name: "Mẹt Ăn Vặt Thập Cẩm", category: "Ăn Vặt", price: 45000, desc: "Đầy đủ cá viên, bò viên, xúc xích, phô mai que chiên giòn rụm kèm tương chấm đặc biệt.", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=600", hasTopping: false }
+                { id: "m1", name: "Sữa Chua Trái Cây & Granola", category: "Sữa Chua & Granola", price: 45000, desc: "Sự kết hợp thanh mát giữa sữa chua sánh mịn, ngũ cốc granola giòn rụm cùng dâu tây, xoài chín và việt quất tươi mọng, giàu dinh dưỡng.", image: "https://images.unsplash.com/photo-1511690743698-d9d85f350245?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m2", name: "Bánh Flan Caramel Truyền Thống", category: "Bánh Ngọt", price: 10000, desc: "Bánh flan trứng sữa mềm mịn, béo ngậy, tan ngay trong miệng hòa quyện cùng lớp sốt caramel đắng nhẹ thơm lừng (10.000đ/phần).", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600", hasTopping: false },
+                { id: "m3", name: "Sinh Tố Việt Quất Bạc Hà", category: "Sinh Tố", price: 49000, desc: "Thức uống giải nhiệt sảng khoái với vị chua ngọt tự nhiên của quả việt quất xay nhuyễn cùng sữa tươi và hương bạc hà the mát.", image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m4", name: "Sinh Tố Xoài Sữa Tươi", category: "Sinh Tố", price: 45000, desc: "Hương vị nhiệt đới ngọt ngào từ xoài chín tươi xay mịn, béo nhẹ vị sữa và điểm xuyết những miếng xoài tươi giòn ngọt.", image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m5", name: "Matcha Đá Xay Kem Tươi", category: "Matcha", price: 55000, desc: "Bột trà xanh Nhật Bản thượng hạng xay cùng đá và sữa tươi, phủ lớp kem tươi bông mịn rắc bột matcha thơm dịu phía trên.", image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m6", name: "Iced Matcha Latte", category: "Matcha", price: 49000, desc: "Sự hòa quyện tinh tế giữa vị chát nhẹ, thanh khiết của trà xanh matcha đánh tay và vị béo ngậy của sữa tươi thanh trùng mát lạnh.", image: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m7", name: "Matcha Kem Trứng Nướng", category: "Matcha", price: 59000, desc: "Matcha latte đậm đà kết hợp cùng lớp kem trứng béo ngậy được khò lửa vàng giòn, tạo nên hương vị caramel cháy quyến rũ.", image: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m8", name: "Matcha Dâu Tây", category: "Matcha", price: 55000, desc: "Thức uống 3 tầng bắt mắt với mứt dâu tây chua ngọt ở đáy ly, sữa tươi béo dịu ở giữa và lớp matcha xanh mướt đậm vị trên cùng.", image: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m9", name: "Bánh Tiramisu", category: "Bánh Ngọt", price: 45000, desc: "Bánh ngọt trứ danh nước Ý với cốt bánh quy sâm-panh thấm đẫm hương cà phê, xen kẽ lớp kem phô mai mascarpone béo mịn và bột cacao nguyên chất.", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&q=80&w=600", hasTopping: false },
+                { id: "m10", name: "Bánh Bông Lan Trứng Muối Mini (Set 3 cái)", category: "Bánh Ngọt", price: 39000, desc: "Cốt bánh bông lan mềm xốp, thơm bơ, phủ đầy sốt phô mai béo ngậy, chà bông mặn mà cùng trứng muối nướng bùi béo.", image: "https://images.unsplash.com/photo-1558326567-98ae2405596b?auto=format&fit=crop&q=80&w=600", hasTopping: false },
+                { id: "m11", name: "Bánh Mousse Chanh Dây", category: "Bánh Ngọt", price: 45000, desc: "Cốt bánh quy giòn nhẹ nâng đỡ lớp mousse béo mịn mát lạnh, phủ mặt gương chanh dây vàng óng chua dịu cùng hạt chanh dây giòn sần sật.", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&q=80&w=600", hasTopping: false },
+                { id: "m12", name: "Bánh Su Kem Nhân Kem Trứng", category: "Bánh Ngọt", price: 29000, desc: "Vỏ bánh su nướng vàng ruộm, mềm xốp nhẹ bẫng, ôm trọn phần nhân kem trứng vani sánh mịn, ngọt dịu và thơm ngậy.", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600", hasTopping: false },
+                { id: "m13", name: "Bánh Croissant Ngàn Lớp (2 cái)", category: "Bánh Ngọt", price: 35000, desc: "Bánh sừng bò chuẩn vị Pháp với lớp vỏ ngoài giòn rụm, ruột bánh rỗng xốp nhiều tầng, dậy mùi bơ lên men thơm lừng (35.000đ/2 cái).", image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=600", hasTopping: false },
+                { id: "m14", name: "Trà Xoài Chanh Dây Bạc Hà", category: "Trà & Nước Trái Cây", price: 49000, desc: "Thức uống nhiệt đới tươi mát kết hợp vị ngọt thanh của xoài tươi cắt hạt lựu, vị chua thơm của chanh dây, lát chanh tươi và hương lá bạc hà sảng khoái.", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m15", name: "Nước Chanh Dâu Tây Tươi", category: "Trà & Nước Trái Cây", price: 45000, desc: "Sự hòa quyện chua ngọt hài hòa giữa dâu tây đỏ mọng và chanh vàng tươi mát, giải nhiệt tức thì cho những ngày nắng.", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m16", name: "Nước Chanh Việt Quất", category: "Trà & Nước Trái Cây", price: 49000, desc: "Thức uống sắc tím bắt mắt với vị chua thanh của chanh lát kết hợp cùng việt quất tươi mọng nước, mát lạnh và dễ uống.", image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m17", name: "Sữa Chua Xoài Alphonso & Granola", category: "Sữa Chua & Granola", price: 49000, desc: "Sữa chua mịn mát hòa cùng sốt xoài Alphonso ngọt đậm đà, thêm xoài tươi, việt quất và granola giòn rụm đầy năng lượng.", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m18", name: "Sữa Chua Dâu Tây & Chuối", category: "Sữa Chua & Granola", price: 50000, desc: "Sữa chua vị dâu hồng mịn màng ăn kèm chuối chín cắt lát, dâu tây tươi và trái mọng chua ngọt dịu nhẹ (45.000đ – 55.000đ).", image: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&q=80&w=600", hasTopping: true },
+                { id: "m19", name: "Sữa Chua Việt Quất & Trái Mọng", category: "Sữa Chua & Granola", price: 49000, desc: "Sữa chua việt quất tím ngắt sánh mịn, điểm thêm việt quất, mâm xôi tươi và dừa bào sấy giòn béo.", image: "https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&q=80&w=600", hasTopping: true }
             ],
             vouchers: [
                 { id: "V10", code: "JUMJUM10", discount: 10, label: "Giảm 10% cho mọi đơn hàng" },
@@ -1210,8 +1249,25 @@
             }
         }
 
+        function normalizeSpaceImageItem(item, index = 0) {
+            const fallbackTags = ["☀️ Góc Đón Nắng", "✨ Hội Bạn Gen Z", "🎧 Vibe Cực Cuốn", "🌿 Không Gian Xanh", "📸 Tọa Độ Sống Ảo"];
+            const fallbackCaptions = ["Ánh sáng tự nhiên cực chill", "Tụ tập tám chuyện hết nấc", "Góc check-in & học bài", "Thoáng mát, gần gũi", "Lên hình nào cũng xinh"];
+            if (typeof item === 'string') {
+                return {
+                    url: item,
+                    tag: fallbackTags[index % fallbackTags.length],
+                    caption: fallbackCaptions[index % fallbackCaptions.length]
+                };
+            }
+            return {
+                url: item.url,
+                tag: item.tag || fallbackTags[index % fallbackTags.length],
+                caption: item.caption || fallbackCaptions[index % fallbackCaptions.length]
+            };
+        }
+
         let products = safeGetStorage('jumjum_products', DEFAULT_SHOP_DATA.products);
-        let spaceImages = safeGetStorage('jumjum_space_images', DEFAULT_SHOP_DATA.spaceImages);
+        let spaceImages = safeGetStorage('jumjum_space_images', DEFAULT_SHOP_DATA.spaceImages).map(normalizeSpaceImageItem);
         let foodTags = safeGetStorage('jumjum_food_tags', DEFAULT_SHOP_DATA.foodTags);
         let adminAccounts = safeGetStorage('jumjum_admins', DEFAULT_SHOP_DATA.admins);
         let emailJsSettings = safeGetStorage('jumjum_emailjs_settings', {
@@ -1302,7 +1358,6 @@
                 checkAuthState();
                 showToast("Đã chuyển sang giao diện Khách hàng!");
             } else {
-                // Không để email sẵn khi mở hộp thoại đăng nhập
                 document.getElementById('shopEmailInput').value = "";
                 document.getElementById('shopPassInput').value = "";
                 openModal('authModal');
@@ -1416,7 +1471,6 @@
             }
             if (!currentUser.savedVouchers) currentUser.savedVouchers = [];
             
-            // Lọc bỏ voucher đã hết hạn
             const nowMs = Date.now();
             currentUser.savedVouchers = currentUser.savedVouchers.filter(v => !v.expiresAtMs || v.expiresAtMs > nowMs);
 
@@ -1425,7 +1479,6 @@
             }
 
             const voucherInfo = DEFAULT_SHOP_DATA.vouchers.find(v => v.code === code);
-            // Hạn sử dụng ngẫu nhiên từ 24h đến 72h
             const randomHours = Math.floor(Math.random() * (72 - 24 + 1)) + 24;
             const expireDateObj = new Date(nowMs + randomHours * 3600 * 1000);
             const expireFormatted = expireDateObj.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' ' + expireDateObj.toLocaleDateString('vi-VN');
@@ -1650,11 +1703,19 @@
         }
 
         function renderSpaceGallery() {
-            document.getElementById('spaceGallery').innerHTML = spaceImages.map(img => `
-                <div class="tactile-card rounded-2xl overflow-hidden h-24 sm:h-28 border border-white/85 dark:border-slate-700 shadow-sm group">
-                    <img src="${img}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600'" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                </div>
-            `).join('');
+            document.getElementById('spaceGallery').innerHTML = spaceImages.map((item, idx) => {
+                const imgObj = normalizeSpaceImageItem(item, idx);
+                const spanClass = idx === 0 ? "col-span-2 sm:col-span-2 h-36 sm:h-44" : "h-32 sm:h-36";
+                return `
+                    <div class="tactile-card relative rounded-2xl overflow-hidden ${spanClass} border border-white/85 dark:border-slate-700 shadow-sm group text-left">
+                        <img src="${imgObj.url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600'" alt="${imgObj.caption}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/15 to-transparent flex flex-col justify-end p-2.5 sm:p-3">
+                            <span class="self-start px-2 py-0.5 rounded-full bg-white/25 backdrop-blur-md border border-white/40 text-white text-[9px] sm:text-[10px] font-bold mb-1 whitespace-nowrap">${imgObj.tag}</span>
+                            <span class="text-white text-[11px] sm:text-xs font-bold leading-tight drop-shadow">${imgObj.caption}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function renderBroadcastBanner() {
@@ -2103,7 +2164,6 @@
             showToast("Đã cập nhật hồ sơ thành công!");
         }
 
-        // Khi user vừa đăng nhập, hồ sơ để mặc định icon "account" (avatar: '')
         function socialLogin(provider) {
             currentUser = {
                 role: 'guest',
@@ -2122,7 +2182,6 @@
             showToast(`Đăng nhập thành công với ${provider}!`);
         }
 
-        // Khi admin vừa đăng nhập, hồ sơ để mặc định là logo shop (images/jumjumshop.png)
         function loginAsShop() {
             const email = document.getElementById('shopEmailInput').value.trim().toLowerCase();
             const pwd = document.getElementById('shopPassInput').value.trim();
@@ -2279,7 +2338,6 @@
                 document.getElementById('shopNotifDot').classList.add('hidden');
             }
 
-            // 1. Yêu cầu gọi phục vụ
             const callsEl = document.getElementById('adminTableCallsList');
             if (tableCalls.length === 0) {
                 callsEl.innerHTML = `<div class="text-xs text-slate-400">Chưa có yêu cầu gọi bàn nào.</div>`;
@@ -2299,7 +2357,6 @@
                 `).join('');
             }
 
-            // 2. Tổng hợp chi tiết đơn hàng qua từng ngày
             const dailyMap = {};
             orders.forEach(o => {
                 const dKey = o.dateStr || (o.time.split(' ')[1] || 'Hôm nay');
@@ -2325,7 +2382,6 @@
                     `).join('');
             }
 
-            // 3. Danh sách đơn hàng & xuất hóa đơn điện tử
             const ordersEl = document.getElementById('shopOrdersList');
             if (orders.length === 0) {
                 ordersEl.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">Chưa có đơn hàng nào.</div>`;
@@ -2362,7 +2418,6 @@
                 `).join('');
             }
 
-            // 4. Danh sách khách hàng & lịch sử đặt hàng
             const customerMap = {};
             orders.forEach(o => {
                 const key = o.phone || o.customer;
@@ -2401,7 +2456,6 @@
                     </div>
                 `).join('');
 
-            // 5. Đánh giá từ khách hàng
             document.getElementById('adminReviewsList').innerHTML = reviews.map(r => `
                 <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800 border border-white dark:border-slate-700 text-xs space-y-1.5">
                     <div class="flex justify-between font-bold whitespace-nowrap">
@@ -2666,14 +2720,18 @@
 
         // ==================== QUẢN LÍ THỰC ĐƠN & ẢNH (CHỈNH SỬA TRỰC TIẾP ĐẦY ĐỦ) ====================
         function renderAdminMenuAndSpaceManager() {
-            document.getElementById('adminSpaceGalleryPreview').innerHTML = spaceImages.map((img, idx) => `
-                <div class="relative rounded-2xl overflow-hidden h-24 border border-white dark:border-slate-700 shadow-sm group">
-                    <img src="${img}" class="w-full h-full object-cover">
-                    <button onclick="playClickSound(); deleteSpaceImage(${idx})" class="tactile-btn absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow" title="Xóa">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
+            document.getElementById('adminSpaceGalleryPreview').innerHTML = spaceImages.map((item, idx) => {
+                const imgObj = normalizeSpaceImageItem(item, idx);
+                return `
+                    <div class="relative rounded-2xl overflow-hidden h-24 border border-white dark:border-slate-700 shadow-sm group">
+                        <img src="${imgObj.url}" class="w-full h-full object-cover">
+                        <span class="absolute bottom-1 left-1.5 right-8 text-[10px] font-bold text-white truncate drop-shadow">${imgObj.caption}</span>
+                        <button onclick="playClickSound(); deleteSpaceImage(${idx})" class="tactile-btn absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow" title="Xóa">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
 
             document.getElementById('adminFoodTagsList').innerHTML = foodTags.map((tag, idx) => `
                 <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-800 dark:text-amber-200 text-xs font-bold whitespace-nowrap">
@@ -2749,7 +2807,11 @@
             if (!files.length) return;
             files.forEach(file => {
                 compressImageFile(file, 650, (compressed) => {
-                    spaceImages.unshift(compressed);
+                    spaceImages.unshift({
+                        url: compressed,
+                        tag: "📸 Góc Mới JUMJUM",
+                        caption: "Không gian check-in thực tế"
+                    });
                     if (safeSetStorage('jumjum_space_images', spaceImages)) {
                         renderSpaceGallery();
                         renderAdminMenuAndSpaceManager();
@@ -2987,7 +3049,7 @@
         // ==================== NHẠC NỀN & QR CODE ====================
         const bgAudioEl = document.getElementById('bgAudio');
         if (bgAudioEl) {
-            bgAudioEl.src = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjum-shop.mp3";
+            bgAudioEl.src = DEFAULT_SHOP_DATA.info.bgMusic || "audio/jumjum music.mp3";
             bgAudioEl.addEventListener('error', () => {
                 isPlayingMusic = false;
                 document.getElementById('musicIconWrap')?.classList.remove('spinning');
@@ -3015,7 +3077,7 @@
                 iconWrap.classList.add('spinning');
                 statusText.textContent = DEFAULT_SHOP_DATA.info.musicTitle;
             } catch (err) {
-                const fallbackSrc = "audio/jumjum%20shop.mp3";
+                const fallbackSrc = "audio/jumjum%20music.mp3";
                 if (!audio.src.endsWith(fallbackSrc)) {
                     audio.src = fallbackSrc;
                     try {
@@ -3029,7 +3091,7 @@
                 isPlayingMusic = false;
                 iconWrap.classList.remove('spinning');
                 statusText.textContent = "Nhạc nền";
-                showToast("Không phát được nhạc nền: kiểm tra lại file trong thư mục audio/!");
+                showToast("Không phát được nhạc nền: kiểm tra lại file audio/jumjum music.mp3!");
             }
         }
 
