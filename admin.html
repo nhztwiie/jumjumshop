@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JUMJUM Admin & POS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="admin">
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="app-shell">
+    <header class="topbar glass">
+      <div>
+        <div class="brand-title">JUMJUM — Quản trị & POS</div>
+        <div class="brand-sub">Nguyễn Văn Cánh, P. Phú Tân, Vĩnh Long • <span id="live-clock"></span></div>
+      </div>
+
+      <div class="controls-row">
+        <button id="theme-toggle-btn" class="pill" type="button">🌓 Tự động sáng/tối</button>
+        <button id="reset-demo-btn" class="pill danger" type="button">Khôi phục mặc định</button>
+        <a href="index.html" class="pill primary">← Về trang Khách</a>
+      </div>
+    </header>
+
+    <section class="section-card glass">
+      <div class="section-header">
+        <h1 class="section-title">Cấu hình EmailJS thông báo đơn hàng</h1>
+      </div>
+      <div class="form-grid">
+        <input id="ejs-public-key" class="input" type="text" placeholder="EmailJS Public Key" />
+        <input id="ejs-service-id" class="input" type="text" placeholder="EmailJS Service ID" />
+        <input id="ejs-template-id" class="input" type="text" placeholder="EmailJS Template ID" />
+        <input id="ejs-to-email" class="input" type="email" placeholder="Email nhận thông báo đơn hàng" />
+      </div>
+      <button id="save-ejs-btn" class="pill primary" type="button">Lưu cấu hình EmailJS</button>
+      <span id="ejs-status" class="status-msg" style="margin-left: 10px;"></span>
+    </section>
+
+    <div class="grid-main">
+      <section class="section-card glass">
+        <div class="section-header">
+          <h2 class="section-title">Thêm món mới vào thực đơn</h2>
+        </div>
+        <form id="add-product-form">
+          <div class="form-grid">
+            <input id="new-prod-name" class="input" type="text" placeholder="Tên món *" required />
+            <input id="new-prod-cat" class="input" type="text" placeholder="Danh mục (vd: Trà sữa, Ăn vặt)" required />
+          </div>
+          <div class="form-grid">
+            <input id="new-prod-price" class="input" type="number" min="1000" step="500" placeholder="Giá (VNĐ) *" required />
+            <input id="new-prod-desc" class="input" type="text" placeholder="Mô tả ngắn" />
+          </div>
+          <button class="pill primary" type="submit">+ Thêm món</button>
+        </form>
+      </section>
+
+      <section class="section-card glass">
+        <div class="section-header">
+          <h2 class="section-title">Quản lý Mã giảm giá (Voucher)</h2>
+        </div>
+        <form id="add-voucher-form" style="margin-bottom: 14px;">
+          <div class="form-grid">
+            <input id="new-voucher-code" class="input" type="text" placeholder="Mã (vd: PHUTAN15)" required />
+            <input id="new-voucher-percent" class="input" type="number" min="1" max="80" placeholder="Giảm % (vd: 15)" required />
+          </div>
+          <button class="pill primary" type="submit">+ Lưu voucher</button>
+        </form>
+        <div id="voucher-list" class="filter-bar"></div>
+      </section>
+    </div>
+
+    <section class="section-card glass">
+      <div class="section-header">
+        <h2 class="section-title">Danh sách món hiện có</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Tên món</th>
+              <th>Danh mục</th>
+              <th>Giá (VNĐ)</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card glass-strong">
+      <div class="section-header">
+        <h2 class="section-title">Đơn hàng POS</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Mã đơn</th>
+              <th>Khách hàng</th>
+              <th>Món & Topping</th>
+              <th>Tổng tiền</th>
+              <th>Trạng thái</th>
+              <th>Xử lý</th>
+            </tr>
+          </thead>
+          <tbody id="admin-orders-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
