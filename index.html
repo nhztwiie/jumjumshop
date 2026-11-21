@@ -1,104 +1,1053 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JUMJUM — Nguyễn Văn Cánh, P. Phú Tân, Vĩnh Long</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JUMJUM — Taste the Fresh, Feel the Joy</title>
+    <meta property="og:title" content="JUMJUM — Taste the Fresh, Feel the Joy">
+    <meta property="og:description" content="Bạn đang thiếu năng lượng - Có JUMJUM đây!">
+    <meta property="og:image" content="images/jumjumshop.png">
+    <meta property="og:type" content="website">
+
+    <link id="dynamicFavicon" rel="icon" type="image/png" href="images/jumjumshop.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body data-page="shop">
-  <canvas id="particle-canvas"></canvas>
+<body class="pb-32">
 
-  <div class="app-shell">
-    <header class="topbar glass">
-      <div>
-        <div class="brand-title">JUMJUM</div>
-        <div class="brand-sub">Nguyễn Văn Cánh, P. Phú Tân, Vĩnh Long • <span id="live-clock"></span></div>
-      </div>
+    <canvas id="liquidCanvas"></canvas>
+    <div class="liquid-orb orb-1"></div>
+    <div class="liquid-orb orb-2"></div>
+    <div class="liquid-orb orb-3"></div>
 
-      <div class="controls-row">
-        <button id="audio-toggle-btn" class="pill" type="button">♪ Nhạc nền: Bật</button>
-        <button id="theme-toggle-btn" class="pill" type="button">🌓 Tự động sáng/tối</button>
-        <a href="admin.html" class="pill">⚙️ Quản trị & POS</a>
-      </div>
+    <!-- Thanh Header trên cùng -->
+    <header class="sticky top-3 z-40 max-w-5xl mx-auto px-4">
+        <div class="liquid-glass px-4 py-2.5 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 shrink-0">
+                <button id="musicToggleBtn" onclick="playClickSound(); toggleMusic()" class="tactile-btn flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 dark:bg-slate-800/70 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-sm whitespace-nowrap">
+                    <div id="musicIconWrap" class="w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center shadow shrink-0">
+                        <i class="fa-solid fa-music text-xs"></i>
+                    </div>
+                    <span id="musicStatusText" class="hidden sm:inline whitespace-nowrap">Nhạc nền</span>
+                </button>
+            </div>
+
+            <div class="text-center min-w-0">
+                <div class="font-extrabold tracking-widest text-sky-900 dark:text-sky-300 text-sm sm:text-base flex items-center justify-center gap-1.5 whitespace-nowrap">
+                    <span id="headerShopName">JUMJUM</span>
+                </div>
+                <div id="realtimeClock" class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-wider whitespace-nowrap">00:00:00</div>
+            </div>
+
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <span id="cloudSyncBadge" onclick="playClickSound(); showCloudSyncStatus()" class="hidden md:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-500/15 text-slate-700 dark:text-slate-300 text-[10px] font-bold cursor-pointer whitespace-nowrap" title="Trạng thái đồng bộ dữ liệu">
+                    <i class="fa-solid fa-cloud"></i> Local
+                </span>
+                <button id="quickSwitchRoleBtn" onclick="playClickSound(); toggleQuickRoleView()" class="tactile-btn px-2.5 py-1.5 rounded-full bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/40 text-sky-800 dark:text-sky-200 text-[11px] font-bold flex items-center gap-1 whitespace-nowrap" title="Chuyển đổi giao diện">
+                    <i class="fa-solid fa-repeat"></i> <span id="quickSwitchRoleLabel" class="hidden md:inline">Admin</span>
+                </button>
+                <button onclick="playClickSound(); toggleThemeManual()" class="tactile-btn w-9 h-9 rounded-full bg-white/75 dark:bg-slate-800/75 text-slate-700 dark:text-slate-200 flex items-center justify-center shadow-sm" title="Chuyển giao diện Sáng/Tối">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <button onclick="playClickSound(); openModal('qrModal')" class="tactile-btn w-9 h-9 rounded-full bg-white/75 dark:bg-slate-800/75 text-slate-700 dark:text-slate-200 flex items-center justify-center shadow-sm" title="Mã QR & Quét nhanh">
+                    <i class="fa-solid fa-qrcode"></i>
+                </button>
+                <button id="authHeaderBtn" onclick="playClickSound(); handleProfileOrAuthClick()" class="tactile-btn w-9 h-9 rounded-full bg-sky-600 text-white flex items-center justify-center shadow-sm relative overflow-hidden border border-white/80" title="Hồ sơ & Tài khoản">
+                    <img id="headerUserAvatar" src="" class="hidden w-full h-full object-cover rounded-full">
+                    <i id="headerUserIcon" class="fa-solid fa-user text-xs"></i>
+                    <span id="shopNotifDot" class="hidden absolute -top-0.5 -right-0.5 w-3 h-3 bg-rose-500 border-2 border-white rounded-full animate-ping"></span>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <audio id="bg-audio" src="audio/jumjum shop.mp3" loop preload="metadata"></audio>
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="max-w-5xl mx-auto px-4 mt-5">
 
-    <div class="grid-main">
-      <main>
-        <section class="section-card glass">
-          <div class="section-header">
-            <h1 class="section-title">Thực đơn JUMJUM</h1>
-            <input id="search-input" class="input" style="max-width: 220px;" type="text" placeholder="Tìm món..." />
-          </div>
+        <!-- ==================== GIAO DIỆN KHÁCH HÀNG ==================== -->
+        <div id="customerView">
 
-          <div id="category-filters" class="filter-bar"></div>
-          <div id="products-grid" class="products-grid"></div>
-        </section>
-      </main>
+            <!-- TAB HOME -->
+            <section id="tab-home" class="tab-section space-y-5">
+                <div class="liquid-glass spotlight-card p-6 sm:p-10 text-center">
+                    <div class="relative z-10 flex flex-col items-center">
+                        <div class="relative group">
+                            <div class="absolute -inset-1.5 bg-gradient-to-tr from-sky-400 to-cyan-300 rounded-full blur opacity-65 group-hover:opacity-100 transition"></div>
+                            <img id="shopLogo" src="images/jumjumshop.png" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&q=80&w=400'" alt="JUMJUM Logo" class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white/90 dark:border-slate-700 shadow-xl">
+                        </div>
 
-      <aside>
-        <section class="section-card glass-strong">
-          <div class="section-header">
-            <h2 class="section-title">Giỏ hàng (VNĐ)</h2>
-            <button id="clear-cart-btn" class="pill danger" type="button">Xóa hết</button>
-          </div>
+                        <h1 id="shopName" class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-white whitespace-nowrap">JUMJUM</h1>
+                        <p id="shopSlogan" class="mt-1.5 text-sm sm:text-base text-sky-800 dark:text-sky-300 font-medium italic whitespace-nowrap">"Taste the Fresh, Feel the Joy"</p>
 
-          <div id="cart-list" class="cart-list"></div>
+                        <div class="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+                            <button id="followShopBtn" onclick="playClickSound(); toggleFollowShop()" class="tactile-btn px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 text-white text-xs font-bold shadow-md flex items-center gap-2 whitespace-nowrap">
+                                <i id="followIcon" class="fa-regular fa-heart text-sm"></i> <span id="followText">Theo dõi JUMJUM</span>
+                            </button>
+                            <button onclick="playClickSound(); switchTab('order')" class="tactile-btn px-5 py-2.5 rounded-full bg-white/85 dark:bg-slate-800/85 border border-sky-300 dark:border-slate-700 text-sky-800 dark:text-sky-300 text-xs font-bold shadow-sm flex items-center gap-2 whitespace-nowrap">
+                                <i class="fa-solid fa-mug-saucer"></i> Khám phá Thực đơn
+                            </button>
+                        </div>
+                        <div id="followerCountDisplay" class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold mt-1.5">0 người đang theo dõi</div>
 
-          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-            <input id="voucher-input" class="input" type="text" placeholder="Mã giảm giá (vd: JUMJUM10)" />
-            <button id="apply-voucher-btn" class="pill primary" type="button">Áp dụng</button>
-          </div>
+                        <div id="customerBroadcastBanner" class="hidden mt-4 w-full max-w-xl p-3.5 rounded-2xl bg-sky-500/15 border border-sky-400/40 text-xs text-sky-900 dark:text-sky-200 flex items-center gap-3 text-left shadow-sm">
+                            <i class="fa-solid fa-bullhorn text-sky-600 dark:text-sky-400 text-base shrink-0 animate-bounce"></i>
+                            <div>
+                                <div class="font-bold uppercase text-[10px] tracking-wider text-sky-700 dark:text-sky-300 whitespace-nowrap">Thông báo mới từ JUMJUM</div>
+                                <div id="broadcastText" class="font-medium mt-0.5 leading-relaxed"></div>
+                            </div>
+                        </div>
 
-          <div class="summary-row">
-            <span>Tạm tính</span>
-            <span id="subtotal-text">0 ₫</span>
-          </div>
-          <div class="summary-row">
-            <span>Giảm giá</span>
-            <span id="discount-text">-0 ₫</span>
-          </div>
-          <div class="summary-row total">
-            <span>Thành tiền</span>
-            <span id="total-text">0 ₫</span>
-          </div>
+                        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full max-w-2xl">
+                            <a href="https://maps.app.goo.gl/9zAXofUzKNd6XVtP7" target="_blank" onclick="playClickSound()" class="tactile-btn bg-white/60 dark:bg-slate-800/60 border border-white/85 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm group">
+                                <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/60 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-location-dot text-lg group-hover:scale-110 transition"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold whitespace-nowrap">Địa chỉ bản đồ</div>
+                                    <div id="shopAddress" class="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-snug break-words">Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</div>
+                                </div>
+                            </a>
 
-          <form id="order-form" style="margin-top: 14px;">
-            <div class="form-grid">
-              <input id="customer-name" class="input" type="text" placeholder="Họ tên khách hàng *" required />
-              <input id="customer-phone" class="input" type="tel" placeholder="Số điện thoại *" required />
+                            <a id="shopPhoneLink" href="tel:0876935873" onclick="playClickSound()" class="tactile-btn bg-white/60 dark:bg-slate-800/60 border border-white/85 dark:border-slate-700 rounded-2xl p-3.5 flex items-center gap-3 text-left shadow-sm">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-phone-volume text-lg"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold whitespace-nowrap">Hotline đặt món</div>
+                                    <div id="shopHotline" class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0876.935.873</div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="mt-4 flex flex-col sm:flex-row justify-center gap-3 w-full max-w-2xl">
+                            <a id="fbLink" href="https://www.facebook.com/nhzt.wiie" target="_blank" onclick="playClickSound()" class="tactile-btn flex-1 bg-blue-500/15 hover:bg-blue-500/25 border border-blue-400/40 rounded-2xl p-3 flex items-center justify-center gap-2.5 text-blue-700 dark:text-blue-300 font-bold text-xs shadow-sm whitespace-nowrap">
+                                <img src="images/facebook.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg'" alt="Facebook" class="w-5 h-5 rounded-full object-contain shrink-0">
+                                <span>Facebook JUMJUM</span>
+                            </a>
+                            <a id="zaloLink" href="https://zalo.me/0398476794" target="_blank" onclick="playClickSound()" class="tactile-btn flex-1 bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/40 rounded-2xl p-3 flex items-center justify-center gap-2.5 text-sky-700 dark:text-sky-300 font-bold text-xs shadow-sm whitespace-nowrap">
+                                <img src="images/zalo.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg'" alt="Zalo" class="w-5 h-5 rounded-full object-contain shrink-0">
+                                <span>Zalo JUMJUM</span>
+                            </a>
+                        </div>
+
+                        <div class="mt-6 w-full max-w-2xl text-left">
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5 whitespace-nowrap">
+                                    <i class="fa-solid fa-camera-retro text-sky-500"></i> Không gian JUMJUM
+                                </h3>
+                                <span class="text-[10px] font-bold text-sky-700 dark:text-sky-300 bg-sky-500/10 px-2.5 py-0.5 rounded-full whitespace-nowrap">Chill • Gen Z • Check-in</span>
+                            </div>
+                            <div id="spaceGallery" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB MENU -->
+            <section id="tab-order" class="tab-section hidden space-y-4">
+                <div class="liquid-glass p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0" id="categoryFilter"></div>
+                    <div class="relative w-full sm:w-64 shrink-0">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="productSearchInput" oninput="renderProducts()" placeholder="Tìm kiếm món ngon..." class="w-full pl-9 pr-4 py-2 rounded-full bg-white/80 dark:bg-slate-800/80 border border-white dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-sky-400 dark:text-white shadow-sm">
+                    </div>
+                </div>
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </section>
+
+            <!-- TAB NHẬN MÓN VÀ GỌI PHỤC VỤ -->
+            <section id="tab-service" class="tab-section hidden space-y-5">
+                <div class="liquid-glass spotlight-card p-6">
+                    <div class="relative z-10">
+                        <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-box-open text-emerald-500"></i> Theo dõi đơn & Xác nhận nhận món
+                        </h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Trạng thái đơn hàng được đồng bộ trực tiếp với hệ thống quản trị JUMJUM.</p>
+                        <div id="userActiveOrdersList" class="mt-4 space-y-3"></div>
+                    </div>
+                </div>
+
+                <div class="liquid-glass spotlight-card p-6">
+                    <div class="relative z-10 space-y-4">
+                        <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-bell-concierge text-sky-500"></i> Gửi mã số bàn & Yêu cầu phục vụ
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1 whitespace-nowrap">Mã số bàn (3 chữ số)</label>
+                                <input type="text" id="tableCodeInput" maxlength="3" pattern="\d{3}" placeholder="Ví dụ: 001, 102..." oninput="this.value=this.value.replace(/[^0-9]/g,'')" class="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-white dark:border-slate-700 text-center font-extrabold tracking-widest text-base focus:outline-none focus:ring-2 focus:ring-sky-400 dark:text-white shadow-sm">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase block mb-1 whitespace-nowrap">Yêu cầu gửi đến hệ thống Admin</label>
+                                <input type="text" id="tableRequestInput" placeholder="Ví dụ: Cho xin thêm ống hút, khăn giấy, thanh toán tại bàn..." class="w-full px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-white dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 dark:text-white shadow-sm">
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="playClickSound(); quickFillTableReq('Cho xin thêm khăn giấy và ống hút')" class="tactile-btn px-3 py-1.5 rounded-full bg-white/75 dark:bg-slate-800 text-xs font-semibold border border-sky-200 dark:border-slate-700">+ Xin khăn giấy/ống hút</button>
+                            <button onclick="playClickSound(); quickFillTableReq('Yêu cầu tính tiền tại bàn')" class="tactile-btn px-3 py-1.5 rounded-full bg-white/75 dark:bg-slate-800 text-xs font-semibold border border-sky-200 dark:border-slate-700">+ Tính tiền tại bàn</button>
+                            <button onclick="playClickSound(); quickFillTableReq('Cho xin thêm trà đá')" class="tactile-btn px-3 py-1.5 rounded-full bg-white/75 dark:bg-slate-800 text-xs font-semibold border border-sky-200 dark:border-slate-700">+ Xin thêm trà đá</button>
+                        </div>
+                        <button onclick="playClickSound(); sendTableServiceRequest()" class="tactile-btn px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white text-sm font-bold flex items-center gap-2 shadow-lg shadow-sky-500/30 whitespace-nowrap">
+                            <i class="fa-solid fa-paper-plane"></i> Gửi yêu cầu đến nhân viên
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB VOUCHER -->
+            <section id="tab-voucher" class="tab-section hidden space-y-4">
+                <div class="liquid-glass p-6 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-ticket text-rose-500"></i> Kho Voucher Ưu Đãi JUMJUM
+                        </h2>
+                        <span class="px-3 py-1 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[11px] font-bold whitespace-nowrap">Lưu trữ Voucher • Hạn ngẫu nhiên 24h - 72h</span>
+                    </div>
+                    <div id="voucherList" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
+
+                    <div class="pt-4 border-t border-slate-200/70 dark:border-slate-700">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 whitespace-nowrap">Voucher đã lưu trong tài khoản của bạn</h3>
+                        <div id="userSavedVouchersList" class="space-y-2.5"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB ĐÁNH GIÁ -->
+            <section id="tab-review" class="tab-section hidden space-y-5">
+                <div class="liquid-glass spotlight-card p-6">
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-star text-amber-400"></i> Đánh giá sản phẩm & Góp ý dịch vụ
+                    </h2>
+                    <div class="mt-4 space-y-3.5 relative z-10">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-1 text-2xl select-none" id="starSelector">
+                                <span class="relative cursor-pointer w-7 h-7 flex items-center justify-center transition hover:scale-110" onclick="handleStarClick(event, 1)"><i id="star-icon-1" class="fa-solid fa-star text-amber-400"></i></span>
+                                <span class="relative cursor-pointer w-7 h-7 flex items-center justify-center transition hover:scale-110" onclick="handleStarClick(event, 2)"><i id="star-icon-2" class="fa-solid fa-star text-amber-400"></i></span>
+                                <span class="relative cursor-pointer w-7 h-7 flex items-center justify-center transition hover:scale-110" onclick="handleStarClick(event, 3)"><i id="star-icon-3" class="fa-solid fa-star text-amber-400"></i></span>
+                                <span class="relative cursor-pointer w-7 h-7 flex items-center justify-center transition hover:scale-110" onclick="handleStarClick(event, 4)"><i id="star-icon-4" class="fa-solid fa-star text-amber-400"></i></span>
+                                <span class="relative cursor-pointer w-7 h-7 flex items-center justify-center transition hover:scale-110" onclick="handleStarClick(event, 5)"><i id="star-icon-5" class="fa-solid fa-star text-amber-400"></i></span>
+                            </div>
+                            <span id="selectedStarLabel" class="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 text-xs font-extrabold">5.0 / 5 sao</span>
+                            <span class="text-[11px] text-slate-400">(Chạm nửa trái của ngôi sao để chọn 0.5 sao)</span>
+                        </div>
+
+                        <input type="text" id="reviewName" placeholder="Tên hiển thị của bạn..." class="w-full px-4 py-2.5 rounded-xl bg-white/75 dark:bg-slate-800/80 border border-white dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm shadow-sm dark:text-white">
+                        <textarea id="reviewComment" rows="2.5" placeholder="Chia sẻ cảm nhận của bạn về thức uống và phục vụ tại JUMJUM..." class="w-full px-4 py-2.5 rounded-xl bg-white/75 dark:bg-slate-800/80 border border-white dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm shadow-sm dark:text-white"></textarea>
+
+                        <div class="flex flex-wrap items-center gap-3">
+                            <label class="tactile-btn px-4 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-dashed border-sky-400 text-sky-700 dark:text-sky-300 text-xs font-bold cursor-pointer flex items-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-camera"></i> <span>Chụp / Tải ảnh (Cắt 4:3)</span>
+                                <input type="file" id="reviewPhotoInput" accept="image/*" capture="environment" onchange="openCropperFromInput(this, 4/3, 'review')" class="hidden">
+                            </label>
+                            <div id="reviewPhotoPreviewWrap" class="hidden relative inline-block">
+                                <img id="reviewPhotoPreview" src="" class="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md">
+                                <button type="button" onclick="clearReviewPhoto()" class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] flex items-center justify-center shadow">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button onclick="playClickSound(); submitReview()" class="tactile-btn px-6 py-2.5 rounded-xl bg-sky-600 text-white text-sm font-semibold flex items-center gap-2 shadow-md whitespace-nowrap">
+                            <i class="fa-solid fa-paper-plane"></i> Gửi đánh giá
+                        </button>
+                    </div>
+                </div>
+                <div id="reviewList" class="space-y-3"></div>
+            </section>
+        </div>
+
+        <!-- ==================== GIAO DIỆN QUẢN LÝ ADMIN JUMJUM ==================== -->
+        <div id="shopDashboardView" class="hidden space-y-5">
+            <div class="liquid-glass p-5 flex flex-wrap items-center justify-between gap-4 border-sky-300">
+                <div class="flex items-center gap-3.5">
+                    <img id="adminDashAvatar" src="images/jumjumshop.png" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&q=80&w=200'" class="w-14 h-14 rounded-full object-cover border-2 border-white shadow-lg shrink-0">
+                    <div>
+                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[10px] font-extrabold tracking-wider whitespace-nowrap">ĐỒNG BỘ TRỰC TIẾP • QUẢN TRỊ JUMJUM</span>
+                        <h2 id="adminDashName" class="text-lg sm:text-xl font-bold text-slate-800 dark:text-white whitespace-nowrap">Bảng Điều Khiển Quản Trị JUMJUM</h2>
+                        <div class="flex flex-wrap items-center gap-3 mt-1 text-[11px]">
+                            <a href="https://maps.app.goo.gl/9zAXofUzKNd6XVtP7" target="_blank" class="text-sky-700 dark:text-sky-300 font-semibold hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-location-dot"></i> Địa chỉ bản đồ
+                            </a>
+                            <a href="tel:0876935873" class="text-emerald-700 dark:text-emerald-300 font-semibold hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-phone"></i> 0876.935.873
+                            </a>
+                            <a href="https://www.facebook.com/nhzt.wiie" target="_blank" class="text-blue-700 dark:text-blue-300 font-semibold hover:underline flex items-center gap-1">
+                                <img src="images/facebook.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg'" class="w-3.5 h-3.5 rounded-full object-contain"> Facebook
+                            </a>
+                            <a href="https://zalo.me/0398476794" target="_blank" class="text-sky-600 dark:text-sky-300 font-semibold hover:underline flex items-center gap-1">
+                                <img src="images/zalo.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg'" class="w-3.5 h-3.5 rounded-full object-contain"> Zalo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="playClickSound(); openProfileModal()" class="tactile-btn px-3.5 py-2 rounded-xl bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 shadow-sm whitespace-nowrap">
+                        <i class="fa-solid fa-user-gear text-sky-600"></i> Hồ sơ Admin
+                    </button>
+                    <button onclick="playClickSound(); logoutAccount()" class="tactile-btn px-3.5 py-2 rounded-xl bg-rose-500 text-white text-xs font-bold flex items-center gap-1.5 shadow whitespace-nowrap">
+                        <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                    </button>
+                </div>
             </div>
-            <input id="customer-address" class="input" style="margin-bottom: 10px;" type="text" placeholder="Địa chỉ nhận / Ghi chú tại P. Phú Tân, Vĩnh Long" />
-            <select id="payment-method" class="select" style="margin-bottom: 12px;">
-              <option value="Tiền mặt / Tại quầy">Tiền mặt / Tại quầy</option>
-              <option value="Chuyển khoản / QR">Chuyển khoản / QR</option>
-            </select>
-            <button class="pill primary" style="width: 100%; justify-content: center; padding: 12px;" type="submit">
-              Đặt hàng ngay
-            </button>
-          </form>
 
-          <div id="order-status" class="status-msg"></div>
-        </section>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="liquid-glass tactile-card p-4 text-center">
+                    <i class="fa-solid fa-receipt text-sky-600 text-xl mb-1"></i>
+                    <div id="statTotalOrders" class="text-2xl font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold whitespace-nowrap">Tổng đơn hàng</div>
+                </div>
+                <div class="liquid-glass tactile-card p-4 text-center">
+                    <i class="fa-solid fa-coins text-amber-500 text-xl mb-1"></i>
+                    <div id="statRevenue" class="text-sm sm:text-lg font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0 VND</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold whitespace-nowrap">Tổng doanh thu (VND)</div>
+                </div>
+                <div class="liquid-glass tactile-card p-4 text-center">
+                    <i class="fa-solid fa-users text-emerald-500 text-xl mb-1"></i>
+                    <div id="statTotalCustomers" class="text-2xl font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold whitespace-nowrap">Số lượng khách</div>
+                </div>
+                <div onclick="playClickSound(); switchAdminTab('followers')" class="liquid-glass tactile-card p-4 text-center cursor-pointer">
+                    <i class="fa-solid fa-heart text-rose-500 text-xl mb-1"></i>
+                    <div id="statTotalFollowers" class="text-2xl font-extrabold text-slate-800 dark:text-white whitespace-nowrap">0</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold whitespace-nowrap">Người theo dõi</div>
+                </div>
+            </div>
 
-        <section class="section-card glass">
-          <div class="section-header">
-            <h2 class="section-title">Mã QR nhanh JUMJUM</h2>
-          </div>
-          <div class="qr-box">
-            <canvas id="qr-canvas"></canvas>
-            <span class="brand-sub" style="text-align: center;">Quét mã để mở nhanh trang đặt món JUMJUM</span>
-            <button id="download-qr-btn" class="pill" type="button">Tải mã QR (.png)</button>
-          </div>
-        </section>
-      </aside>
+            <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                <button onclick="playClickSound(); switchAdminTab('orders')" data-admintab="orders" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-sky-600 text-white text-xs font-bold whitespace-nowrap shadow">
+                    <i class="fa-solid fa-bell mr-1"></i> Đơn hàng & Gọi phục vụ <span id="adminOrderBadge" class="ml-1 px-1.5 py-0.2 bg-rose-500 text-white rounded-full text-[10px]">0</span>
+                </button>
+                <button onclick="playClickSound(); switchAdminTab('pos')" data-admintab="pos" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-calculator mr-1 text-emerald-600"></i> Bán hàng tại quầy
+                </button>
+                <button onclick="playClickSound(); switchAdminTab('menu')" data-admintab="menu" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-mug-hot mr-1 text-amber-500"></i> Quản lí Thực đơn & Topping
+                </button>
+                <button onclick="playClickSound(); switchAdminTab('followers')" data-admintab="followers" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-heart mr-1 text-rose-500"></i> Người theo dõi
+                </button>
+                <button onclick="playClickSound(); switchAdminTab('admins')" data-admintab="admins" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-user-shield mr-1 text-sky-600"></i> Quản lí Admin
+                </button>
+                <button onclick="playClickSound(); switchAdminTab('customers')" data-admintab="customers" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-crown mr-1 text-amber-500"></i> Khách hàng & Lịch sử
+                </button>
+                <button onclick="playClickSound(); switchAdminTab('reviews_notif')" data-admintab="reviews_notif" class="admin-tab-btn tactile-btn px-4 py-2.5 rounded-2xl bg-white/75 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-cloud-arrow-up mr-1 text-sky-500"></i> Đồng bộ & EmailJS
+                </button>
+            </div>
+
+            <!-- ADMIN TAB 1: ĐƠN HÀNG VÀ GỌI PHỤC VỤ -->
+            <div id="admin-tab-orders" class="admin-section space-y-4">
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-3 text-sm whitespace-nowrap">
+                        <i class="fa-solid fa-bell-concierge text-amber-500"></i> Yêu cầu gọi phục vụ và gọi món tại bàn (3 chữ số)
+                    </h3>
+                    <div id="adminTableCallsList" class="space-y-2.5"></div>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-3 text-sm whitespace-nowrap">
+                        <i class="fa-solid fa-calendar-days text-emerald-600"></i> Tổng hợp chi tiết đơn hàng qua từng ngày
+                    </h3>
+                    <div id="dailyOrdersSummaryList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 text-sm whitespace-nowrap">
+                            <i class="fa-solid fa-file-invoice-dollar text-sky-600"></i> Danh sách đơn hàng và Xuất hóa đơn điện tử
+                        </h3>
+                        <button onclick="playClickSound(); clearAllOrders()" class="text-xs text-rose-500 hover:underline font-semibold whitespace-nowrap">Xóa lịch sử đơn hàng</button>
+                    </div>
+                    <div id="shopOrdersList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 2: BÁN HÀNG TẠI QUẦY -->
+            <div id="admin-tab-pos" class="admin-section hidden space-y-5">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="liquid-glass p-5">
+                            <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2 whitespace-nowrap">
+                                <i class="fa-solid fa-cash-register text-sky-600"></i> List chọn món tại quầy
+                            </h3>
+                            <div id="posProductGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1"></div>
+                        </div>
+
+                        <div class="liquid-glass p-5">
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">Máy tính tiền</span>
+                                <span id="posChangeText" class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">Tiền hồi lại: 0 VND</span>
+                            </div>
+                            <input type="text" id="calcDisplay" readonly value="0" class="w-full px-4 py-2.5 rounded-xl bg-white/90 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-right font-extrabold text-xl text-slate-800 dark:text-white mb-3 shadow-inner">
+                            <div class="grid grid-cols-4 gap-2 text-sm font-bold">
+                                <button onclick="playClickSound(); calcInput('7')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">7</button>
+                                <button onclick="playClickSound(); calcInput('8')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">8</button>
+                                <button onclick="playClickSound(); calcInput('9')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">9</button>
+                                <button onclick="playClickSound(); calcOp('/')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base">÷</button>
+
+                                <button onclick="playClickSound(); calcInput('4')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">4</button>
+                                <button onclick="playClickSound(); calcInput('5')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">5</button>
+                                <button onclick="playClickSound(); calcInput('6')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">6</button>
+                                <button onclick="playClickSound(); calcOp('*')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base">×</button>
+
+                                <button onclick="playClickSound(); calcInput('1')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">1</button>
+                                <button onclick="playClickSound(); calcInput('2')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">2</button>
+                                <button onclick="playClickSound(); calcInput('3')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">3</button>
+                                <button onclick="playClickSound(); calcOp('-')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base">−</button>
+
+                                <button onclick="playClickSound(); calcClear()" class="tactile-btn py-2.5 rounded-xl bg-rose-100 dark:bg-rose-900/70 text-rose-600 dark:text-rose-300">C</button>
+                                <button onclick="playClickSound(); calcInput('0')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">0</button>
+                                <button onclick="playClickSound(); calcInput('000')" class="tactile-btn py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 shadow-sm">000</button>
+                                <button onclick="playClickSound(); calcOp('+')" class="tactile-btn py-2.5 rounded-xl bg-sky-100 dark:bg-sky-900/70 text-sky-700 dark:text-sky-300 text-base">+</button>
+
+                                <button onclick="playClickSound(); calcBackspace()" class="tactile-btn py-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 col-span-2 text-sm flex items-center justify-center font-bold tracking-wider">⌫ Xóa</button>
+                                <button onclick="playClickSound(); calcEqual()" class="tactile-btn py-2.5 rounded-xl bg-sky-600 text-white shadow col-span-2 text-base">=</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="liquid-glass p-5 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center justify-between gap-2">
+                                    <span class="whitespace-nowrap"><i class="fa-solid fa-receipt text-sky-600 mr-1"></i> Hóa đơn tại quầy</span>
+                                    <button onclick="playClickSound(); clearPosCart()" class="text-[11px] text-rose-500 hover:underline whitespace-nowrap">Làm mới</button>
+                                </h3>
+                                <div id="posCartList" class="space-y-2 max-h-44 overflow-y-auto mb-3"></div>
+                            </div>
+
+                            <div class="border-t border-slate-200/70 dark:border-slate-700 pt-3 space-y-3">
+                                <div class="flex justify-between font-extrabold text-base whitespace-nowrap">
+                                    <span>Tổng cộng:</span>
+                                    <span id="posTotalDisplay" class="text-sky-600 dark:text-sky-400">0 VND</span>
+                                </div>
+
+                                <div class="p-3 rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-sky-200 dark:border-slate-700 text-center space-y-2">
+                                    <div class="text-[11px] font-extrabold text-sky-800 dark:text-sky-300 uppercase whitespace-nowrap">THANH TOÁN BANK / VÍ ĐIỆN TỬ</div>
+                                    <div class="text-[10px] font-bold text-slate-600 dark:text-slate-300">MB Bank • LE NHAT HUY • 0398476794</div>
+                                    <div class="my-1 flex justify-center">
+                                        <img id="posBankQrImg" src="https://img.vietqr.io/image/MB-0398476794-compact2.png?accountName=LE%20NHAT%20HUY" alt="VietQR MB LE NHAT HUY" class="w-40 h-40 object-contain rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+                                    </div>
+                                    <button onclick="simulateBankQrScanned()" class="tactile-btn w-full py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow whitespace-nowrap">
+                                        <i class="fa-solid fa-qrcode"></i> Hoàn thành Bank / Ví điện tử & Xuất HĐ
+                                    </button>
+                                </div>
+
+                                <button onclick="playClickSound(); completePosCashOrder()" class="tactile-btn w-full py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                                    <i class="fa-solid fa-money-bill-wave mr-1"></i> Hoàn thành COD (Tiền mặt) & Xuất HĐ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-chart-pie text-emerald-500"></i> Chi tiết số món bán được trong ngày hôm nay
+                    </h3>
+                    <div id="dailySoldItemsStats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 3: QUẢN LÍ THỰC ĐƠN, TOPPING VÀ ẢNH -->
+            <div id="admin-tab-menu" class="admin-section hidden space-y-5">
+                <!-- Điều chỉnh List Topping -->
+                <div class="liquid-glass p-5 space-y-3">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-layer-group text-emerald-600"></i> Điều chỉnh List Topping (Áp dụng toàn hệ thống)
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                        <input type="text" id="newToppingNameInput" placeholder="Tên topping mới (VD: Trân châu trắng)..." class="sm:col-span-2 px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <div class="flex gap-2">
+                            <input type="number" id="newToppingPriceInput" placeholder="Giá (VND)..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                            <button onclick="playClickSound(); addNewToppingItem()" class="tactile-btn px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow whitespace-nowrap shrink-0">
+                                <i class="fa-solid fa-plus"></i> Thêm
+                            </button>
+                        </div>
+                    </div>
+                    <div id="adminToppingManageList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1"></div>
+                </div>
+
+                <!-- Ảnh không gian JUMJUM (có cắt xén tỉ lệ 16:9) -->
+                <div class="liquid-glass p-5 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-images text-sky-600"></i> Ảnh không gian JUMJUM (Hỗ trợ cắt ảnh nhiều tỉ lệ)
+                        </h3>
+                        <label class="tactile-btn px-4 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold cursor-pointer flex items-center gap-2 shadow whitespace-nowrap">
+                            <i class="fa-solid fa-crop-simple"></i> Tải & Cắt ảnh không gian
+                            <input type="file" accept="image/*" onchange="openCropperFromInput(this, 16/9, 'space')" class="hidden">
+                        </label>
+                    </div>
+                    <div id="adminSpaceGalleryPreview" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1"></div>
+                </div>
+
+                <!-- Quản lí thẻ thức ăn -->
+                <div class="liquid-glass p-5 space-y-3">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-tags text-amber-500"></i> Quản lí thẻ thức ăn và danh mục
+                    </h3>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="newFoodTagInput" placeholder="Nhập tên thẻ thức ăn mới..." class="flex-1 px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs dark:text-white">
+                        <button onclick="playClickSound(); addNewFoodTag()" class="tactile-btn px-5 py-2.5 rounded-xl bg-amber-500 text-white text-xs font-bold shadow whitespace-nowrap">
+                            <i class="fa-solid fa-plus mr-1"></i> Thêm thẻ thức ăn
+                        </button>
+                    </div>
+                    <div id="adminFoodTagsList" class="flex flex-wrap gap-2 pt-1"></div>
+                </div>
+
+                <!-- Thêm món mới vào thực đơn -->
+                <div class="liquid-glass p-5 space-y-3">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-plus-circle text-sky-600"></i> Cài đặt và thêm món mới vào thực đơn
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <input type="text" id="newProdName" placeholder="Tên món ăn hoặc thức uống..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <select id="newProdCategorySelect" class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white font-semibold"></select>
+                        <input type="number" id="newProdPrice" placeholder="Giá bán (VND)..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <label class="px-3.5 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-dashed border-sky-400 cursor-pointer flex items-center justify-center gap-2 text-sky-700 dark:text-sky-300 font-semibold whitespace-nowrap">
+                            <i class="fa-solid fa-crop-simple"></i> <span id="newProdImgLabel">Tải & Cắt ảnh món (1:1)</span>
+                            <input type="file" id="newProdImageFile" accept="image/*" onchange="openCropperFromInput(this, 1, 'newProduct')" class="hidden">
+                        </label>
+                        <input type="text" id="newProdImageUrl" oninput="previewNewProductUrl(this.value)" placeholder="Hoặc dán đường dẫn URL hình ảnh tại đây..." class="sm:col-span-2 px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <div id="newProdPreviewBox" class="hidden sm:col-span-2 flex items-center gap-3 p-2.5 rounded-xl bg-sky-50/70 dark:bg-slate-800/70 border border-sky-200 dark:border-slate-700">
+                            <img id="newProdPreviewImg" src="" class="w-16 h-16 rounded-xl object-cover border border-white shadow-sm">
+                            <div class="text-[11px] text-slate-600 dark:text-slate-300">
+                                <div class="font-bold text-sky-700 dark:text-sky-400">Xem trước hình ảnh món mới</div>
+                                <div>Ảnh đã cắt xén và sẵn sàng lưu vào thực đơn!</div>
+                            </div>
+                        </div>
+                        <label class="sm:col-span-2 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 cursor-pointer font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap">
+                            <input type="checkbox" id="newProdHasTopping" checked> Cài đặt cho phép khách chọn thêm Topping cho món này
+                        </label>
+                        <textarea id="newProdDesc" rows="2" placeholder="Miêu tả ngắn gọn về hương vị và thành phần..." class="sm:col-span-2 px-3.5 py-2 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white"></textarea>
+                    </div>
+                    <button onclick="playClickSound(); addNewProduct()" class="tactile-btn px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                        <i class="fa-solid fa-check mr-1"></i> Lưu món mới vào thực đơn
+                    </button>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 whitespace-nowrap">List các món đang phục vụ (Chỉnh sửa trực tiếp)</h3>
+                    <div id="adminProductEditList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 4: NGƯỜI THEO DÕI -->
+            <div id="admin-tab-followers" class="admin-section hidden">
+                <div class="liquid-glass p-5 space-y-4">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-heart text-rose-500"></i> Toàn bộ danh sách Người theo dõi JUMJUM (Kiểm soát & Tương tác)
+                    </h3>
+                    <div id="adminFollowersList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 5: QUẢN LÍ ADMIN -->
+            <div id="admin-tab-admins" class="admin-section hidden space-y-4">
+                <div class="liquid-glass p-5 space-y-3">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-user-shield text-sky-600"></i> Quản lí tài khoản Quản trị viên (Đăng nhập nhiều Admin)
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <input type="email" id="newAdminEmail" placeholder="Email Admin mới..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <input type="password" id="newAdminPwd" placeholder="Mật khẩu Admin mới..." class="px-3.5 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                    </div>
+                    <button onclick="playClickSound(); addNewAdminAccount()" class="tactile-btn px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                        <i class="fa-solid fa-plus mr-1"></i> Thêm tài khoản Admin mới
+                    </button>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 whitespace-nowrap">Danh sách tài khoản Admin đang hoạt động</h3>
+                    <div id="adminAccountsList" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 6: DANH SÁCH KHÁCH HÀNG VÀ LỊCH SỬ ĐẶT HÀNG -->
+            <div id="admin-tab-customers" class="admin-section hidden">
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-4 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-crown text-amber-500"></i> Danh sách Khách hàng và Lịch sử đặt hàng (Tương tác chi tiết)
+                    </h3>
+                    <div id="customerProfilesList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN TAB 7: ĐỒNG BỘ ĐA THIẾT BỊ, ĐÁNH GIÁ VÀ EMAILJS -->
+            <div id="admin-tab-reviews_notif" class="admin-section hidden space-y-5">
+                <!-- Đồng bộ dữ liệu đa thiết bị (Firebase Realtime Database) -->
+                <div class="liquid-glass p-5 space-y-3 border-sky-300/70">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-cloud-arrow-up text-sky-600"></i> Đồng bộ dữ liệu trên mọi thiết bị (Cloud Sync)
+                        </h3>
+                        <span id="adminCloudStatusBadge" class="px-2.5 py-0.5 rounded-full bg-slate-500/20 text-slate-700 dark:text-slate-300 text-[10px] font-bold whitespace-nowrap">Chế độ LocalStorage</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                        Nhập <b>Firebase Realtime Database URL</b> (ví dụ: <code>https://your-project-default-rtdb.firebaseio.com</code>) và mã phòng/kênh đồng bộ để mọi thiết bị truy cập vào web đều tự động nhận và cập nhật dữ liệu mới nhất.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="sm:col-span-2">
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Firebase Realtime Database URL</label>
+                            <input type="url" id="cloudDbUrlInput" placeholder="https://ten-du-an-default-rtdb.firebaseio.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Mã kênh đồng bộ (Node)</label>
+                            <input type="text" id="cloudChannelInput" placeholder="jumjum_live_v1" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <button onclick="playClickSound(); saveCloudSyncSettings()" class="tactile-btn px-4 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                            <i class="fa-solid fa-link mr-1"></i> Lưu & Bật đồng bộ Cloud
+                        </button>
+                        <button onclick="playClickSound(); pushAllDataToCloud(true)" class="tactile-btn px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                            <i class="fa-solid fa-upload mr-1"></i> Đẩy dữ liệu hiện tại lên Cloud
+                        </button>
+                        <button onclick="playClickSound(); pullAllDataFromCloud(true)" class="tactile-btn px-4 py-2.5 rounded-xl bg-amber-500 text-white text-xs font-bold shadow whitespace-nowrap">
+                            <i class="fa-solid fa-download mr-1"></i> Kéo dữ liệu mới nhất về
+                        </button>
+                    </div>
+                </div>
+
+                <div class="liquid-glass p-5 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-envelope-circle-check text-emerald-600"></i> Cấu hình kết nối EmailJS gửi thông báo đơn hàng
+                        </h3>
+                        <span id="emailJsStatusBadge" class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-[10px] font-bold whitespace-nowrap">Chưa nhập đủ mã EmailJS</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Public Key</label>
+                            <input type="text" id="ejsPublicKeyInput" placeholder="Nhập Public Key..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Service ID</label>
+                            <input type="text" id="ejsServiceIdInput" placeholder="service_xxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Template ID</label>
+                            <input type="text" id="ejsTemplateIdInput" placeholder="template_xxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Email nhận thông báo đơn hàng</label>
+                            <input type="email" id="ejsReceiverEmailInput" placeholder="Email nhận đơn..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        <button onclick="playClickSound(); saveEmailJsSettings()" class="tactile-btn px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu cấu hình EmailJS
+                        </button>
+                    </div>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-bullhorn text-sky-600"></i> Gửi thông báo đến toàn bộ khách hàng (Tab thông báo của User)
+                    </h3>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="adminBroadcastInput" placeholder="Nhập nội dung thông báo hiển thị cho khách hàng..." class="flex-1 px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs dark:text-white">
+                        <button onclick="playClickSound(); sendBroadcastToCustomers()" class="tactile-btn px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">Phát thông báo ngay</button>
+                    </div>
+                </div>
+
+                <div class="liquid-glass p-5">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3 flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-star text-amber-400"></i> Đánh giá từ khách hàng
+                    </h3>
+                    <div id="adminReviewsList" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- NÚT GIỎ HÀNG NỔI -->
+    <button id="floatingCartBtn" onclick="playClickSound(); openCartModal()" class="tactile-btn fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full bg-gradient-to-tr from-sky-600 to-blue-500 text-white shadow-xl shadow-sky-500/40 flex items-center justify-center" title="Giỏ hàng của bạn">
+        <i class="fa-solid fa-bag-shopping text-xl"></i>
+        <span id="cartBadge" class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-rose-500 text-white text-xs font-bold flex items-center justify-center border-2 border-white">0</span>
+    </button>
+
+    <!-- THANH DOCK ĐIỀU HƯỚNG DƯỚI ĐÁY -->
+    <nav id="bottomDock" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 glass-dock px-3 py-2 rounded-full flex items-center gap-2.5">
+        <button onclick="playClickSound(); switchTab('order')" data-tab="order" class="dock-btn w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Menu">
+            <i class="fa-solid fa-mug-saucer"></i>
+        </button>
+        <button onclick="playClickSound(); switchTab('service')" data-tab="service" class="dock-btn w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg relative" title="Nhận món & Gọi phục vụ">
+            <i class="fa-solid fa-bell-concierge"></i>
+        </button>
+        <button onclick="playClickSound(); switchTab('home')" data-tab="home" class="dock-btn active w-12 h-12 sm:w-13 sm:h-13 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Home">
+            <i class="fa-solid fa-shop"></i>
+        </button>
+        <button onclick="playClickSound(); switchTab('voucher')" data-tab="voucher" class="dock-btn w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Voucher">
+            <i class="fa-solid fa-ticket"></i>
+        </button>
+        <button onclick="playClickSound(); switchTab('review')" data-tab="review" class="dock-btn w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-slate-700 dark:text-slate-200 text-lg" title="Đánh giá">
+            <i class="fa-solid fa-star-half-stroke"></i>
+        </button>
+    </nav>
+
+    <!-- ==================== CÁC HỘP THOẠI HỆ THỐNG ==================== -->
+
+    <!-- 0. Hộp thoại Cắt xén ảnh nhiều tỉ lệ -->
+    <div id="cropImageModal" class="fixed inset-0 z-50 hidden bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-5 shadow-2xl space-y-3.5">
+            <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/70 dark:border-slate-800">
+                <h3 class="font-bold text-base text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-crop-simple text-sky-600"></i> Cắt xén hình ảnh nhiều tỉ lệ
+                </h3>
+                <button onclick="playClickSound(); closeCropperModal()" class="tactile-btn w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Chọn tỉ lệ khung cắt -->
+            <div class="flex flex-wrap items-center gap-1.5 text-xs font-bold">
+                <button type="button" data-ratio="1" onclick="setCropRatio(1, this)" class="crop-ratio-btn px-3 py-1.5 rounded-xl bg-sky-600 text-white">1:1</button>
+                <button type="button" data-ratio="1.3333" onclick="setCropRatio(4/3, this)" class="crop-ratio-btn px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">4:3</button>
+                <button type="button" data-ratio="1.7778" onclick="setCropRatio(16/9, this)" class="crop-ratio-btn px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">16:9</button>
+                <button type="button" data-ratio="0.75" onclick="setCropRatio(3/4, this)" class="crop-ratio-btn px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">3:4</button>
+                <button type="button" data-ratio="free" onclick="setCropRatio('free', this)" class="crop-ratio-btn px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">Tự do</button>
+            </div>
+
+            <div class="crop-viewport">
+                <canvas id="cropStageCanvas" class="crop-canvas"></canvas>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1">Phóng to / Thu nhỏ (<span id="cropZoomLabel">100%</span>)</label>
+                    <input type="range" id="cropZoomSlider" min="0.5" max="3" step="0.05" value="1" oninput="updateCropZoom(this.value)" class="w-full accent-sky-600">
+                </div>
+                <div class="flex items-end justify-end gap-2">
+                    <button type="button" onclick="rotateCropImage(-90)" class="tactile-btn px-3 py-1.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold" title="Xoay trái 90°">
+                        <i class="fa-solid fa-rotate-left"></i> -90°
+                    </button>
+                    <button type="button" onclick="rotateCropImage(90)" class="tactile-btn px-3 py-1.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold" title="Xoay phải 90°">
+                        <i class="fa-solid fa-rotate-right"></i> +90°
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-1">
+                <button type="button" onclick="closeCropperModal()" class="tactile-btn px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white text-xs font-bold">Hủy</button>
+                <button type="button" onclick="applyCroppedImage()" class="tactile-btn px-5 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold shadow">
+                    <i class="fa-solid fa-check mr-1"></i> Áp dụng ảnh đã cắt
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script src="app.js"></script>
+    <!-- 1. Hộp thoại Chọn Topping -->
+    <div id="toppingModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 shadow-2xl">
+            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
+                <h3 id="toppingModalTitle" class="font-bold text-sm text-slate-800 dark:text-white truncate">Tùy chọn Topping thêm</h3>
+                <button onclick="playClickSound(); closeModal('toppingModal')" class="tactile-btn w-8 h-8 rounded-full bg-slate-200/80 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="toppingOptionsList" class="py-3 space-y-2 text-xs max-h-60 overflow-y-auto"></div>
+            <div class="pt-3 border-t border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-2">
+                <div>
+                    <div class="text-[10px] text-slate-400 uppercase font-bold whitespace-nowrap">Tổng giá món</div>
+                    <div id="toppingCalculatedPrice" class="text-base font-extrabold text-sky-600 dark:text-sky-400 whitespace-nowrap">0 VND</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="playClickSound(); confirmAddProductWithToppings(false)" class="tactile-btn px-3.5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white text-xs font-bold whitespace-nowrap">
+                        <i class="fa-solid fa-cart-plus mr-1"></i> Thêm giỏ
+                    </button>
+                    <button onclick="playClickSound(); confirmAddProductWithToppings(true)" class="tactile-btn px-4 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                        Đặt mua ngay
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Hộp thoại Giỏ Hàng & Thanh Toán -->
+    <div id="cartModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 max-h-[90vh] flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-cart-shopping text-sky-600"></i> Giỏ hàng (<span id="cartModalCount">0</span> món)
+                </h3>
+                <div class="flex items-center gap-2">
+                    <button onclick="playClickSound(); clearCustomerCart()" class="text-[11px] text-rose-500 hover:underline font-bold whitespace-nowrap">Xóa hết</button>
+                    <button onclick="playClickSound(); closeModal('cartModal')" class="tactile-btn w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="cartItemsContainer" class="py-3 overflow-y-auto space-y-2.5 flex-1 min-h-[120px]"></div>
+
+            <div class="pt-3 border-t border-slate-200/70 dark:border-slate-800 space-y-2.5">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="orderCustomerName" placeholder="Tên khách hàng *" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                    <input type="tel" id="orderPhone" placeholder="Số điện thoại *" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="email" id="orderEmail" placeholder="Email của bạn" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                    <input type="text" id="orderAddress" placeholder="Địa chỉ / Số bàn *" class="px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                </div>
+                <input type="text" id="orderNote" placeholder="Yêu cầu thêm (Ví dụ: ít đá, 70% đường...)" class="w-full px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+
+                <select id="voucherSelect" onchange="playClickSound(); applyVoucher()" class="w-full px-3 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                    <option value="">-- Chọn mã Voucher đã lưu trong tài khoản --</option>
+                </select>
+
+                <div>
+                    <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1 whitespace-nowrap">Phương thức thanh toán:</div>
+                    <div class="grid grid-cols-3 gap-2 text-xs">
+                        <label class="tactile-btn flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer font-semibold whitespace-nowrap">
+                            <input type="radio" name="payMethod" value="COD" checked onchange="toggleAppSelector()"> COD
+                        </label>
+                        <label class="tactile-btn flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer font-semibold whitespace-nowrap">
+                            <input type="radio" name="payMethod" value="Chuyển khoản ngân hàng" onchange="toggleAppSelector()"> Chuyển khoản
+                        </label>
+                        <label class="tactile-btn flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer font-semibold whitespace-nowrap">
+                            <input type="radio" name="payMethod" value="Ví điện tử" onchange="toggleAppSelector()"> Ví điện tử
+                        </label>
+                    </div>
+
+                    <div id="bankAppSelectBox" class="mt-2 hidden">
+                        <select id="selectedPaymentApp" class="w-full px-3 py-2 rounded-xl bg-sky-50/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-xs font-semibold text-sky-900 dark:text-sky-300">
+                            <option value="mb">MB Bank (Quân Đội)</option>
+                            <option value="vcb">Vietcombank</option>
+                            <option value="tcb">Techcombank</option>
+                            <option value="bidv">BIDV SmartBanking</option>
+                            <option value="icb">VietinBank iPay</option>
+                            <option value="acb">ACB ONE</option>
+                            <option value="vpb">VPBank NEO</option>
+                            <option value="tpb">TPBank LiveBank</option>
+                            <option value="agb">Agribank E-Mobile Banking</option>
+                            <option value="scb">Sacombank Pay</option>
+                        </select>
+                    </div>
+                    <div id="ewalletAppSelectBox" class="mt-2 hidden">
+                        <select id="selectedEwalletApp" class="w-full px-3 py-2 rounded-xl bg-sky-50/90 dark:bg-slate-800 border border-sky-300 dark:border-slate-700 text-xs font-semibold text-sky-900 dark:text-sky-300">
+                            <option value="zalopay">Ví ZaloPay</option>
+                            <option value="momo">Ví MoMo</option>
+                            <option value="vnpay">Ví VNPAY</option>
+                            <option value="shopeepay">Ví ShopeePay</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between font-bold text-base text-slate-800 dark:text-white pt-1 whitespace-nowrap">
+                    <span>Tổng thanh toán:</span>
+                    <span id="cartTotalPrice" class="text-sky-600 dark:text-sky-400 text-lg font-extrabold">0 VND</span>
+                </div>
+                <button onclick="playClickSound(); placeOrder()" class="tactile-btn w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold shadow-lg shadow-sky-500/30 flex items-center justify-center gap-2 text-sm whitespace-nowrap">
+                    <i class="fa-solid fa-check-circle"></i> Đặt mua ngay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Hộp thoại Hồ Sơ -->
+    <div id="profileModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-6 shadow-2xl">
+            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-200/70 dark:border-slate-800">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-id-card text-sky-600"></i> Hồ sơ cá nhân
+                </h3>
+                <button onclick="playClickSound(); closeModal('profileModal')" class="tactile-btn w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="py-4 space-y-3 text-xs">
+                <div class="flex flex-col items-center">
+                    <div class="relative group">
+                        <div id="profileAvatarFallback" class="w-20 h-20 rounded-full bg-sky-600 text-white flex items-center justify-center text-3xl border-4 border-sky-400/50 shadow-md">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <img id="profileAvatarPreview" src="" class="hidden w-20 h-20 rounded-full object-cover border-4 border-sky-400/50 shadow-md">
+                        <label class="tactile-btn absolute bottom-0 right-0 w-7 h-7 rounded-full bg-sky-600 text-white flex items-center justify-center cursor-pointer shadow" title="Tải & cắt ảnh đại diện">
+                            <i class="fa-solid fa-camera text-[11px]"></i>
+                            <input type="file" accept="image/*" onchange="openCropperFromInput(this, 1, 'avatar')" class="hidden">
+                        </label>
+                    </div>
+                    <span class="text-[10px] text-slate-400 mt-1.5 whitespace-nowrap">Chạm biểu tượng máy ảnh để tải và cắt ảnh đại diện</span>
+                </div>
+
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Tên hiển thị</label>
+                    <input type="text" id="profDisplayName" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Số điện thoại</label>
+                        <input type="tel" id="profPhone" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Email</label>
+                        <input type="email" id="profEmail" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Địa chỉ mặc định</label>
+                    <input type="text" id="profAddress" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 block mb-1 whitespace-nowrap">Phương thức thanh toán ưu tiên</label>
+                    <select id="profPayMethod" class="w-full px-3.5 py-2 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 dark:text-white">
+                        <option value="COD">COD (Tiền mặt)</option>
+                        <option value="Chuyển khoản ngân hàng">Chuyển khoản ngân hàng</option>
+                        <option value="Ví điện tử">Ví điện tử</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button onclick="playClickSound(); saveUserProfile()" class="tactile-btn flex-1 py-2.5 rounded-xl bg-sky-600 text-white font-bold shadow whitespace-nowrap">Lưu hồ sơ</button>
+                    <button onclick="playClickSound(); closeModal('profileModal'); logoutAccount()" class="tactile-btn px-4 py-2.5 rounded-xl bg-rose-500 text-white font-bold shadow whitespace-nowrap">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Hộp thoại Xuất Hóa Đơn Điện Tử -->
+    <div id="invoiceModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white text-slate-900 w-full max-w-sm rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div id="invoicePrintArea" class="space-y-3 text-xs font-mono">
+                <div class="text-center border-b-2 border-dashed border-slate-300 pb-3">
+                    <div class="text-lg font-extrabold tracking-widest">JUMJUM</div>
+                    <div class="text-[11px]">Taste the Fresh, Feel the Joy</div>
+                    <div class="text-[10px] mt-1">Địa chỉ: Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</div>
+                    <div class="text-[10px]">Hotline: 0876.935.873</div>
+                    <div class="mt-2 font-bold text-sm uppercase">HÓA ĐƠN ĐIỆN TỬ</div>
+                </div>
+                <div id="invoiceDetailsContent" class="space-y-1.5"></div>
+                <div class="text-center border-t-2 border-dashed border-slate-300 pt-3 text-[10px]">
+                    Cảm ơn quý khách đã ủng hộ JUMJUM!<br>Hẹn gặp lại quý khách!
+                </div>
+            </div>
+            <div class="mt-4 flex gap-2">
+                <button onclick="playClickSound(); window.print()" class="tactile-btn flex-1 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                    <i class="fa-solid fa-print mr-1"></i> In / Lưu PDF
+                </button>
+                <button onclick="playClickSound(); closeModal('invoiceModal')" class="tactile-btn px-4 py-2.5 rounded-xl bg-slate-200 text-slate-800 text-xs font-bold whitespace-nowrap">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Hộp thoại Mã QR -->
+    <div id="qrModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 text-center shadow-2xl">
+            <div class="flex items-center justify-between gap-2 mb-4">
+                <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 text-base whitespace-nowrap">
+                    <i class="fa-solid fa-qrcode text-sky-600"></i> Mã QR và Quét nhanh
+                </h3>
+                <button onclick="playClickSound(); closeQrModal()" class="tactile-btn w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="flex bg-slate-200/70 dark:bg-slate-800 p-1 rounded-2xl mb-4 text-xs font-semibold">
+                <button id="btnShowMyQr" onclick="playClickSound(); switchQrMode('myqr')" class="flex-1 py-2 rounded-xl bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 shadow-sm transition whitespace-nowrap">Mã QR của JUMJUM</button>
+                <button id="btnScanQr" onclick="playClickSound(); switchQrMode('scan')" class="flex-1 py-2 rounded-xl text-slate-600 dark:text-slate-400 transition whitespace-nowrap">Quét mã QR</button>
+            </div>
+
+            <div id="myQrSection" class="flex flex-col items-center">
+                <div id="qrcodeCardBadge" class="p-4 bg-gradient-to-b from-sky-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-3xl shadow-md border border-sky-100 dark:border-slate-700 flex flex-col items-center">
+                    <div class="text-xs font-extrabold text-sky-800 dark:text-sky-300 tracking-wider mb-2 uppercase">JUMJUM • Quét để gọi món</div>
+                    <div id="qrcodeCanvas" class="p-3 bg-white rounded-2xl shadow-inner border border-slate-100"></div>
+                    <div class="text-[10px] text-slate-500 mt-2 italic">Taste the Fresh, Feel the Joy</div>
+                </div>
+                <div class="flex justify-center gap-4 w-full mt-4">
+                    <button onclick="playClickSound(); copyWebLink()" class="tactile-btn w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm text-lg text-sky-600" title="Sao chép liên kết">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                    <button onclick="playClickSound(); downloadAestheticQR()" class="tactile-btn w-12 h-12 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-sm text-lg" title="Tải hình ảnh mã QR">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="scanQrSection" class="hidden">
+                <div id="qr-reader" class="w-full rounded-2xl overflow-hidden bg-black/5"></div>
+                <p id="scanResultText" class="text-xs text-sky-700 dark:text-sky-300 font-medium mt-3">Đưa máy ảnh vào mã QR để quét</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Hộp thoại Đăng Nhập -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/45 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-sm p-6 shadow-2xl">
+            <div class="flex items-center justify-between gap-2 mb-4">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-user-shield text-sky-600"></i> Đăng nhập hệ thống
+                </h3>
+                <button onclick="playClickSound(); closeModal('authModal')" class="tactile-btn w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="space-y-2">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Khách hàng đăng nhập nhanh</div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="playClickSound(); socialLogin('Google')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm whitespace-nowrap">
+                            <i class="fa-brands fa-google text-red-500"></i> Google
+                        </button>
+                        <button onclick="playClickSound(); socialLogin('Zalo')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm whitespace-nowrap">
+                            <img src="images/zalo.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg'" class="w-4 h-4 rounded-full object-contain"> Zalo
+                        </button>
+                        <button onclick="playClickSound(); socialLogin('Facebook')" class="tactile-btn py-2.5 px-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm whitespace-nowrap">
+                            <img src="images/facebook.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg'" class="w-4 h-4 rounded-full object-contain"> Facebook
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative flex py-1 items-center">
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                    <span class="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-semibold whitespace-nowrap">Dành cho Quản trị viên JUMJUM</span>
+                    <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                </div>
+
+                <form onsubmit="event.preventDefault(); playClickSound(); loginAsShop();" autocomplete="off" class="space-y-2.5">
+                    <input type="email" id="shopEmailInput" autocomplete="off" placeholder="Nhập Email đăng nhập..." class="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                    <div class="relative">
+                        <input type="password" id="shopPassInput" autocomplete="new-password" placeholder="Nhập mật khẩu..." class="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none dark:text-white">
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs" title="Hiện/Ẩn mật khẩu">
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <button type="submit" class="tactile-btn w-full py-2.5 rounded-xl bg-slate-800 dark:bg-sky-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md whitespace-nowrap">
+                        <i class="fa-solid fa-key"></i> Đăng nhập Quản trị hệ thống
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bgAudio" src="audio/jumjum music.mp3" preload="metadata" loop></audio>
+
+    <div id="toastBox" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-3 max-w-[92vw]">
+        <div class="px-5 py-2.5 rounded-full bg-slate-800/95 backdrop-blur-md text-white text-xs font-medium shadow-2xl flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-sky-400 shrink-0"></i>
+            <span id="toastMsg" class="truncate">Thông báo</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
