@@ -1292,6 +1292,98 @@
         let pendingProductForTopping = null;
         let newUploadedProductImgBase64 = "";
 
+        // ==================== CẤU HÌNH ĐỒNG BỘ FIREBASE REALTIME DATABASE ====================
+        const JUMJUM_FIREBASE_CFG = {
+            databaseUrl: "", // Dán Database URL Firebase của bạn vào đây (VD: "https://jumjum-shop-default-rtdb.firebaseio.com")
+            nodePath: "jumjum_state",
+            pollMs: 3000
+        };
+
+        function getJumjumCloudPayload() {
+            return {
+                updatedAt: Date.now(),
+                products,
+                spaceImages,
+                foodTags,
+                orders,
+                tableCalls,
+                reviews,
+                followers,
+                broadcastMsg: localStorage.getItem('jumjum_broadcast') || ""
+            };
+        }
+
+        function applyJumjumCloudSnapshot(remote, playAlert = true) {
+            if (!remote || typeof remote.updatedAt !== 'number') return;
+            const lastTs = parseInt(localStorage.getItem('jumjum_firebase_ts') || '0', 10);
+            if (remote.updatedAt <= lastTs) return;
+
+            const prevOrdersLen = orders.length;
+            const prevCallsLen = tableCalls.length;
+
+            localStorage.setItem('jumjum_firebase_ts', String(remote.updatedAt));
+            if (Array.isArray(remote.products)) { products = remote.products; safeSetStorage('jumjum_products', products); }
+            if (Array.isArray(remote.spaceImages)) { spaceImages = remote.spaceImages.map(normalizeSpaceImageItem); safeSetStorage('jumjum_space_images', spaceImages); }
+            if (Array.isArray(remote.foodTags)) { foodTags = remote.foodTags; safeSetStorage('jumjum_food_tags', foodTags); }
+            if (Array.isArray(remote.orders)) { orders = remote.orders; safeSetStorage('jumjum_orders', orders); }
+            if (Array.isArray(remote.tableCalls)) { tableCalls = remote.tableCalls; safeSetStorage('jumjum_table_calls', tableCalls); }
+            if (Array.isArray(remote.reviews)) { reviews = remote.reviews; safeSetStorage('jumjum_reviews', reviews); }
+            if (Array.isArray(remote.followers)) { followers = remote.followers; safeSetStorage('jumjum_followers', followers); }
+            if (typeof remote.broadcastMsg === 'string') {
+                broadcastMsg = remote.broadcastMsg;
+                localStorage.setItem('jumjum_broadcast', broadcastMsg);
+            }
+
+            renderBroadcastBanner();
+            renderSpaceGallery();
+            renderCategories();
+            renderProducts();
+            renderReviews();
+            updateFollowButtonUI();
+
+            if (!document.getElementById('tab-service')?.classList.contains('hidden')) {
+                renderUserActiveOrders();
+            }
+            if (currentUser && currentUser.role === 'shop') {
+                if (playAlert && (orders.length > prevOrdersLen || tableCalls.length > prevCallsLen)) {
+                    playAdminNotificationSound();
+                    showToast(orders.length > prevOrdersLen ? "🔔 Có đơn đặt món mới vừa gửi đến!" : "🔔 Có khách tại bàn vừa gọi phục vụ!");
+                }
+                renderAllAdminData();
+            }
+        }
+
+        async function syncJumjumFirebasePush() {
+            if (!JUMJUM_FIREBASE_CFG.databaseUrl) return;
+            const payload = getJumjumCloudPayload();
+            localStorage.setItem('jumjum_firebase_ts', String(payload.updatedAt));
+            const base = JUMJUM_FIREBASE_CFG.databaseUrl.replace(/\/+$/, '');
+
+            try {
+                await fetch(`${base}/${JUMJUM_FIREBASE_CFG.nodePath}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.warn("Firebase push tạm gián đoạn:", err);
+            }
+        }
+
+        async function syncJumjumFirebasePull(playAlert = true) {
+            if (!JUMJUM_FIREBASE_CFG.databaseUrl) return;
+            const base = JUMJUM_FIREBASE_CFG.databaseUrl.replace(/\/+$/, '');
+
+            try {
+                const res = await fetch(`${base}/${JUMJUM_FIREBASE_CFG.nodePath}.json`, { cache: 'no-store' });
+                if (!res.ok) return;
+                const remote = await res.json();
+                applyJumjumCloudSnapshot(remote, playAlert);
+            } catch (err) {
+                console.warn("Firebase pull tạm gián đoạn:", err);
+            }
+        }
+
         // ==================== KHỞI TẠO HỆ THỐNG ====================
         window.addEventListener('DOMContentLoaded', () => {
             initEmailJsSdk();
@@ -1317,9 +1409,11 @@
                 }
             });
 
+            syncJumjumFirebasePull(false);
             setInterval(() => {
                 syncStateFromStorage(false);
-            }, 3000);
+                syncJumjumFirebasePull(true);
+            }, JUMJUM_FIREBASE_CFG.pollMs);
         });
 
         function syncStateFromStorage(playAlert = false) {
@@ -1421,6 +1515,7 @@
                 showToast("Cảm ơn bạn đã theo dõi JUMJUM!");
             }
             safeSetStorage('jumjum_followers', followers);
+            syncJumjumFirebasePush();
             updateFollowButtonUI();
         }
 
@@ -2007,6 +2102,7 @@
 
             orders.unshift(newOrder);
             safeSetStorage('jumjum_orders', orders);
+            syncJumjumFirebasePush();
 
             sendOrderEmailViaEmailJS(newOrder);
             playAdminNotificationSound();
@@ -2062,6 +2158,7 @@
             orders[idx].status = "Khách hàng đã nhận món";
             orders[idx].isNew = false;
             safeSetStorage('jumjum_orders', orders);
+            syncJumjumFirebasePush();
             playAdminNotificationSound();
             renderUserActiveOrders();
             showToast("Cảm ơn bạn đã xác nhận nhận món! Chúc bạn ngon miệng.");
@@ -2092,6 +2189,7 @@
 
             tableCalls.unshift(callObj);
             safeSetStorage('jumjum_table_calls', tableCalls);
+            syncJumjumFirebasePush();
             document.getElementById('tableRequestInput').value = '';
             document.getElementById('shopNotifDot').classList.remove('hidden');
 
@@ -2495,6 +2593,7 @@
         function removeFollower(idx) {
             followers.splice(idx, 1);
             safeSetStorage('jumjum_followers', followers);
+            syncJumjumFirebasePush();
             renderAdminFollowersList();
             updateFollowButtonUI();
             showToast("Đã xóa khỏi danh sách theo dõi.");
@@ -2503,6 +2602,7 @@
         function completeTableCall(idx) {
             tableCalls[idx].done = true;
             safeSetStorage('jumjum_table_calls', tableCalls);
+            syncJumjumFirebasePush();
             renderAllAdminData();
             showToast("Đã xác nhận phục vụ bàn thành công!");
         }
@@ -2511,6 +2611,7 @@
             orders[idx].isNew = false;
             orders[idx].status = "Đang pha chế & Giao hàng";
             safeSetStorage('jumjum_orders', orders);
+            syncJumjumFirebasePush();
             renderAllAdminData();
             showToast("Đã duyệt đơn hàng và cập nhật trạng thái cho khách!");
         }
@@ -2519,6 +2620,7 @@
             if (confirm("Xóa toàn bộ lịch sử đơn hàng?")) {
                 orders = [];
                 safeSetStorage('jumjum_orders', orders);
+                syncJumjumFirebasePush();
                 renderAllAdminData();
             }
         }
@@ -2686,6 +2788,7 @@
             };
             orders.unshift(newOrder);
             safeSetStorage('jumjum_orders', orders);
+            syncJumjumFirebasePush();
             posCart = [];
             updatePosCartUI();
             renderAllAdminData();
@@ -2813,6 +2916,7 @@
                         caption: "Không gian check-in thực tế"
                     });
                     if (safeSetStorage('jumjum_space_images', spaceImages)) {
+                        syncJumjumFirebasePush();
                         renderSpaceGallery();
                         renderAdminMenuAndSpaceManager();
                     }
@@ -2826,6 +2930,7 @@
             if (confirm("Xóa hình ảnh không gian này?")) {
                 spaceImages.splice(idx, 1);
                 safeSetStorage('jumjum_space_images', spaceImages);
+                syncJumjumFirebasePush();
                 renderSpaceGallery();
                 renderAdminMenuAndSpaceManager();
             }
@@ -2837,6 +2942,7 @@
             if (!foodTags.includes(tagName)) {
                 foodTags.push(tagName);
                 safeSetStorage('jumjum_food_tags', foodTags);
+                syncJumjumFirebasePush();
                 document.getElementById('newFoodTagInput').value = "";
                 renderCategories();
                 renderAdminMenuAndSpaceManager();
@@ -2850,6 +2956,7 @@
             if (foodTags.length <= 1) return showToast("Cần giữ lại ít nhất một thẻ thức ăn!");
             const removed = foodTags.splice(idx, 1);
             safeSetStorage('jumjum_food_tags', foodTags);
+            syncJumjumFirebasePush();
             renderCategories();
             renderAdminMenuAndSpaceManager();
             showToast(`Đã xóa thẻ thức ăn "${removed[0]}"!`);
@@ -2896,6 +3003,7 @@
             });
 
             if (safeSetStorage('jumjum_products', products)) {
+                syncJumjumFirebasePush();
                 newUploadedProductImgBase64 = "";
                 document.getElementById('newProdName').value = '';
                 document.getElementById('newProdPrice').value = '';
@@ -2916,6 +3024,7 @@
             if (!val && val !== 0 && typeof val !== 'boolean') return;
             products[idx][field] = val;
             safeSetStorage('jumjum_products', products);
+            syncJumjumFirebasePush();
             renderCategories();
             renderProducts();
             renderAdminMenuAndSpaceManager();
@@ -2928,6 +3037,7 @@
             compressImageFile(file, 500, (compressed) => {
                 products[idx].image = compressed;
                 if (safeSetStorage('jumjum_products', products)) {
+                    syncJumjumFirebasePush();
                     renderProducts();
                     renderAdminMenuAndSpaceManager();
                     showToast("Đã cập nhật hình ảnh món mới!");
@@ -2939,6 +3049,7 @@
             if (confirm("Xóa món này khỏi thực đơn?")) {
                 products.splice(idx, 1);
                 safeSetStorage('jumjum_products', products);
+                syncJumjumFirebasePush();
                 renderCategories();
                 renderProducts();
                 renderAdminMenuAndSpaceManager();
@@ -2949,6 +3060,7 @@
             const msg = document.getElementById('adminBroadcastInput').value.trim();
             broadcastMsg = msg;
             localStorage.setItem('jumjum_broadcast', msg);
+            syncJumjumFirebasePush();
             renderBroadcastBanner();
             showToast(msg ? "Đã phát thông báo đến khách hàng!" : "Đã tắt thông báo!");
         }
@@ -3018,6 +3130,7 @@
                 photo: reviewPhotoBase64
             });
             safeSetStorage('jumjum_reviews', reviews);
+            syncJumjumFirebasePush();
             document.getElementById('reviewComment').value = '';
             clearReviewPhoto();
             renderReviews();
