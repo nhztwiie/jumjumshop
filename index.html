@@ -4,10 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>JUMJUM — Taste the Fresh, Feel the Joy</title>
+    <meta name="description" content="Bạn đang thiếu năng lượng - Có JUMJUM đây! Đặt món trực tuyến nhanh chóng, giao tận nơi tại Phường Phú Tân, Vĩnh Long.">
+    <meta name="theme-color" content="#0284c7">
+    <!-- Link Preview / Open Graph (Zalo, Facebook, Messenger, Telegram) -->
+    <meta property="og:site_name" content="JUMJUM">
     <meta property="og:title" content="JUMJUM — Taste the Fresh, Feel the Joy">
-    <meta property="og:description" content="Bạn đang thiếu năng lượng - Có JUMJUM đây!">
-    <meta property="og:image" content="images/jumjumshop.png">
+    <meta property="og:description" content="Bạn đang thiếu năng lượng - Có JUMJUM đây! Khám phá thực đơn tươi mát & ưu đãi mỗi ngày.">
+    <meta property="og:image" content="https://nhztwiie.github.io/jumjum/images/jumjumshop.png">
+    <meta property="og:image:secure_url" content="https://nhztwiie.github.io/jumjum/images/jumjumshop.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="800">
+    <meta property="og:image:alt" content="Logo JUMJUM — Taste the Fresh, Feel the Joy">
     <meta property="og:type" content="website">
+    <meta property="og:locale" content="vi_VN">
+    <!-- Twitter / X Link Preview -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JUMJUM — Taste the Fresh, Feel the Joy">
+    <meta name="twitter:description" content="Bạn đang thiếu năng lượng - Có JUMJUM đây! Đặt món trực tuyến & nhận voucher ưu đãi tại JUMJUM.">
+    <meta name="twitter:image" content="https://nhztwiie.github.io/jumjum/images/jumjumshop.png">
     
     <!-- Favicon hình tròn đồng nhất với Avatar Admin -->
     <link id="dynamicFavicon" rel="icon" type="image/png" href="images/jumjumshop.png">
@@ -193,6 +208,23 @@
             body * { visibility: hidden; }
             #invoicePrintArea, #invoicePrintArea * { visibility: visible; }
             #invoicePrintArea { position: fixed; left: 0; top: 0; width: 100%; background: white !important; color: black !important; }
+        }
+
+        /* Tối ưu Mobile & PC mượt mà, safe-area tai thỏ */
+        html { scroll-behavior: smooth; }
+        body { padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); }
+        #bottomDock { bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px)); }
+        #floatingCartBtn { bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px)); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @media (max-width: 640px) {
+            .liquid-glass { border-radius: 22px; }
+            .liquid-orb { filter: blur(55px); opacity: 0.65; }
+            input, select, textarea { font-size: 16px !important; } /* Ngăn iOS Safari tự zoom khi chạm input */
+            #cartModal input, #cartModal select, #authModal input, #profileModal input, #profileModal select, #admin-tab-menu input, #admin-tab-menu select { font-size: 13px !important; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .liquid-orb, .spinning { animation: none !important; }
         }
 
         ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -1050,6 +1082,7 @@
         <div class="bg-white text-slate-900 w-full max-w-sm rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div id="invoicePrintArea" class="space-y-3 text-xs font-mono">
                 <div class="text-center border-b-2 border-dashed border-slate-300 pb-3">
+                    <img id="invoiceShopLogo" src="images/jumjumshop.png" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&q=80&w=200'" alt="Logo JUMJUM" class="w-16 h-16 mx-auto mb-1.5 rounded-full object-cover border-2 border-slate-300 shadow-sm">
                     <div class="text-lg font-extrabold tracking-widest">JUMJUM</div>
                     <div class="text-[11px]">Taste the Fresh, Feel the Joy</div>
                     <div class="text-[10px] mt-1">Địa chỉ: Nguyễn Văn Cánh, Phường Phú Tân, Vĩnh Long</div>
@@ -1156,6 +1189,60 @@
                         <i class="fa-solid fa-key"></i> Đăng nhập Quản trị hệ thống
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Hộp thoại Căn chỉnh Tỉ lệ Khung Ảnh trước khi tải lên -->
+    <div id="imageCropperModal" class="fixed inset-0 z-50 hidden bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="liquid-glass bg-white/95 dark:bg-slate-900/95 w-full max-w-md p-5 shadow-2xl space-y-3">
+            <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/70 dark:border-slate-800">
+                <h3 class="font-bold text-sm sm:text-base text-slate-800 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-crop-simple text-sky-600"></i> Điều chỉnh tỉ lệ khung ảnh
+                </h3>
+                <button onclick="playClickSound(); cancelImageCrop()" class="tactile-btn w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Chọn tỉ lệ khung -->
+            <div class="flex flex-wrap gap-1.5 text-[11px] font-bold" id="cropRatioButtons">
+                <button type="button" onclick="playClickSound(); setCropAspect('free')" data-ratio="free" class="crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-sky-600 text-white">Gốc (Tự do)</button>
+                <button type="button" onclick="playClickSound(); setCropAspect('1:1')" data-ratio="1:1" class="crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">1:1 Vuông</button>
+                <button type="button" onclick="playClickSound(); setCropAspect('4:3')" data-ratio="4:3" class="crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">4:3 Ngang</button>
+                <button type="button" onclick="playClickSound(); setCropAspect('16:9')" data-ratio="16:9" class="crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">16:9 Rộng</button>
+                <button type="button" onclick="playClickSound(); setCropAspect('3:4')" data-ratio="3:4" class="crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">3:4 Đứng</button>
+                <button type="button" onclick="playClickSound(); setCropAspect('9:16')" data-ratio="9:16" class="crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">9:16 Story</button>
+            </div>
+
+            <!-- Khung xem trước -->
+            <div class="w-full h-60 rounded-2xl bg-slate-900/90 flex items-center justify-center overflow-hidden p-2 border border-slate-700">
+                <canvas id="cropPreviewCanvas" class="max-w-full max-h-full rounded-xl shadow-lg"></canvas>
+            </div>
+
+            <!-- Thanh thu phóng & dịch chuyển khung -->
+            <div class="grid grid-cols-3 gap-2 text-[11px] bg-slate-100/80 dark:bg-slate-800/80 p-2.5 rounded-xl">
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 block">Thu phóng (<span id="cropZoomVal">1.0</span>x)</label>
+                    <input type="range" id="cropZoomRange" min="1" max="2.5" step="0.05" value="1" oninput="updateCropPreview()" class="w-full accent-sky-600">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 block">Dịch ngang</label>
+                    <input type="range" id="cropOffsetXRange" min="-50" max="50" step="1" value="0" oninput="updateCropPreview()" class="w-full accent-sky-600">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-500 dark:text-slate-400 block">Dịch dọc</label>
+                    <input type="range" id="cropOffsetYRange" min="-50" max="50" step="1" value="0" oninput="updateCropPreview()" class="w-full accent-sky-600">
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-1">
+                <button type="button" onclick="playClickSound(); applyCroppedImage()" class="tactile-btn flex-1 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow">
+                    <i class="fa-solid fa-check mr-1"></i> Áp dụng khung ảnh
+                </button>
+                <button type="button" onclick="playClickSound(); cancelImageCrop()" class="tactile-btn px-4 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold">
+                    Hủy
+                </button>
             </div>
         </div>
     </div>
@@ -1884,13 +1971,27 @@
             }
         }
 
+        function getAspectCssClass(aspect) {
+            switch (aspect) {
+                case '1:1': return 'aspect-square';
+                case '4:3': return 'aspect-[4/3]';
+                case '16:9': return 'aspect-video';
+                case '3:4': return 'aspect-[3/4]';
+                case '9:16': return 'aspect-[9/16]';
+                default: return '';
+            }
+        }
+
         function renderSpaceGallery() {
             document.getElementById('spaceGallery').innerHTML = spaceImages.map((item, idx) => {
                 const imgObj = normalizeSpaceImageItem(item, idx);
-                const spanClass = idx === 0 ? "col-span-2 sm:col-span-2 h-36 sm:h-44" : "h-32 sm:h-36";
+                const aspectCls = getAspectCssClass(item.aspect);
+                const spanClass = aspectCls
+                    ? `${idx === 0 && (item.aspect === '16:9' || item.aspect === '4:3') ? 'col-span-2 ' : ''}${aspectCls}`
+                    : (idx === 0 ? "col-span-2 sm:col-span-2 h-40 sm:h-48" : "h-36 sm:h-40");
                 return `
                     <div class="tactile-card relative rounded-2xl overflow-hidden ${spanClass} border border-white/85 dark:border-slate-700 shadow-sm group text-left">
-                        <img src="${imgObj.url}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600'" alt="${imgObj.caption}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <img src="${imgObj.url}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=600'" alt="${imgObj.caption}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/15 to-transparent flex flex-col justify-end p-2.5 sm:p-3">
                             <span class="self-start px-2 py-0.5 rounded-full bg-white/25 backdrop-blur-md border border-white/40 text-white text-[9px] sm:text-[10px] font-bold mb-1 whitespace-nowrap">${imgObj.tag}</span>
                             <span class="text-white text-[11px] sm:text-xs font-bold leading-tight drop-shadow">${imgObj.caption}</span>
@@ -1941,8 +2042,8 @@
             document.getElementById('productGrid').innerHTML = filtered.map(p => `
                 <div class="liquid-glass tactile-card spotlight-card p-4 flex flex-col justify-between group">
                     <div class="relative z-10">
-                        <div class="relative h-40 rounded-2xl overflow-hidden mb-3 shadow-sm bg-slate-100 dark:bg-slate-800">
-                            <img src="${p.image}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=400'" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="relative ${getAspectCssClass(p.aspect) || 'h-40'} rounded-2xl overflow-hidden mb-3 shadow-sm bg-slate-100 dark:bg-slate-800">
+                            <img src="${p.image}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=400'" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             <span class="absolute top-2 left-2 px-2.5 py-1 rounded-full bg-white/85 dark:bg-slate-900/85 backdrop-blur-md text-[10px] font-extrabold text-sky-800 dark:text-sky-300 shadow-sm whitespace-nowrap">
                                 ${p.category}
                             </span>
@@ -2320,17 +2421,22 @@
         function handleProfileAvatarChange(input) {
             const file = input.files[0];
             if (!file) return;
-            compressImageFile(file, 350, (compressedDataUrl) => {
-                const previewEl = document.getElementById('profileAvatarPreview');
-                const fallbackEl = document.getElementById('profileAvatarFallback');
-                previewEl.src = compressedDataUrl;
-                previewEl.classList.remove('hidden');
-                fallbackEl.classList.add('hidden');
+            openImageCropper(file, {
+                defaultAspect: '1:1',
+                maxSize: 360,
+                inputEl: input,
+                onComplete: (compressedDataUrl) => {
+                    const previewEl = document.getElementById('profileAvatarPreview');
+                    const fallbackEl = document.getElementById('profileAvatarFallback');
+                    previewEl.src = compressedDataUrl;
+                    previewEl.classList.remove('hidden');
+                    fallbackEl.classList.add('hidden');
 
-                currentUser.avatar = compressedDataUrl;
-                if (safeSetStorage('jumjum_user', currentUser)) {
-                    checkAuthState();
-                    showToast("Đã cập nhật ảnh đại diện thành công!");
+                    currentUser.avatar = compressedDataUrl;
+                    if (safeSetStorage('jumjum_user', currentUser)) {
+                        checkAuthState();
+                        showToast("Đã cập nhật ảnh đại diện thành công!");
+                    }
                 }
             });
         }
@@ -2998,13 +3104,140 @@
             reader.readAsDataURL(file);
         }
 
+        // ==================== TRÌNH CẮT & ĐIỀU CHỈNH TỈ LỆ KHUNG ẢNH ====================
+        let cropSession = {
+            img: null,
+            aspect: 'free',
+            maxSize: 650,
+            defaultAspect: 'free',
+            onComplete: null,
+            inputEl: null
+        };
+
+        function openImageCropper(file, options) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    cropSession = {
+                        img,
+                        aspect: options.defaultAspect || 'free',
+                        maxSize: options.maxSize || 650,
+                        onComplete: options.onComplete,
+                        inputEl: options.inputEl || null
+                    };
+                    document.getElementById('cropZoomRange').value = 1;
+                    document.getElementById('cropOffsetXRange').value = 0;
+                    document.getElementById('cropOffsetYRange').value = 0;
+                    setCropAspect(cropSession.aspect);
+                    openModal('imageCropperModal');
+                };
+                img.onerror = () => showToast("Tệp ảnh không hợp lệ, vui lòng chọn ảnh khác!");
+                img.src = e.target.result;
+            };
+            reader.onerror = () => showToast("Không thể đọc tệp ảnh!");
+            reader.readAsDataURL(file);
+        }
+
+        function setCropAspect(ratio) {
+            cropSession.aspect = ratio;
+            document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
+                const active = btn.dataset.ratio === ratio;
+                btn.className = active
+                    ? "crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-sky-600 text-white"
+                    : "crop-ratio-btn tactile-btn px-2.5 py-1.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200";
+            });
+            updateCropPreview();
+        }
+
+        function getCropTargetDimensions(img, ratio, maxSide) {
+            const natRatio = img.width / img.height;
+            let targetRatio = natRatio;
+            if (ratio === '1:1') targetRatio = 1;
+            else if (ratio === '4:3') targetRatio = 4 / 3;
+            else if (ratio === '16:9') targetRatio = 16 / 9;
+            else if (ratio === '3:4') targetRatio = 3 / 4;
+            else if (ratio === '9:16') targetRatio = 9 / 16;
+
+            let outW, outH;
+            if (targetRatio >= 1) {
+                outW = maxSide;
+                outH = Math.round(maxSide / targetRatio);
+            } else {
+                outH = maxSide;
+                outW = Math.round(maxSide * targetRatio);
+            }
+            return { outW, outH, targetRatio };
+        }
+
+        function renderCropToCanvas(canvas, maxSide) {
+            const img = cropSession.img;
+            if (!img) return;
+            const { outW, outH, targetRatio } = getCropTargetDimensions(img, cropSession.aspect, maxSide);
+            canvas.width = outW;
+            canvas.height = outH;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, outW, outH);
+
+            const zoom = parseFloat(document.getElementById('cropZoomRange').value) || 1;
+            const offX = (parseFloat(document.getElementById('cropOffsetXRange').value) || 0) / 100;
+            const offY = (parseFloat(document.getElementById('cropOffsetYRange').value) || 0) / 100;
+            document.getElementById('cropZoomVal').textContent = zoom.toFixed(2);
+
+            const natRatio = img.width / img.height;
+            let baseCropW, baseCropH;
+            if (natRatio > targetRatio) {
+                baseCropH = img.height;
+                baseCropW = img.height * targetRatio;
+            } else {
+                baseCropW = img.width;
+                baseCropH = img.width / targetRatio;
+            }
+
+            const cropW = baseCropW / zoom;
+            const cropH = baseCropH / zoom;
+            const maxShiftX = Math.max(0, (img.width - cropW) / 2);
+            const maxShiftY = Math.max(0, (img.height - cropH) / 2);
+
+            const sx = Math.max(0, Math.min(img.width - cropW, (img.width - cropW) / 2 + offX * maxShiftX * 2));
+            const sy = Math.max(0, Math.min(img.height - cropH, (img.height - cropH) / 2 + offY * maxShiftY * 2));
+
+            ctx.drawImage(img, sx, sy, cropW, cropH, 0, 0, outW, outH);
+        }
+
+        function updateCropPreview() {
+            const canvas = document.getElementById('cropPreviewCanvas');
+            renderCropToCanvas(canvas, 360);
+        }
+
+        function applyCroppedImage() {
+            if (!cropSession.img || !cropSession.onComplete) return;
+            const exportCanvas = document.createElement('canvas');
+            renderCropToCanvas(exportCanvas, cropSession.maxSize);
+            const dataUrl = exportCanvas.toDataURL('image/jpeg', 0.82);
+            const chosenAspect = cropSession.aspect;
+            const cb = cropSession.onComplete;
+            if (cropSession.inputEl) cropSession.inputEl.value = '';
+            closeModal('imageCropperModal');
+            cb(dataUrl, chosenAspect);
+        }
+
+        function cancelImageCrop() {
+            if (cropSession.inputEl) cropSession.inputEl.value = '';
+            closeModal('imageCropperModal');
+        }
+
         function uploadSpaceImages(input) {
             const files = Array.from(input.files);
             if (!files.length) return;
-            files.forEach(file => {
-                compressImageFile(file, 650, (compressed) => {
+            openImageCropper(files[0], {
+                defaultAspect: 'free',
+                maxSize: 700,
+                inputEl: input,
+                onComplete: (croppedUrl, aspect) => {
                     spaceImages.unshift({
-                        url: compressed,
+                        url: croppedUrl,
+                        aspect: aspect,
                         tag: "📸 Góc Mới JUMJUM",
                         caption: "Không gian check-in thực tế"
                     });
@@ -3012,11 +3245,10 @@
                         syncJumjumFirebasePush();
                         renderSpaceGallery();
                         renderAdminMenuAndSpaceManager();
+                        showToast("Đã tải ảnh không gian với tỉ lệ khung đã chọn!");
                     }
-                });
+                }
             });
-            input.value = "";
-            showToast(`Đang tải lên ${files.length} hình ảnh không gian...`);
         }
 
         function deleteSpaceImage(idx) {
@@ -3113,14 +3345,22 @@
             showToast(`Đã xóa topping "${removed[0].name}"!`);
         }
 
+        let newUploadedProductAspect = 'free';
+
         function previewNewProductImage(input) {
             const file = input.files[0];
             if (!file) return;
-            compressImageFile(file, 500, (compressed) => {
-                newUploadedProductImgBase64 = compressed;
-                document.getElementById('newProdImgLabel').textContent = "Đã chọn: " + file.name;
-                document.getElementById('newProdPreviewImg').src = compressed;
-                document.getElementById('newProdPreviewBox').classList.remove('hidden');
+            openImageCropper(file, {
+                defaultAspect: '4:3',
+                maxSize: 550,
+                inputEl: input,
+                onComplete: (compressed, aspect) => {
+                    newUploadedProductImgBase64 = compressed;
+                    newUploadedProductAspect = aspect;
+                    document.getElementById('newProdImgLabel').textContent = `Đã căn chỉnh (${aspect === 'free' ? 'Gốc' : aspect})`;
+                    document.getElementById('newProdPreviewImg').src = compressed;
+                    document.getElementById('newProdPreviewBox').classList.remove('hidden');
+                }
             });
         }
 
@@ -3150,12 +3390,14 @@
                 price: price,
                 desc: desc,
                 image: newUploadedProductImgBase64 || urlImg || "https://images.unsplash.com/photo-1541658016010-618bd0c4cfd2?auto=format&fit=crop&q=80&w=600",
+                aspect: newUploadedProductImgBase64 ? newUploadedProductAspect : 'free',
                 hasTopping: hasTopping
             });
 
             if (safeSetStorage('jumjum_products', products)) {
                 syncJumjumFirebasePush();
                 newUploadedProductImgBase64 = "";
+                newUploadedProductAspect = "free";
                 document.getElementById('newProdName').value = '';
                 document.getElementById('newProdPrice').value = '';
                 document.getElementById('newProdDesc').value = '';
@@ -3185,13 +3427,19 @@
         function updateExistingProductImage(idx, input) {
             const file = input.files[0];
             if (!file) return;
-            compressImageFile(file, 500, (compressed) => {
-                products[idx].image = compressed;
-                if (safeSetStorage('jumjum_products', products)) {
-                    syncJumjumFirebasePush();
-                    renderProducts();
-                    renderAdminMenuAndSpaceManager();
-                    showToast("Đã cập nhật hình ảnh món mới!");
+            openImageCropper(file, {
+                defaultAspect: products[idx].aspect || '4:3',
+                maxSize: 550,
+                inputEl: input,
+                onComplete: (compressed, aspect) => {
+                    products[idx].image = compressed;
+                    products[idx].aspect = aspect;
+                    if (safeSetStorage('jumjum_products', products)) {
+                        syncJumjumFirebasePush();
+                        renderProducts();
+                        renderAdminMenuAndSpaceManager();
+                        showToast("Đã cập nhật hình ảnh & tỉ lệ khung món mới!");
+                    }
                 }
             });
         }
