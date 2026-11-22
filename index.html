@@ -1449,8 +1449,10 @@
         }
 
         function getJumjumCloudPayload() {
+            localStorage.setItem('jumjum_initial_reviews_rev', String(INITIAL_REVIEWS_REVISION));
             return {
                 updatedAt: Date.now(),
+                initialReviewsRevision: INITIAL_REVIEWS_REVISION,
                 products,
                 spaceImages,
                 foodTags,
@@ -1463,10 +1465,14 @@
             };
         }
 
+        const INITIAL_REVIEWS_REVISION = 2026112201;
+
         function applyJumjumCloudSnapshot(remote, playAlert = true) {
             if (!remote || typeof remote.updatedAt !== 'number') return;
             const lastTs = parseInt(localStorage.getItem('jumjum_firebase_ts') || '0', 10);
-            if (remote.updatedAt <= lastTs) return;
+            const appliedRev = parseInt(localStorage.getItem('jumjum_initial_reviews_rev') || '0', 10);
+            const hasFreshInitialReviews = (remote.initialReviewsRevision || 0) > appliedRev && Array.isArray(remote.reviews);
+            if (remote.updatedAt <= lastTs && !hasFreshInitialReviews) return;
 
             const prevOrdersLen = orders.length;
             const prevCallsLen = tableCalls.length;
@@ -1478,7 +1484,13 @@
             if (Array.isArray(remote.toppings)) { toppings = remote.toppings; safeSetStorage('jumjum_toppings', toppings); }
             if (Array.isArray(remote.orders)) { orders = remote.orders; safeSetStorage('jumjum_orders', orders); }
             if (Array.isArray(remote.tableCalls)) { tableCalls = remote.tableCalls; safeSetStorage('jumjum_table_calls', tableCalls); }
-            if (Array.isArray(remote.reviews)) { reviews = remote.reviews; safeSetStorage('jumjum_reviews', reviews); }
+            if (Array.isArray(remote.reviews)) {
+                reviews = remote.reviews;
+                safeSetStorage('jumjum_reviews', reviews);
+                if (remote.initialReviewsRevision) {
+                    localStorage.setItem('jumjum_initial_reviews_rev', String(remote.initialReviewsRevision));
+                }
+            }
             if (Array.isArray(remote.followers)) { followers = remote.followers; safeSetStorage('jumjum_followers', followers); }
             if (typeof remote.broadcastMsg === 'string') {
                 broadcastMsg = remote.broadcastMsg;
@@ -1489,6 +1501,15 @@
             renderSpaceGallery();
             renderCategories();
             renderProducts();
+            const seenRev = parseInt(localStorage.getItem('jumjum_initial_reviews_rev') || '0', 10);
+            if (seenRev < INITIAL_REVIEWS_REVISION) {
+                reviews = DEFAULT_SHOP_DATA.initialReviews.map(r => ({ ...r }));
+                safeSetStorage('jumjum_reviews', reviews);
+                localStorage.setItem('jumjum_initial_reviews_rev', String(INITIAL_REVIEWS_REVISION));
+                if (JUMJUM_FIREBASE_CFG.databaseUrl) {
+                    setTimeout(() => syncJumjumFirebasePush(false), 600);
+                }
+            }
             renderReviews();
             updateFollowButtonUI();
 
