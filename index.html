@@ -688,6 +688,20 @@
 
                 <div class="liquid-glass p-5 space-y-3">
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-cubes-stacked text-sky-600"></i> Quản lí danh sách Topping (Thêm / Sửa giá / Xóa)
+                    </h3>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="newToppingNameInput" placeholder="Tên topping mới (VD: Thạch dừa, Trân châu trắng...)" class="flex-1 px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs dark:text-white">
+                        <input type="number" id="newToppingPriceInput" placeholder="Giá thêm (VND)..." class="w-full sm:w-40 px-4 py-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs dark:text-white">
+                        <button onclick="playClickSound(); addNewTopping()" class="tactile-btn px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold shadow whitespace-nowrap">
+                            <i class="fa-solid fa-plus mr-1"></i> Thêm Topping
+                        </button>
+                    </div>
+                    <div id="adminToppingsList" class="space-y-2 pt-1"></div>
+                </div>
+
+                <div class="liquid-glass p-5 space-y-3">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-2 whitespace-nowrap">
                         <i class="fa-solid fa-plus-circle text-sky-600"></i> Cài đặt và thêm món mới vào thực đơn
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -1284,6 +1298,7 @@
         let products = safeGetStorage('jumjum_products', DEFAULT_SHOP_DATA.products);
         let spaceImages = safeGetStorage('jumjum_space_images', DEFAULT_SHOP_DATA.spaceImages).map(normalizeSpaceImageItem);
         let foodTags = safeGetStorage('jumjum_food_tags', DEFAULT_SHOP_DATA.foodTags);
+        let toppings = safeGetStorage('jumjum_toppings', DEFAULT_SHOP_DATA.toppings);
         let adminAccounts = safeGetStorage('jumjum_admins', DEFAULT_SHOP_DATA.admins);
         let emailJsSettings = safeGetStorage('jumjum_emailjs_settings', {
             publicKey: "", serviceId: "", templateId: "", receiverEmail: DEFAULT_SHOP_DATA.info.defaultNotifEmail
@@ -1309,7 +1324,7 @@
 
         // ==================== CẤU HÌNH ĐỒNG BỘ FIREBASE REALTIME DATABASE ====================
         const JUMJUM_FIREBASE_CFG = {
-            databaseUrl: localStorage.getItem('jumjum_firebase_url') || "", // Dán Database URL Firebase của bạn vào đây (VD: "https://jumjum-shop-default-rtdb.firebaseio.com")
+            databaseUrl: localStorage.getItem('jumjum_firebase_url') || "https://jumjum-5b0a5-default-rtdb.asia-southeast1.firebasedatabase.app",
             nodePath: "jumjum_state",
             pollMs: 2500
         };
@@ -1348,6 +1363,7 @@
                 products,
                 spaceImages,
                 foodTags,
+                toppings,
                 orders,
                 tableCalls,
                 reviews,
@@ -1368,6 +1384,7 @@
             if (Array.isArray(remote.products)) { products = remote.products; safeSetStorage('jumjum_products', products); }
             if (Array.isArray(remote.spaceImages)) { spaceImages = remote.spaceImages.map(normalizeSpaceImageItem); safeSetStorage('jumjum_space_images', spaceImages); }
             if (Array.isArray(remote.foodTags)) { foodTags = remote.foodTags; safeSetStorage('jumjum_food_tags', foodTags); }
+            if (Array.isArray(remote.toppings)) { toppings = remote.toppings; safeSetStorage('jumjum_toppings', toppings); }
             if (Array.isArray(remote.orders)) { orders = remote.orders; safeSetStorage('jumjum_orders', orders); }
             if (Array.isArray(remote.tableCalls)) { tableCalls = remote.tableCalls; safeSetStorage('jumjum_table_calls', tableCalls); }
             if (Array.isArray(remote.reviews)) { reviews = remote.reviews; safeSetStorage('jumjum_reviews', reviews); }
@@ -1457,7 +1474,7 @@
             
             // Đồng bộ tức thì giữa các tab trình duyệt
             window.addEventListener('storage', (e) => {
-                if (['jumjum_orders', 'jumjum_table_calls', 'jumjum_reviews', 'jumjum_followers', 'jumjum_products', 'jumjum_space_images', 'jumjum_food_tags', 'jumjum_broadcast'].includes(e.key)) {
+                if (['jumjum_orders', 'jumjum_table_calls', 'jumjum_reviews', 'jumjum_followers', 'jumjum_products', 'jumjum_space_images', 'jumjum_food_tags', 'jumjum_toppings', 'jumjum_broadcast'].includes(e.key)) {
                     syncStateFromStorage(true);
                 }
             });
@@ -1483,6 +1500,7 @@
             products = safeGetStorage('jumjum_products', products);
             spaceImages = safeGetStorage('jumjum_space_images', spaceImages).map(normalizeSpaceImageItem);
             foodTags = safeGetStorage('jumjum_food_tags', foodTags);
+            toppings = safeGetStorage('jumjum_toppings', toppings);
             orders = latestOrders;
             tableCalls = latestCalls;
             reviews = safeGetStorage('jumjum_reviews', reviews);
@@ -1958,7 +1976,7 @@
                 pendingProductForTopping = product;
                 isDirectOrderAfterTopping = openCartImmediately;
                 document.getElementById('toppingModalTitle').textContent = `Topping cho: ${product.name}`;
-                document.getElementById('toppingOptionsList').innerHTML = DEFAULT_SHOP_DATA.toppings.map(t => `
+                document.getElementById('toppingOptionsList').innerHTML = (toppings.length ? toppings : DEFAULT_SHOP_DATA.toppings).map(t => `
                     <label class="tactile-btn flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer">
                         <span class="flex items-center gap-2 font-semibold dark:text-white whitespace-nowrap">
                             <input type="checkbox" class="topping-checkbox" data-name="${t.name}" data-price="${t.price}" onchange="playClickSound(); updateToppingPricePreview()">
@@ -2919,6 +2937,7 @@
                 </span>
             `).join('');
 
+            renderAdminToppingsList();
             document.getElementById('newProdCategorySelect').innerHTML = foodTags.map(t => `<option value="${t}">${t}</option>`).join('');
 
             document.getElementById('adminProductEditList').innerHTML = products.map((p, idx) => `
@@ -3034,6 +3053,64 @@
             renderCategories();
             renderAdminMenuAndSpaceManager();
             showToast(`Đã xóa thẻ thức ăn "${removed[0]}"!`);
+        }
+
+        function renderAdminToppingsList() {
+            const listEl = document.getElementById('adminToppingsList');
+            if (!listEl) return;
+            if (!toppings || toppings.length === 0) {
+                listEl.innerHTML = `<div class="text-xs text-slate-400 italic">Chưa có topping nào. Hãy thêm topping mới ở trên.</div>`;
+                return;
+            }
+            listEl.innerHTML = toppings.map((t, idx) => `
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-white/85 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs">
+                    <div class="flex flex-1 gap-2">
+                        <input type="text" value="${t.name}" onchange="updateToppingField(${idx}, 'name', this.value)" placeholder="Tên topping" class="flex-1 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 font-bold text-slate-800 dark:text-white border border-transparent focus:border-sky-400 focus:outline-none">
+                        <input type="number" value="${t.price}" onchange="updateToppingField(${idx}, 'price', parseInt(this.value))" placeholder="Giá (VND)" class="w-32 px-3 py-1.5 rounded-lg bg-sky-50 dark:bg-slate-900 border border-sky-200 dark:border-slate-700 font-bold text-sky-700 dark:text-sky-400 text-right">
+                    </div>
+                    <button onclick="playClickSound(); deleteTopping(${idx})" class="tactile-btn px-3 py-1.5 rounded-lg bg-rose-100 text-rose-600 font-bold flex items-center justify-center gap-1 self-end sm:self-center" title="Xóa topping">
+                        <i class="fa-solid fa-trash"></i> Xóa
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addNewTopping() {
+            const name = document.getElementById('newToppingNameInput').value.trim();
+            const price = parseInt(document.getElementById('newToppingPriceInput').value);
+            if (!name || isNaN(price) || price < 0) {
+                return showToast("Vui lòng nhập đầy đủ Tên topping và Giá hợp lệ!");
+            }
+            toppings.push({ id: 't' + Date.now(), name, price });
+            safeSetStorage('jumjum_toppings', toppings);
+            syncJumjumFirebasePush();
+            document.getElementById('newToppingNameInput').value = '';
+            document.getElementById('newToppingPriceInput').value = '';
+            renderAdminToppingsList();
+            showToast(`Đã thêm topping "${name}"!`);
+        }
+
+        function updateToppingField(idx, field, val) {
+            if (field === 'name') {
+                const trimmed = String(val || '').trim();
+                if (!trimmed) return renderAdminToppingsList();
+                toppings[idx].name = trimmed;
+            } else if (field === 'price') {
+                if (isNaN(val) || val < 0) return renderAdminToppingsList();
+                toppings[idx].price = val;
+            }
+            safeSetStorage('jumjum_toppings', toppings);
+            syncJumjumFirebasePush();
+            renderAdminToppingsList();
+            showToast("Đã cập nhật thông tin topping!");
+        }
+
+        function deleteTopping(idx) {
+            const removed = toppings.splice(idx, 1);
+            safeSetStorage('jumjum_toppings', toppings);
+            syncJumjumFirebasePush();
+            renderAdminToppingsList();
+            showToast(`Đã xóa topping "${removed[0].name}"!`);
         }
 
         function previewNewProductImage(input) {
